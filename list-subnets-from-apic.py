@@ -12,12 +12,7 @@ from itertools import groupby
 
 requests.packages.urllib3.disable_warnings()
  
-def delay_print(s):
-    for c in s:
-        sys.stdout.write( '%s' % c )
-        sys.stdout.flush()
-        time.sleep(0.1)
-
+# AUTHENTICATE WITH APIC-EM #
 def createserviceticket():
     response = requests.post(
         url="https://"+apicem_ip+"/api/v1/ticket",
@@ -35,16 +30,18 @@ def createserviceticket():
     service_ticket = match_service_ticket.group(1)
     return service_ticket
 
+# ERROR IF NO APIC-EM IP ADDRESS ENTERED #
 if len(sys.argv) < 2:
     print('Need arguments !')
     sys.exit(1)
  
+# START #
 apicem_ip = sys.argv[1] # use argument 1 in command line
 print("Listing Subnets used in APIC-EM controller : "+apicem_ip)
  
 url = "https://" + apicem_ip + "/api/v1/network-device/count"
 resp = requests.get(url, headers={"X-Auth-Token": createserviceticket(),"Content-Type": "application/json",}, verify=False)
-response_json = resp.json() # Get the json-encoded content from response with "response_json = resp.json()
+response_json = resp.json() 
 count = response_json["response"]
 print("Devices = {}".format(count))
 interface_list = []
@@ -63,7 +60,7 @@ if count > 0 :
         response_json = resp.json()
 
         for interface in response_json["response"]:
-            if interface['ipv4Address'] != None: # make sure that only interfaces with an ip address, else KeyError
+            if interface['ipv4Address'] != None: 
                 interface_list.append([interface['ipv4Address'],interface['ipv4Mask']])
 
     subnets =[]
@@ -74,9 +71,10 @@ if count > 0 :
             subnets.append( [str(subnet.network()), str(subnet.mask), str(subnet.network_long())] )
             print("")
 
-        subnets.sort(key=itemgetter(2)) # sort by long#
-        subnets = list(map(itemgetter(0), groupby(subnets))) #remove duplicates
+        subnets.sort(key=itemgetter(2)) # SORT BY IPCALC NETWORK_LONG
+        subnets = list(map(itemgetter(0), groupby(subnets))) # REMOVE DUPLICATES 
 
+# OUTPUT
     print("Subnets Found:")
     print("----------------------")
     print("Subnet: {0:>13}".format("Mask:"))
