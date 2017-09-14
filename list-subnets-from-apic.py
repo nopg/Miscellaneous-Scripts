@@ -36,7 +36,7 @@ if len(sys.argv) < 2:
     sys.exit(1)
  
 # START #
-apicem_ip = sys.argv[1] # use argument 1 in command line
+apicem_ip = sys.argv[1]  # use argument 1 in command line
 print("Listing Subnets used in APIC-EM controller : "+apicem_ip)
  
 url = "https://" + apicem_ip + "/api/v1/network-device/count"
@@ -71,8 +71,8 @@ if count > 0 :
             subnets.append( [str(subnet.network()), str(subnet.mask), str(subnet.network_long())] )
             print("")
 
-        subnets.sort(key=itemgetter(2)) # SORT BY IPCALC NETWORK_LONG
-        subnets = list(map(itemgetter(0), groupby(subnets))) # REMOVE DUPLICATES 
+        subnets.sort(key=itemgetter(2))  # SORT BY IPCALC NETWORK_LONG
+        subnets = list(map(itemgetter(0), groupby(subnets)))  # REMOVE DUPLICATES
 
 # OUTPUT
     print("Subnets Found:")
