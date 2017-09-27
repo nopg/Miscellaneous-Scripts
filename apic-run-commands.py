@@ -7,14 +7,17 @@ from netmiko.ssh_exception import *
 ## Disable invalid certificate warnings for APIC ##
 requests.packages.urllib3.disable_warnings()
 
+
+### UPDATE THESE VARIABLES FOR EACH CUSTOMER ###
 APICEM_IP = "172.20.10.20"
 APICUSER = 'admin'
 APICPASS = '!Cnet2017!'
 
 USERNAME = 'admin'                              # NETWORK DEVICE USERNAME
 PASSWORD = '!Cnet2017!'                         # NETWORK DEVICE PASSWORD
-SEARCHTAG = 'HQ'                                  # SEARCH BASED ON THIS DEVICE TAG, IF EMPTY ('') THEN SEARCH ALL DEVICES
+SEARCHTAG = 'HQ'                                # SEARCH BASED ON THIS DEVICE TAG, IF EMPTY ('') THEN SEARCH ALL DEVICES
 COMMANDS = ['show version', 'show ip route']    # COMMAND(S) TO RUN
+###                                          ###
 
 ## AUTH WITH APIC-EM ##
 def createserviceticket():
