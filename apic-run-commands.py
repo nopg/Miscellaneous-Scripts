@@ -17,7 +17,7 @@ USERNAME = 'admin'                              # NETWORK DEVICE USERNAME
 PASSWORD = '!Cnet2017!'                         # NETWORK DEVICE PASSWORD
 SEARCHTAG = 'HQ'                                # SEARCH BASED ON THIS DEVICE TAG, IF EMPTY ('') THEN SEARCH ALL DEVICES
 COMMANDS = ['show version', 'show ip route']    # COMMAND(S) TO RUN
-###                                          ###
+################################################
 
 ## AUTH WITH APIC-EM ##
 def createserviceticket():
