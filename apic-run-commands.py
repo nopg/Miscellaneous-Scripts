@@ -37,11 +37,13 @@ def createserviceticket():
     service_ticket = match_service_ticket.group(1)
     return service_ticket
 
+## CALL APIC REST-API
 def newAPICallGET(url):
     url = "https://"+APICEM_IP+"/api/v1/"+url
     response = requests.get(url,headers={"X-Auth-Token": createserviceticket(),"Content-Type": "application/json",},verify=False)
     return response.json()
 
+## RUN COMMANDS ON NETWORK DEVICES
 def run_commands(my_list):
     for device in my_list:
         ## Open output file ##
