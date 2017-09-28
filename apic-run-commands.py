@@ -15,7 +15,7 @@ APICPASS = '!Cnet2017!'
 
 USERNAME = 'admin'                              # NETWORK DEVICE USERNAME
 PASSWORD = '!Cnet2017!'                         # NETWORK DEVICE PASSWORD
-SEARCHTAG = ''                                  # SEARCH BASED ON THIS DEVICE TAG, IF EMPTY ('') THEN SEARCH ALL DEVICES
+SEARCHTAG = 'HQ'                                  # SEARCH BASED ON THIS DEVICE TAG, IF EMPTY ('') THEN SEARCH ALL DEVICES
 COMMANDS = ['show version', 'show ip route']    # COMMAND(S) TO RUN
 ################################################
 
@@ -32,7 +32,7 @@ def createserviceticket():
             "password": APICPASS
         })
     )
-    output = ('Response HTTP Response Body: {content}'.format(content=response.content))
+    output = (f'Response HTTP Response Body: {response.content}')
     match_service_ticket = re.search('serviceTicket":"(.*cas)', output, flags=0)
     service_ticket = match_service_ticket.group(1)
     return service_ticket
@@ -55,12 +55,12 @@ def run_commands(my_list):
             try:
                 net_connect = ConnectHandler(**connect_dict)
             except NetMikoTimeoutException:
-                error = "Unable to connect to host {} ({}) (timeout)!".format(device['hostname'],device['ip]'])
+                error = f"Unable to connect to host {device['hostname']} ({device['ip]']}) (timeout)!"
                 print(error)
                 fout.write(error)
                 continue
             except NetMikoAuthenticationException:
-                error = "Unable to connect to host {} ({}) (authentication failure)!".format(device['hostname'],device['ip'])
+                error = f"Unable to connect to host {device['hostname']} ({device['ip']}) (authentication failure)!"
                 print(error)
                 fout.write(error)
                 continue
@@ -77,7 +77,7 @@ def grabdevicestag(my_list):
 
     ## CREATE LIST OF IP ADDRESSES/HOSTNAMES TO CONNECT TO ##
     for device in my_list:
-        data = newAPICallGET('network-device/{}'.format(device['resourceId']))
+        data = newAPICallGET(f"network-device/{device['resourceId']}")
         temp_device = {'ip': data['response']['managementIpAddress'], 'hostname': data['response']['hostname']}
         ip_list.append(temp_device)
 
@@ -100,6 +100,6 @@ if SEARCHTAG == '':             # GRAB ALL DEVICES
     device_list = data['response']
     graballdevices(device_list)
 else:                           # USE SEARCH TAG
-    data = newAPICallGET('tag/association?resourceType=network-device&tag={}'.format(SEARCHTAG))
+    data = newAPICallGET(f"tag/association?resourceType=network-device&tag={SEARCHTAG}")
     tag_device_list = data['response']
     grabdevicestag(tag_device_list)
