@@ -55,7 +55,7 @@ if count > 0 :
     for device in response_json["response"]:
         id = device["id"]
         url = "https://" + apicem_ip + "/api/v1/interface/network-device/"+id
-        resp = requests.get(url,    headers={"X-Auth-Token": createserviceticket(), "Content-Type": "application/json", },
+        resp = requests.get(url, headers={"X-Auth-Token": createserviceticket(), "Content-Type": "application/json", },
                         verify=False)
         response_json = resp.json()
 
