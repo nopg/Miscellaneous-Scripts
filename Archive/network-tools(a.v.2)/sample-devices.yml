@@ -1,0 +1,14 @@
+---
+# List device ip/fqdn's in each section, only need to specify the types in use #
+# Defaults to SSH unless using the TELNET section #
+IOS:
+  - 10.7.7.11
+  - 172.20.254.5
+NX-OS:
+  - 1.1.1.1
+ASA:
+  - 2.2.2.2
+TELNET:
+# EXAMPLE:
+# - [3.3.3.3, telnetpass, enablepass]
+  - [5.5.5.5, mypass, pass2]
