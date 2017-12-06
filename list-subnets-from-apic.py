@@ -31,12 +31,18 @@ def createserviceticket():
     return service_ticket
 
 # ERROR IF NO APIC-EM IP ADDRESS ENTERED #
-if len(sys.argv) < 2:
-    print('Need arguments !')
-    sys.exit(1)
+#if len(sys.argv) < 2:
+#    print('Need arguments !')
+#    sys.exit(1)
  
 # START #
-apicem_ip = sys.argv[1]  # use argument 1 in command line
+global username
+global password
+global apicem_ip
+apicem_ip = input("APIC-EM IP Address: ")  
+username = input("APIC-EM Username: ")
+password = input("APIC-EM Password: ")
+
 print("Listing Subnets used in APIC-EM controller : "+apicem_ip)
  
 url = "https://" + apicem_ip + "/api/v1/network-device/count"
