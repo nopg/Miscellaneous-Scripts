@@ -21,8 +21,8 @@ def createserviceticket():
         },
         verify=False,
         data=json.dumps({
-            "username": 'admin',
-            "password": '!Cnet2017!'
+            "username": username,
+            "password": password
         })
     )
     output = ('Response HTTP Response Body: {content}'.format(content=response.content))
