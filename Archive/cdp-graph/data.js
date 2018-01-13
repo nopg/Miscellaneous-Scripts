@@ -22,6 +22,12 @@ var data = {
             "label": "R3.cisco.com",
             "title": "<strong>Mgmt-IP:</strong><br>172.20.100.58<br><br><strong>Platform</strong>:<br> Cisco <br><br><strong>Version:</strong><br> Cisco IOS Software, IOSv Software (VIOS-ADVENTERPRISEK9-M), Version 15.6(2)T, RELEASE SOFTWARE (fc2)",
             "group": "attached_device"
+        },
+        {
+            "id": 5,
+            "label": "R4.cisco.com",
+            "title": "<strong>Mgmt-IP:</strong><br>172.20.100.60<br><br><strong>Platform</strong>:<br> Cisco <br><br><strong>Version:</strong><br> Cisco IOS Software, IOSv Software (VIOS-ADVENTERPRISEK9-M), Version 15.6(2)T, RELEASE SOFTWARE (fc2)",
+            "group": "attached_device"
         }
     ],
     "edges": [
@@ -49,6 +55,26 @@ var data = {
             "from": 1,
             "to": 4,
             "title": "from: FastEthernet0/0<br>to: GigabitEthernet0/0",
+            "label": "",
+            "value": 0,
+            "font": {
+                "align": "top"
+            }
+        },
+                {
+            "from": 2,
+            "to": 5,
+            "title": "from: FastEthernet2/0<br>to: GigabitEthernet0/2",
+            "label": "",
+            "value": 0,
+            "font": {
+                "align": "top"
+            }
+        },
+        {
+            "from": 4,
+            "to": 5,
+            "title": "from: FastEthernet3/0<br>to: GigabitEthernet0/3",
             "label": "",
             "value": 0,
             "font": {
