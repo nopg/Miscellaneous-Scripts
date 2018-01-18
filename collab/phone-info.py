@@ -1,5 +1,6 @@
 #created by lfane
 #1/17/18
+#Loops through a list of Cisco IP phones; opens each phones webpage and dumps contents to a file
 import requests
 from bs4 import BeautifulSoup
 
