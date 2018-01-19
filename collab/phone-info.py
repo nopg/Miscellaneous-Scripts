@@ -1,5 +1,5 @@
 #created by lfane
-#1/17/18; looks for arguments
+#1/17/18; looks for arguments and creates a log file
 import sys
 import requests
 import datetime
