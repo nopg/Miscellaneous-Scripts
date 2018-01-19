@@ -1,5 +1,5 @@
 #created by lfane
-#1/17/18
+#1/17/18; looks for arguments
 import sys
 import requests
 from bs4 import BeautifulSoup
