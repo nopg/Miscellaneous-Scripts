@@ -83,6 +83,8 @@ def build_csv(ip, username, password):
     ## REFORMAT THE OUTPUT ##
     output = format_fsm_output(re_table, fsm_results)
 
+    print(output)
+
     fout = open('int-status-output.csv', 'w')
 
     writer = csv.DictWriter(fout, fieldnames=re_table.header)
