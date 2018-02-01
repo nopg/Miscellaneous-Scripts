@@ -91,19 +91,25 @@ def main(ip, username, password):
     fsm_results = re_table.ParseText(int_status)
 
     ## REFORMAT THE OUTPUT ##
-    output = format_fsm_output(re_table, fsm_results)
+    int_status = format_fsm_output(re_table, fsm_results)
 
     ## Grab config ##
 
-    test = ""
-    for line in output:
-        test += ssh_connection.send_command("show run int {}".format(line['PORT'])) + '\n'
+    re_table = jtextfsm.TextFSM(open("cisco_ios_show_run_interface.textfsm"))
+    for line in int_status:
+        portconfig = ssh_connection.send_command("show run int {}".format(line['PORT'])) + '\n'
+        fsm_results = re_table.ParseText(portconfig)
+        portconfig = format_fsm_output(re_table, fsm_results)
+
+        newline = {**line, **portconfig}
+        line = newline
+
 
     ssh_connection.disconnect()
 
     print(test)
 
-    build_csv(output, re_table.header)
+    build_csv(int_status, re_table.header)
 
 
 if __name__ == "__main__":

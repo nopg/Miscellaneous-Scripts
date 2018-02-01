@@ -1,0 +1,18 @@
+Value DESCRIPTION (.+)
+Value MODE (access|trunk|dot1q-tunnel|dynamic|private-vlan)
+Value DATAVLAN (\d+)
+Value VOICEVLAN (\d+)
+Value ALLOWEDVLANS (\S+)
+Value NATIVEVLAN (\d+)
+Value PORTCHANNEL (\d+)
+Value PCMODE (active|auto|desirable|on|passive)
+
+Start
+  ^ description ${DESCRIPTION}
+  ^ switchport mode ${MODE}
+  ^ switchport access vlan ${DATAVLAN}
+  ^ switchport voice vlan ${VOICEVLAN}
+  ^ switchport trunk allowed vlan ${ALLOWEDVLANS}
+  ^ switchport trunk native vlan ${NATIVEVLAN}
+  ^ channel-group ${PORTCHANNEL} mode ${PCMODE}
+
