@@ -95,10 +95,13 @@ def main(ip, username, password):
 
     ## Grab config ##
 
+    test = ""
     for line in output:
-        ssh_connection.send_command("show run int {}".format(line['PORT']))
+        test += ssh_connection.send_command("show run int {}".format(line['PORT'])) + '\n'
 
     ssh_connection.disconnect()
+
+    print(test)
 
     build_csv(output, re_table.header)
 
