@@ -50,9 +50,9 @@ def get_show_int_status(ip, username, password):
     result = ssh_connection.send_command("show interface status", delay_factor=2)
 
     # close SSH connection
-    ssh_connection.disconnect()
+    #ssh_connection.disconnect()
 
-    return result
+    return result, ssh_connection
 
 def format_fsm_output(re_table, fsm_results):
     #   FORMAT FSM OUTPUT(LIST OF LIST) INTO PYTHON LIST OF DICTIONARY VALUES BASED ON TEMPLATE #
@@ -80,7 +80,7 @@ def build_csv(output, headers):
 
 def main(ip, username, password):
 
-    int_status = get_show_int_status(ip, username, password)
+    int_status, ssh_connection = get_show_int_status(ip, username, password)
 
     if int_status in ("TIMEOUT", "AUTHFAIL", "CONNECTREFUSED", "UNKNOWN"):
         print(int_status)
@@ -92,6 +92,13 @@ def main(ip, username, password):
 
     ## REFORMAT THE OUTPUT ##
     output = format_fsm_output(re_table, fsm_results)
+
+    ## Grab config ##
+
+    for line in output:
+        ssh_connection.send_command("show run int {}".format(line['PORT']))
+
+    ssh_connection.disconnect()
 
     build_csv(output, re_table.header)
 
