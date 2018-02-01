@@ -68,11 +68,11 @@ def format_fsm_output(re_table, fsm_results):
 
     return result
 
-def build_csv(output):
+def build_csv(output, headers):
 
     fout = open('int-status-output.csv', 'w')
 
-    writer = csv.DictWriter(fout, fieldnames=re_table.header, lineterminator='\n')
+    writer = csv.DictWriter(fout, fieldnames=headers, lineterminator='\n')
     writer.writeheader()
     writer.writerows(output)
 
@@ -93,7 +93,7 @@ def main(ip, username, password):
     ## REFORMAT THE OUTPUT ##
     output = format_fsm_output(re_table, fsm_results)
 
-    build_csv(output)
+    build_csv(output, re_table.header)
 
 
 if __name__ == "__main__":
