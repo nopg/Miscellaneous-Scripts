@@ -1,0 +1,217 @@
+PORT,NAME,STATUS,VLAN,DUPLEX,SPEED,TYPE
+Gi1/1,*---Fiber to Servic*,connected,trunk,full,1000,1000BaseSX
+Gi1/2,*---- Fiber to Serv*,notconnect,1,full,1000,1000BaseSX
+Gi1/3,*--- Body Shop Buil*,connected,trunk,full,1000,1000BaseSX
+Gi1/4,*--- Body Shop Buil*,connected,trunk,full,1000,1000BaseSX
+Gi1/5,*--- Tank Building*,connected,trunk,full,1000,1000BaseSX
+Gi1/6,*--- Tank Building*,connected,trunk,full,1000,1000BaseSX
+Gi1/7,,connected,trunk,full,1000,1000BaseSX
+Gi1/8,*---Fiber to Servic*,connected,trunk,full,1000,1000BaseSX
+Gi1/9,,notconnect,1,full,1000,1000BaseSX
+Gi1/10,,notconnect,1,full,1000,1000BaseLH
+Gi1/11,,connected,trunk,full,1000,1000BaseSX
+Gi1/12,,disabled,1,full,1000,1000BaseSX
+Gi1/13,port channel to se,notconnect,1,full,1000,1000BaseSX
+Gi1/14,port channel to se,connected,trunk,full,1000,1000BaseSX
+Gi1/15,port channel to se,notconnect,1,full,1000,1000BaseSX
+Gi1/16,port channel to se,connected,trunk,full,1000,1000BaseSX
+Gi3/1,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi3/2,,connected,16,a-full,a-10,10/100/1000BaseT
+Gi3/3,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/4,,notconnect,16,full,auto,10/100/1000BaseT
+Gi3/5,,notconnect,24,full,auto,10/100/1000BaseT
+Gi3/6,,connected,330,a-full,a-1000,10/100/1000BaseT
+Gi3/7,,connected,255,a-full,a-1000,10/100/1000BaseT
+Gi3/8,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/9,,connected,255,a-full,a-1000,10/100/1000BaseT
+Gi3/10,N174 vdi,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/11,,notconnect,2,full,auto,10/100/1000BaseT
+Gi3/12,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/13,,notconnect,16,full,auto,10/100/1000BaseT
+Gi3/14,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/15,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/16,,notconnect,16,full,auto,10/100/1000BaseT
+Gi3/17,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/18,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/19,,notconnect,16,full,auto,10/100/1000BaseT
+Gi3/20,,notconnect,16,full,auto,10/100/1000BaseT
+Gi3/21,,notconnect,16,full,auto,10/100/1000BaseT
+Gi3/22,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/23,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/24,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/35,,notconnect,260,full,1000,10/100/1000BaseT
+Gi3/36,,notconnect,16,full,auto,10/100/1000BaseT
+Gi3/37,,disabled,1,full,auto,10/100/1000BaseT
+Gi3/38,,connected,16,a-full,a-10,10/100/1000BaseT
+Gi3/39,Port-channel to C3,disabled,20,full,auto,10/100/1000BaseT
+Gi3/40,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi3/41,,connected,20,a-full,a-100,10/100/1000BaseT
+Gi3/42,,notconnect,20,full,auto,10/100/1000BaseT
+Gi3/45,,notconnect,256,full,auto,10/100/1000BaseT
+Gi3/46,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi3/47,,connected,20,a-full,a-100,10/100/1000BaseT
+Gi3/48,,connected,20,a-full,a-100,10/100/1000BaseT
+Gi4/1,,notconnect,9,full,auto,10/100/1000BaseT
+Gi4/2,,notconnect,9,full,auto,10/100/1000BaseT
+Gi4/3,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi4/4,*--- Untrusted CAS*,notconnect,999,full,auto,10/100/1000BaseT
+Gi4/7,n244,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi4/8,port channels to 5,disabled,372,full,auto,10/100/1000BaseT
+Gi4/10,,connected,trunk,a-full,a-1000,10/100/1000BaseT
+Gi4/11,,notconnect,2,full,auto,10/100/1000BaseT
+Gi4/12,,connected,trunk,a-full,a-1000,10/100/1000BaseT
+Gi4/20,,connected,330,a-full,a-1000,10/100/1000BaseT
+Gi4/23,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi4/24,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi4/25,,notconnect,300,full,100,10/100/1000BaseT
+Gi4/26,,notconnect,300,full,100,10/100/1000BaseT
+Gi4/27,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi4/28,- users,connected,330,a-full,a-1000,10/100/1000BaseT
+Gi4/30,,notconnect,255,full,auto,10/100/1000BaseT
+Gi4/32,,notconnect,255,full,auto,10/100/1000BaseT
+Gi4/33,,notconnect,20,full,auto,10/100/1000BaseT
+Gi4/34,,connected,330,a-full,a-1000,10/100/1000BaseT
+Gi4/35,call pilot c lan,notconnect,20,full,auto,10/100/1000BaseT
+Gi4/38,,connected,256,full,100,10/100/1000BaseT
+Gi4/40,*---Cisco VM Access*,connected,255,a-full,a-1000,10/100/1000BaseT
+Gi4/43,call center vmware,notconnect,20,full,auto,10/100/1000BaseT
+Gi4/44,port channels to 5,connected,trunk,a-full,a-1000,10/100/1000BaseT
+Gi4/45,,connected,trunk,a-full,a-1000,10/100/1000BaseT
+Gi4/46,port channels to 5,disabled,1,full,auto,10/100/1000BaseT
+Gi4/48,Port channel to 55,connected,trunk,a-full,a-1000,10/100/1000BaseT
+Gi5/3,,disabled,1,full,auto,10/100/1000BaseT
+Gi7/2,,notconnect,1,full,auto,10/100/1000BaseT
+Gi7/3,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi7/4,freightliner users,connected,255,a-full,a-1000,10/100/1000BaseT
+Gi7/5,user port,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi7/6,IT users,notconnect,9,full,auto,10/100/1000BaseT
+Gi7/7,webgwp1,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi7/8,adp term server 1,notconnect,256,full,auto,10/100/1000BaseT
+Gi7/9,webgwm1,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi7/10,webgwm2,notconnect,256,full,auto,10/100/1000BaseT
+Gi7/12,utna2,notconnect,9,full,auto,10/100/1000BaseT
+Gi7/13,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi7/14,users,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi7/15,,notconnect,16,full,auto,10/100/1000BaseT
+Gi7/16,,notconnect,16,full,auto,10/100/1000BaseT
+Gi7/17,,connected,330,a-full,a-1000,10/100/1000BaseT
+Gi7/18,*--- Freightliner U*,notconnect,16,full,auto,10/100/1000BaseT
+Gi7/19,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi7/21,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi7/22,,notconnect,255,full,auto,10/100/1000BaseT
+Gi7/24,,notconnect,350,full,auto,10/100/1000BaseT
+Gi7/38,*---Trunk to Temp 3*,notconnect,1,full,auto,10/100/1000BaseT
+Gi7/39,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
+Gi7/40,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
+Gi7/41,*--- Roof Antenna t*,notconnect,10,full,auto,10/100/1000BaseT
+Gi7/42,,notconnect,255,full,auto,10/100/1000BaseT
+Gi7/43,,connected,15,a-full,a-1000,10/100/1000BaseT
+Gi7/44,,notconnect,1,full,auto,10/100/1000BaseT
+Gi7/45,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi7/46,-- Link to Seconda,notconnect,1,full,auto,10/100/1000BaseT
+Gi7/47,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi7/48,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/1,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/2,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/3,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi8/4,,notconnect,256,full,auto,10/100/1000BaseT
+Gi8/5,,notconnect,16,full,auto,10/100/1000BaseT
+Gi8/6,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/7,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/8,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/9,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi8/10,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi8/11,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/12,,notconnect,16,full,auto,10/100/1000BaseT
+Gi8/13,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi8/14,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/15,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/16,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/17,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/18,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/19,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/20,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/21,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/22,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/23,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/24,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi8/25,,notconnect,20,full,auto,10/100/1000BaseT
+Gi8/26,,notconnect,16,full,auto,10/100/1000BaseT
+Gi8/27,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/28,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/29,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/30,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/31,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/32,,notconnect,16,full,auto,10/100/1000BaseT
+Gi8/33,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/34,,notconnect,16,full,auto,10/100/1000BaseT
+Gi8/35,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/36,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/37,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi8/38,,connected,trunk,a-full,a-1000,10/100/1000BaseT
+Gi8/39,,notconnect,15,full,auto,10/100/1000BaseT
+Gi8/40,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/41,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/42,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/43,,connected,1,a-full,a-100,10/100/1000BaseT
+Gi8/44,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/45,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/46,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi8/47,,notconnect,16,full,auto,10/100/1000BaseT
+Gi8/48,,connected,16,a-full,a-1000,10/100/1000BaseT
+Gi9/1,"""D119""",connected,16,a-full,a-1000,10/100/1000BaseT
+Gi9/2,,notconnect,9,full,auto,10/100/1000BaseT
+Gi9/13,ftl sls admin offi,notconnect,200,full,auto,10/100/1000BaseT
+Gi9/14,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi9/15,ADP back counter p,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi9/16,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi9/17,*--- Freightliner E*,connected,255,a-full,a-1000,10/100/1000BaseT
+Gi9/18,user port,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/19,,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/20,*--- Freightliner T*,connected,16,a-full,a-100,10/100/1000BaseT
+Gi9/21,*--- Freightliner T*,notconnect,30,full,auto,10/100/1000BaseT
+Gi9/22,*--- Freightliner T*,connected,256,a-full,a-1000,10/100/1000BaseT
+Gi9/23,,notconnect,1,full,auto,10/100/1000BaseT
+Gi9/24,,notconnect,9,full,auto,10/100/1000BaseT
+Gi9/25,*---Users---*,notconnect,20,full,auto,10/100/1000BaseT
+Gi9/27,*--- Freightliner U*,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/28,*--- Freightliner U*,notconnect,1,full,auto,10/100/1000BaseT
+Gi9/29,*--- Freightliner U*,notconnect,20,full,auto,10/100/1000BaseT
+Gi9/30,,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/31,,connected,330,a-full,a-100,10/100/1000BaseT
+Gi9/32,,connected,330,a-full,a-1000,10/100/1000BaseT
+Gi9/33,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
+Gi9/34,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
+Gi9/35,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
+Gi9/36,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
+Gi9/37,,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/38,,notconnect,9,full,auto,10/100/1000BaseT
+Gi9/39,,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/40,,connected,350,a-full,a-100,10/100/1000BaseT
+Gi9/41,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi9/42,,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/43,,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/44,,notconnect,16,full,auto,10/100/1000BaseT
+Gi9/45,,connected,10,a-full,a-1000,10/100/1000BaseT
+Gi9/46,,connected,9,a-full,a-1000,10/100/1000BaseT
+Gi9/47,,connected,16,a-full,a-100,10/100/1000BaseT
+Gi9/48,,notconnect,16,full,auto,10/100/1000BaseT
+Po1,*--- Sterling Build*,notconnect,0,full,auto,
+Po2,*--- FreightLiner B*,notconnect,0,full,auto,
+Po3,*--- Body Shop Buil*,connected,trunk,a-full,a-1000,
+Po4,*--- Tank Building*,connected,trunk,a-full,a-1000,
+Po5,,notconnect,256,full,auto,
+Po6,,notconnect,256,full,auto,
+Po7,,notconnect,256,full,auto,
+Po8,,notconnect,256,full,auto,
+Po9,*--- Service East s*,notconnect,0,full,auto,
+Po13,utna1,disabled,0,full,auto,
+Po14,utna2,disabled,0,full,auto,
+Po15,Port channel 15 to,connected,trunk,a-full,a-1000,
+Po16,Port channel to 55,notconnect,1,full,auto,
+Po20,port channel to md,connected,trunk,a-full,a-1000,
+Po22,,notconnect,0,full,auto,
+Po30,Port-channel to C3,connected,trunk,a-full,a-1000,
+Po33,*---Channel to Serv*,connected,trunk,a-full,a-1000,
+Po55,,notconnect,1,full,auto,
+Po66,,notconnect,1,full,auto,
