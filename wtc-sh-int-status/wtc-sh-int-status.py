@@ -4,10 +4,12 @@ Built for Warner Truck Center 6500 Migration
 import sys
 import jtextfsm
 import csv
+import getpass
 from netmiko import ConnectHandler
 from netmiko.ssh_exception import *
 
-
+DEBUG = False
+DEBMAXLINES = 3
 
 def get_show_int_status(ip, username, password):
     """
@@ -31,19 +33,19 @@ def get_show_int_status(ip, username, password):
         ssh_connection.enable()
     except NetMikoTimeoutException:
         print("\nSSH session timed trying to connect to the device: {}\n".format(ip))
-        return "TIMEOUT"
+        return "TIMEOUT", None
     except NetMikoAuthenticationException:
         print("\nSSH authentication failed for device: {}\n".format(ip))
-        return "AUTHFAIL"
+        return "AUTHFAIL", None
     except ConnectionRefusedError:
         print("\nConnection refused for device: {}\n".format(ip))
-        return "CONNECTREFUSED"
+        return "CONNECTREFUSED", None
     except KeyboardInterrupt:
         print("\nUser interupted connection, closing program.\n")
         sys.exit(0)
     except Exception:
         print("\nUnknown error connecting to device: {}\n".format(ip))
-        return "UNKNOWN"
+        return "UNKNOWN", None
 
     # execute the show cdp neighbor detail command
     # we increase the delay_factor for this command, because it take some time if many devices are seen by CDP
@@ -69,13 +71,10 @@ def format_fsm_output(re_table, fsm_results):
     return result
 
 def build_csv(output, headers):
-
     fout = open('int-status-output.csv', 'w')
-
     writer = csv.DictWriter(fout, fieldnames=headers, lineterminator='\n')
     writer.writeheader()
     writer.writerows(output)
-
     fout.close()
 
 def main(ip, username, password):
@@ -94,23 +93,77 @@ def main(ip, username, password):
     int_status = format_fsm_output(re_table, fsm_results)
 
     ## Grab config ##
-
+    headers = re_table.header
+    headers.remove('DESCRIPTION')
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_run_interface.textfsm"))
+    headers += re_table.header
+    headers.append('OTHER')
+    debcount = 0
+
+    output = []
     for line in int_status:
-        portconfig = ssh_connection.send_command("show run int {}".format(line['PORT'])) + '\n'
-        fsm_results = re_table.ParseText(portconfig)
+    
+        if DEBUG == True:
+            if debcount > DEBMAXLINES:
+                break
+            else:
+                debcount += 1
+                
+        print("Checking config on port {}...".format(line['PORT']))
+
+        port_config = ssh_connection.send_command("show run int {}".format(line['PORT']))
+
+        re_table = jtextfsm.TextFSM(open("cisco_ios_show_run_interface.textfsm"))
+        fsm_results = re_table.ParseText(port_config)
+        
         portconfig = format_fsm_output(re_table, fsm_results)
 
-        newline = {**line, **portconfig}
-        line = newline
-
-
+        if not portconfig == []:
+            newline = {**line, **portconfig[0]}
+        else:
+            newline = {**line}
+        
+        newline['OTHER'] = port_config
+        output.append(newline)
+        
+    ## Grab MAC Addresses ##
+    headers.append('MAC_ADDRESS')
+    
+    debcount = 0
+    newoutput = []
+    for line in output:
+    
+        if DEBUG == True:
+            if debcount > DEBMAXLINES:
+                break
+            else:
+                debcount += 1
+                
+        print("Checking mac-address-table on port {}...".format(line['PORT']))
+        mac_table = ssh_connection.send_command("show mac-address-table interface {}".format(line['PORT']))
+            
+        re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac-address-table.textfsm"))
+        fsm_results = re_table.ParseText(mac_table)
+        
+        mac_table_formatted = format_fsm_output(re_table, fsm_results)
+        macs = {}
+        macs['MAC_ADDRESS'] = ''
+        
+        if not mac_table_formatted == []:
+            for item in mac_table_formatted:
+                macs['MAC_ADDRESS'] += item['MAC_ADDRESS']
+                macs['MAC_ADDRESS'] += '\n'
+                
+        if not macs == []:
+            newline = {**line, **macs}
+        else:
+            newline = {**line}
+            
+        newoutput.append(newline)        
+                
     ssh_connection.disconnect()
-
-    print(test)
-
-    build_csv(int_status, re_table.header)
-
+    
+    build_csv(newoutput, headers)
 
 if __name__ == "__main__":
 
@@ -121,7 +174,7 @@ if __name__ == "__main__":
 
     target_ip = sys.argv[1]
     username = sys.argv[2]
-    password = input("Type the password: ")
+    password = getpass.getpass("Type the password: ")
 
     main(target_ip, username, password)
     print("Done.")

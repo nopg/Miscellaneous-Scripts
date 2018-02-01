@@ -1,217 +1,3443 @@
-PORT,NAME,STATUS,VLAN,DUPLEX,SPEED,TYPE
-Gi1/1,*---Fiber to Servic*,connected,trunk,full,1000,1000BaseSX
-Gi1/2,*---- Fiber to Serv*,notconnect,1,full,1000,1000BaseSX
-Gi1/3,*--- Body Shop Buil*,connected,trunk,full,1000,1000BaseSX
-Gi1/4,*--- Body Shop Buil*,connected,trunk,full,1000,1000BaseSX
-Gi1/5,*--- Tank Building*,connected,trunk,full,1000,1000BaseSX
-Gi1/6,*--- Tank Building*,connected,trunk,full,1000,1000BaseSX
-Gi1/7,,connected,trunk,full,1000,1000BaseSX
-Gi1/8,*---Fiber to Servic*,connected,trunk,full,1000,1000BaseSX
-Gi1/9,,notconnect,1,full,1000,1000BaseSX
-Gi1/10,,notconnect,1,full,1000,1000BaseLH
-Gi1/11,,connected,trunk,full,1000,1000BaseSX
-Gi1/12,,disabled,1,full,1000,1000BaseSX
-Gi1/13,port channel to se,notconnect,1,full,1000,1000BaseSX
-Gi1/14,port channel to se,connected,trunk,full,1000,1000BaseSX
-Gi1/15,port channel to se,notconnect,1,full,1000,1000BaseSX
-Gi1/16,port channel to se,connected,trunk,full,1000,1000BaseSX
-Gi3/1,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi3/2,,connected,16,a-full,a-10,10/100/1000BaseT
-Gi3/3,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/4,,notconnect,16,full,auto,10/100/1000BaseT
-Gi3/5,,notconnect,24,full,auto,10/100/1000BaseT
-Gi3/6,,connected,330,a-full,a-1000,10/100/1000BaseT
-Gi3/7,,connected,255,a-full,a-1000,10/100/1000BaseT
-Gi3/8,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/9,,connected,255,a-full,a-1000,10/100/1000BaseT
-Gi3/10,N174 vdi,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/11,,notconnect,2,full,auto,10/100/1000BaseT
-Gi3/12,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/13,,notconnect,16,full,auto,10/100/1000BaseT
-Gi3/14,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/15,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/16,,notconnect,16,full,auto,10/100/1000BaseT
-Gi3/17,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/18,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/19,,notconnect,16,full,auto,10/100/1000BaseT
-Gi3/20,,notconnect,16,full,auto,10/100/1000BaseT
-Gi3/21,,notconnect,16,full,auto,10/100/1000BaseT
-Gi3/22,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/23,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/24,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/35,,notconnect,260,full,1000,10/100/1000BaseT
-Gi3/36,,notconnect,16,full,auto,10/100/1000BaseT
-Gi3/37,,disabled,1,full,auto,10/100/1000BaseT
-Gi3/38,,connected,16,a-full,a-10,10/100/1000BaseT
-Gi3/39,Port-channel to C3,disabled,20,full,auto,10/100/1000BaseT
-Gi3/40,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi3/41,,connected,20,a-full,a-100,10/100/1000BaseT
-Gi3/42,,notconnect,20,full,auto,10/100/1000BaseT
-Gi3/45,,notconnect,256,full,auto,10/100/1000BaseT
-Gi3/46,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi3/47,,connected,20,a-full,a-100,10/100/1000BaseT
-Gi3/48,,connected,20,a-full,a-100,10/100/1000BaseT
-Gi4/1,,notconnect,9,full,auto,10/100/1000BaseT
-Gi4/2,,notconnect,9,full,auto,10/100/1000BaseT
-Gi4/3,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi4/4,*--- Untrusted CAS*,notconnect,999,full,auto,10/100/1000BaseT
-Gi4/7,n244,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi4/8,port channels to 5,disabled,372,full,auto,10/100/1000BaseT
-Gi4/10,,connected,trunk,a-full,a-1000,10/100/1000BaseT
-Gi4/11,,notconnect,2,full,auto,10/100/1000BaseT
-Gi4/12,,connected,trunk,a-full,a-1000,10/100/1000BaseT
-Gi4/20,,connected,330,a-full,a-1000,10/100/1000BaseT
-Gi4/23,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi4/24,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi4/25,,notconnect,300,full,100,10/100/1000BaseT
-Gi4/26,,notconnect,300,full,100,10/100/1000BaseT
-Gi4/27,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi4/28,- users,connected,330,a-full,a-1000,10/100/1000BaseT
-Gi4/30,,notconnect,255,full,auto,10/100/1000BaseT
-Gi4/32,,notconnect,255,full,auto,10/100/1000BaseT
-Gi4/33,,notconnect,20,full,auto,10/100/1000BaseT
-Gi4/34,,connected,330,a-full,a-1000,10/100/1000BaseT
-Gi4/35,call pilot c lan,notconnect,20,full,auto,10/100/1000BaseT
-Gi4/38,,connected,256,full,100,10/100/1000BaseT
-Gi4/40,*---Cisco VM Access*,connected,255,a-full,a-1000,10/100/1000BaseT
-Gi4/43,call center vmware,notconnect,20,full,auto,10/100/1000BaseT
-Gi4/44,port channels to 5,connected,trunk,a-full,a-1000,10/100/1000BaseT
-Gi4/45,,connected,trunk,a-full,a-1000,10/100/1000BaseT
-Gi4/46,port channels to 5,disabled,1,full,auto,10/100/1000BaseT
-Gi4/48,Port channel to 55,connected,trunk,a-full,a-1000,10/100/1000BaseT
-Gi5/3,,disabled,1,full,auto,10/100/1000BaseT
-Gi7/2,,notconnect,1,full,auto,10/100/1000BaseT
-Gi7/3,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi7/4,freightliner users,connected,255,a-full,a-1000,10/100/1000BaseT
-Gi7/5,user port,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi7/6,IT users,notconnect,9,full,auto,10/100/1000BaseT
-Gi7/7,webgwp1,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi7/8,adp term server 1,notconnect,256,full,auto,10/100/1000BaseT
-Gi7/9,webgwm1,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi7/10,webgwm2,notconnect,256,full,auto,10/100/1000BaseT
-Gi7/12,utna2,notconnect,9,full,auto,10/100/1000BaseT
-Gi7/13,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi7/14,users,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi7/15,,notconnect,16,full,auto,10/100/1000BaseT
-Gi7/16,,notconnect,16,full,auto,10/100/1000BaseT
-Gi7/17,,connected,330,a-full,a-1000,10/100/1000BaseT
-Gi7/18,*--- Freightliner U*,notconnect,16,full,auto,10/100/1000BaseT
-Gi7/19,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi7/21,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi7/22,,notconnect,255,full,auto,10/100/1000BaseT
-Gi7/24,,notconnect,350,full,auto,10/100/1000BaseT
-Gi7/38,*---Trunk to Temp 3*,notconnect,1,full,auto,10/100/1000BaseT
-Gi7/39,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
-Gi7/40,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
-Gi7/41,*--- Roof Antenna t*,notconnect,10,full,auto,10/100/1000BaseT
-Gi7/42,,notconnect,255,full,auto,10/100/1000BaseT
-Gi7/43,,connected,15,a-full,a-1000,10/100/1000BaseT
-Gi7/44,,notconnect,1,full,auto,10/100/1000BaseT
-Gi7/45,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi7/46,-- Link to Seconda,notconnect,1,full,auto,10/100/1000BaseT
-Gi7/47,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi7/48,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/1,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/2,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/3,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi8/4,,notconnect,256,full,auto,10/100/1000BaseT
-Gi8/5,,notconnect,16,full,auto,10/100/1000BaseT
-Gi8/6,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/7,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/8,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/9,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi8/10,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi8/11,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/12,,notconnect,16,full,auto,10/100/1000BaseT
-Gi8/13,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi8/14,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/15,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/16,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/17,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/18,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/19,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/20,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/21,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/22,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/23,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/24,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi8/25,,notconnect,20,full,auto,10/100/1000BaseT
-Gi8/26,,notconnect,16,full,auto,10/100/1000BaseT
-Gi8/27,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/28,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/29,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/30,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/31,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/32,,notconnect,16,full,auto,10/100/1000BaseT
-Gi8/33,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/34,,notconnect,16,full,auto,10/100/1000BaseT
-Gi8/35,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/36,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/37,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi8/38,,connected,trunk,a-full,a-1000,10/100/1000BaseT
-Gi8/39,,notconnect,15,full,auto,10/100/1000BaseT
-Gi8/40,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/41,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/42,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/43,,connected,1,a-full,a-100,10/100/1000BaseT
-Gi8/44,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/45,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/46,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi8/47,,notconnect,16,full,auto,10/100/1000BaseT
-Gi8/48,,connected,16,a-full,a-1000,10/100/1000BaseT
-Gi9/1,"""D119""",connected,16,a-full,a-1000,10/100/1000BaseT
-Gi9/2,,notconnect,9,full,auto,10/100/1000BaseT
-Gi9/13,ftl sls admin offi,notconnect,200,full,auto,10/100/1000BaseT
-Gi9/14,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi9/15,ADP back counter p,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi9/16,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi9/17,*--- Freightliner E*,connected,255,a-full,a-1000,10/100/1000BaseT
-Gi9/18,user port,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/19,,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/20,*--- Freightliner T*,connected,16,a-full,a-100,10/100/1000BaseT
-Gi9/21,*--- Freightliner T*,notconnect,30,full,auto,10/100/1000BaseT
-Gi9/22,*--- Freightliner T*,connected,256,a-full,a-1000,10/100/1000BaseT
-Gi9/23,,notconnect,1,full,auto,10/100/1000BaseT
-Gi9/24,,notconnect,9,full,auto,10/100/1000BaseT
-Gi9/25,*---Users---*,notconnect,20,full,auto,10/100/1000BaseT
-Gi9/27,*--- Freightliner U*,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/28,*--- Freightliner U*,notconnect,1,full,auto,10/100/1000BaseT
-Gi9/29,*--- Freightliner U*,notconnect,20,full,auto,10/100/1000BaseT
-Gi9/30,,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/31,,connected,330,a-full,a-100,10/100/1000BaseT
-Gi9/32,,connected,330,a-full,a-1000,10/100/1000BaseT
-Gi9/33,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
-Gi9/34,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
-Gi9/35,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
-Gi9/36,*---NetAppEtherChan*,notconnect,256,full,auto,10/100/1000BaseT
-Gi9/37,,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/38,,notconnect,9,full,auto,10/100/1000BaseT
-Gi9/39,,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/40,,connected,350,a-full,a-100,10/100/1000BaseT
-Gi9/41,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi9/42,,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/43,,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/44,,notconnect,16,full,auto,10/100/1000BaseT
-Gi9/45,,connected,10,a-full,a-1000,10/100/1000BaseT
-Gi9/46,,connected,9,a-full,a-1000,10/100/1000BaseT
-Gi9/47,,connected,16,a-full,a-100,10/100/1000BaseT
-Gi9/48,,notconnect,16,full,auto,10/100/1000BaseT
-Po1,*--- Sterling Build*,notconnect,0,full,auto,
-Po2,*--- FreightLiner B*,notconnect,0,full,auto,
-Po3,*--- Body Shop Buil*,connected,trunk,a-full,a-1000,
-Po4,*--- Tank Building*,connected,trunk,a-full,a-1000,
-Po5,,notconnect,256,full,auto,
-Po6,,notconnect,256,full,auto,
-Po7,,notconnect,256,full,auto,
-Po8,,notconnect,256,full,auto,
-Po9,*--- Service East s*,notconnect,0,full,auto,
-Po13,utna1,disabled,0,full,auto,
-Po14,utna2,disabled,0,full,auto,
-Po15,Port channel 15 to,connected,trunk,a-full,a-1000,
-Po16,Port channel to 55,notconnect,1,full,auto,
-Po20,port channel to md,connected,trunk,a-full,a-1000,
-Po22,,notconnect,0,full,auto,
-Po30,Port-channel to C3,connected,trunk,a-full,a-1000,
-Po33,*---Channel to Serv*,connected,trunk,a-full,a-1000,
-Po55,,notconnect,1,full,auto,
-Po66,,notconnect,1,full,auto,
+PORT,STATUS,VLAN,DUPLEX,SPEED,TYPE,DESCRIPTION,MODE,DATAVLAN,VOICEVLAN,ALLOWEDVLANS,NATIVEVLAN,PORTCHANNEL,PCMODE,OTHER,MAC_ADDRESS
+Gi1/1,connected,trunk,full,1000,1000BaseSX,*---Fiber to Service 3560 STack---*,trunk,,,"1,9-11,16,20,24,30,251-253,255,256,300,350",,33,active,"Building configuration...
+
+Current configuration : 275 bytes
+!
+interface GigabitEthernet1/1
+ description ---Fiber to Service 3560 STack---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9-11,16,20,24,30,251-253,255,256,300,350
+ switchport mode trunk
+ no ip address
+ channel-group 33 mode active
+end
+",
+Gi1/2,notconnect,1,full,1000,1000BaseSX,*---- Fiber to Service 3560 ---*,trunk,,,"1,9-11,16,20,24,30,251-253,255,256,350",,,,"Building configuration...
+
+Current configuration : 238 bytes
+!
+interface GigabitEthernet1/2
+ description ---- Fiber to Service 3560 ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9-11,16,20,24,30,251-253,255,256,350
+ switchport mode trunk
+ no ip address
+end
+",
+Gi1/3,connected,trunk,full,1000,1000BaseSX,*--- Body Shop Building ---*,trunk,,,"1,9-11,14,20,21,24,30,251,255,256,350,901-4094",,3,active,"Building configuration...
+
+Current configuration : 294 bytes
+!
+interface GigabitEthernet1/3
+ description --- Body Shop Building ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9-11,14,20,21,24,30,251,255,256,350,901-4094
+ switchport mode trunk
+ no ip address
+ channel-protocol lacp
+ channel-group 3 mode active
+end
+",
+Gi1/4,connected,trunk,full,1000,1000BaseSX,*--- Body Shop Building ---*,trunk,,,"1,9-11,14,20,21,24,30,251,255,256,350,901-4094",,3,active,"Building configuration...
+
+Current configuration : 294 bytes
+!
+interface GigabitEthernet1/4
+ description --- Body Shop Building ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9-11,14,20,21,24,30,251,255,256,350,901-4094
+ switchport mode trunk
+ no ip address
+ channel-protocol lacp
+ channel-group 3 mode active
+end
+",
+Gi1/5,connected,trunk,full,1000,1000BaseSX,*--- Tank Building ---*,trunk,,,"1,9,10,20,24,251-253,255,256,350",,4,active,"Building configuration...
+
+Current configuration : 275 bytes
+!
+interface GigabitEthernet1/5
+ description --- Tank Building ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9,10,20,24,251-253,255,256,350
+ switchport mode trunk
+ no ip address
+ channel-protocol lacp
+ channel-group 4 mode active
+end
+",
+Gi1/6,connected,trunk,full,1000,1000BaseSX,*--- Tank Building ---*,trunk,,,"1,9,10,20,24,251-253,255,256,350",,4,active,"Building configuration...
+
+Current configuration : 275 bytes
+!
+interface GigabitEthernet1/6
+ description --- Tank Building ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9,10,20,24,251-253,255,256,350
+ switchport mode trunk
+ no ip address
+ channel-protocol lacp
+ channel-group 4 mode active
+end
+",
+Gi1/7,connected,trunk,full,1000,1000BaseSX,,,,,"1,9,16,20,24,30,255,256,350",,,,"Building configuration...
+
+Current configuration : 122 bytes
+!
+interface GigabitEthernet1/7
+ switchport
+ switchport trunk allowed vlan 1,9,16,20,24,30,255,256,350
+ no ip address
+end
+","0023.68c9.7201
+1c39.472f.0552
+0022.ee02.15bc
+6c41.6a48.8d86
+68f7.284f.4eb1
+accc.8e3f.40e9
+7010.5c5e.116f
+cc2d.b7e9.466a
+0800.1fb3.11c0
+0007.4d4e.24ca
+0022.ee02.15b7
+d8cb.8ad9.c27e
+705a.0f14.4372
+accc.8e26.7fca
+c47d.cc17.7da4
+4403.a781.0300
+00e1.6dba.7cc4
+58ac.784d.89c4
+4437.e6c0.32e6
+d0c7.8914.dfc6
+0023.2456.3238
+0016.a423.792e
+7c95.f3d2.0cc1
+a08c.fd17.356c
+0023.2462.0e6c
+0016.17be.2cc8
+705a.0f14.3371
+001d.9a04.175b
+7c95.f3d2.0cb2
+0024.f749.4ec3
+accc.8e26.dfca
+4c74.bf61.aa71
+60f1.89a0.db47
+4403.a781.169c
+705a.0f14.3389
+0001.6ccf.b606
+fc4d.d4d7.9330
+4403.a758.d32a
+0023.2462.0e47
+f866.f2d1.5f6c
+d0c7.8915.37a7
+20bb.c021.36a3
+a08c.fd17.25f6
+d0c7.8915.2a2b
+58ac.784d.934c
+90fb.a676.2708
+e4c7.2286.ed71
+d0c7.8915.2bfd
+0040.9d24.5b36
+d0c7.8915.2bfb
+0057.d2d0.5cae
+d8cb.8a61.d389
+d43d.7eab.f9f0
+"
+Gi1/8,connected,trunk,full,1000,1000BaseSX,*---Fiber to Service 3560 Stack---*,trunk,,,"1,9-11,16,20,24,30,251-253,255,256,300,350",,33,active,"Building configuration...
+
+Current configuration : 275 bytes
+!
+interface GigabitEthernet1/8
+ description ---Fiber to Service 3560 Stack---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9-11,16,20,24,30,251-253,255,256,300,350
+ switchport mode trunk
+ no ip address
+ channel-group 33 mode active
+end
+",
+Gi1/9,notconnect,1,full,1000,1000BaseSX,,trunk,,,,,1,active,"Building configuration...
+
+Current configuration : 176 bytes
+!
+interface GigabitEthernet1/9
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ channel-protocol lacp
+ channel-group 1 mode active
+end
+",
+Gi1/10,notconnect,1,full,1000,1000BaseLH,,,,,,,1,active,"Building configuration...
+
+Current configuration : 154 bytes
+!
+interface GigabitEthernet1/10
+ switchport
+ switchport trunk encapsulation dot1q
+ no ip address
+ channel-protocol lacp
+ channel-group 1 mode active
+end
+",
+Gi1/11,connected,trunk,full,1000,1000BaseSX,,trunk,,,"9,16,24,251,255,330,350,351",,,,"Building configuration...
+
+Current configuration : 184 bytes
+!
+interface GigabitEthernet1/11
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 9,16,24,251,255,330,350,351
+ switchport mode trunk
+ no ip address
+end
+","5006.0473.6397
+7010.5c5f.04cc
+7010.5c5e.9a66
+5cfc.665c.43af
+bc67.1cdd.ed30
+ac44.f215.d156
+5006.0473.6398
+f481.39c5.d2c5
+0021.5554.df8d
+fc4d.d4d4.fd10
+c03f.d567.0593
+448a.5b54.eff2
+5cfc.665c.6c02
+0023.2453.9a7b
+7010.5c5e.177a
+5006.0473.dde0
+0023.68c9.71b7
+b4e9.b0b0.0077
+90fb.a679.bd50
+20bb.c021.36b5
+5006.0473.637f
+7010.5c5e.898d
+c03f.d56d.539f
+7010.5c5e.23b1
+0021.cc6b.d20a
+a08c.fd17.4506
+0023.68c9.7701
+5006.0473.5ec2
+b000.b472.6641
+a89d.21a1.7e48
+accc.8e56.2a6b
+5006.0473.6448
+8c89.a56d.c4ae
+448a.5b75.2c7a
+0021.cc69.4be1
+0800.1fe5.0971
+7010.5c5e.133a
+5cfc.665c.69a5
+448a.5b54.d424
+5006.0473.6443
+b05a.dac4.60cc
+7010.5c5f.8694
+"
+Gi1/12,disabled,1,full,1000,1000BaseSX,,,,,,,,,"Building configuration...
+
+Current configuration : 74 bytes
+!
+interface GigabitEthernet1/12
+ switchport
+ no ip address
+ shutdown
+end
+",
+Gi1/13,notconnect,1,full,1000,1000BaseSX,port channel to server switches,trunk,,,,,66,on,"Building configuration...
+
+Current configuration : 196 bytes
+!
+interface GigabitEthernet1/13
+ description port channel to server switches
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ channel-group 66 mode on
+end
+",
+Gi1/14,connected,trunk,full,1000,1000BaseSX,port channel to server switches,trunk,,,,,20,on,"Building configuration...
+
+Current configuration : 196 bytes
+!
+interface GigabitEthernet1/14
+ description port channel to server switches
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ channel-group 20 mode on
+end
+",
+Gi1/15,notconnect,1,full,1000,1000BaseSX,port channel to server switches,trunk,,,,,66,on,"Building configuration...
+
+Current configuration : 196 bytes
+!
+interface GigabitEthernet1/15
+ description port channel to server switches
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ channel-group 66 mode on
+end
+",
+Gi1/16,connected,trunk,full,1000,1000BaseSX,port channel to server switches,trunk,,,,,20,on,"Building configuration...
+
+Current configuration : 196 bytes
+!
+interface GigabitEthernet1/16
+ description port channel to server switches
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ channel-group 20 mode on
+end
+",
+Gi3/1,connected,9,a-full,a-1000,10/100/1000BaseT,,,9,,,,,,"Building configuration...
+
+Current configuration : 89 bytes
+!
+interface GigabitEthernet3/1
+ switchport
+ switchport access vlan 9
+ no ip address
+end
+","705a.0f14.33bb
+"
+Gi3/2,connected,16,a-full,a-100,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 116 bytes
+!
+interface GigabitEthernet3/2
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi3/3,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 116 bytes
+!
+interface GigabitEthernet3/3
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","5006.0473.6643
+0001.6ccf.b5fd
+"
+Gi3/4,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 116 bytes
+!
+interface GigabitEthernet3/4
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi3/5,notconnect,24,full,auto,10/100/1000BaseT,,,24,,,,,,"Building configuration...
+
+Current configuration : 90 bytes
+!
+interface GigabitEthernet3/5
+ switchport
+ switchport access vlan 24
+ no ip address
+end
+",
+Gi3/6,connected,330,a-full,a-1000,10/100/1000BaseT,,,330,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/6
+ switchport
+ switchport access vlan 330
+ switchport voice vlan 24
+ no ip address
+end
+","8478.aced.c465
+"
+Gi3/7,connected,255,a-full,a-1000,10/100/1000BaseT,,,255,,,,,,"Building configuration...
+
+Current configuration : 91 bytes
+!
+interface GigabitEthernet3/7
+ switchport
+ switchport access vlan 255
+ no ip address
+end
+","e4c7.2286.ebd8
+"
+Gi3/8,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 116 bytes
+!
+interface GigabitEthernet3/8
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","00e1.6dba.1b04
+0023.2456.3143
+"
+Gi3/9,connected,255,a-full,a-1000,10/100/1000BaseT,,,255,,,,,,"Building configuration...
+
+Current configuration : 91 bytes
+!
+interface GigabitEthernet3/9
+ switchport
+ switchport access vlan 255
+ no ip address
+end
+","e4c7.2286.ec45
+"
+Gi3/10,connected,16,a-full,a-1000,10/100/1000BaseT,N174 vdi,,16,24,,,,,"Building configuration...
+
+Current configuration : 139 bytes
+!
+interface GigabitEthernet3/10
+ description N174 vdi
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","0023.2461.e42e
+20bb.c021.2436
+"
+Gi3/11,notconnect,2,full,auto,10/100/1000BaseT,,,2,,,,,,"Building configuration...
+
+Current configuration : 90 bytes
+!
+interface GigabitEthernet3/11
+ switchport
+ switchport access vlan 2
+ no ip address
+end
+",
+Gi3/12,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/12
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","00e1.6dbb.a356
+"
+Gi3/13,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/13
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi3/14,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/14
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3599
+"
+Gi3/15,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/15
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","448a.5b54.ed89
+5cfc.665c.3770
+"
+Gi3/16,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/16
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi3/17,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet3/17
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.34c1
+"
+Gi3/18,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/18
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","5ca4.8afe.4603
+001f.b527.425f
+"
+Gi3/19,notconnect,16,full,auto,10/100/1000BaseT,,,16,,,,,,"Building configuration...
+
+Current configuration : 91 bytes
+!
+interface GigabitEthernet3/19
+ switchport
+ switchport access vlan 16
+ no ip address
+end
+",
+Gi3/20,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/20
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi3/21,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/21
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi3/22,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/22
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","507b.9d02.3ca8
+5ca4.8afe.75a5
+"
+Gi3/23,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/23
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","b4e9.b0b0.008d
+78e3.b5b3.1195
+"
+Gi3/24,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/24
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.36ad
+"
+Gi3/35,notconnect,260,full,1000,10/100/1000BaseT,,,260,,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/35
+ switchport
+ switchport access vlan 260
+ no ip address
+ speed 1000
+ duplex full
+end
+",
+Gi3/36,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/36
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi3/38,connected,16,a-full,a-10,10/100/1000BaseT,,,16,,,,,,"Building configuration...
+
+Current configuration : 91 bytes
+!
+interface GigabitEthernet3/38
+ switchport
+ switchport access vlan 16
+ no ip address
+end
+",
+Gi3/40,connected,16,a-full,a-100,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet3/40
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","0004.f2f5.9978
+"
+Gi3/41,connected,20,a-full,a-100,10/100/1000BaseT,,,20,,,,,,"Building configuration...
+
+Current configuration : 91 bytes
+!
+interface GigabitEthernet3/41
+ switchport
+ switchport access vlan 20
+ no ip address
+end
+","00c0.b7b8.ed50
+"
+Gi3/42,notconnect,20,full,auto,10/100/1000BaseT,,,20,,,,,,"Building configuration...
+
+Current configuration : 91 bytes
+!
+interface GigabitEthernet3/42
+ switchport
+ switchport access vlan 20
+ no ip address
+end
+",
+Gi3/45,notconnect,256,full,auto,10/100/1000BaseT,,,256,24,,,,,"Building configuration...
+
+Current configuration : 118 bytes
+!
+interface GigabitEthernet3/45
+ switchport
+ switchport access vlan 256
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi3/46,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet3/46
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3545
+c85b.7657.4832
+"
+Gi3/47,connected,20,a-full,a-100,10/100/1000BaseT,,,20,,,,,,"Building configuration...
+
+Current configuration : 91 bytes
+!
+interface GigabitEthernet3/47
+ switchport
+ switchport access vlan 20
+ no ip address
+end
+","acf2.c58d.214b
+"
+Gi3/48,connected,20,a-full,a-100,10/100/1000BaseT,,,20,,,,,,"Building configuration...
+
+Current configuration : 91 bytes
+!
+interface GigabitEthernet3/48
+ switchport
+ switchport access vlan 20
+ no ip address
+end
+","00c0.b7b8.ed00
+"
+Gi4/1,notconnect,9,full,auto,10/100/1000BaseT,,,9,,,,,,"Building configuration...
+
+Current configuration : 89 bytes
+!
+interface GigabitEthernet4/1
+ switchport
+ switchport access vlan 9
+ no ip address
+end
+",
+Gi4/2,notconnect,9,full,auto,10/100/1000BaseT,,,9,,,,,,"Building configuration...
+
+Current configuration : 89 bytes
+!
+interface GigabitEthernet4/2
+ switchport
+ switchport access vlan 9
+ no ip address
+end
+",
+Gi4/3,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 116 bytes
+!
+interface GigabitEthernet4/3
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","b4e9.b0b0.008f
+0023.24bc.46db
+"
+Gi4/4,notconnect,999,full,auto,10/100/1000BaseT,*--- Untrusted CAS 1B ---*,trunk,999,,"910-916,953,990,999",999,,,"Building configuration...
+
+Current configuration : 295 bytes
+!
+interface GigabitEthernet4/4
+ description --- Untrusted CAS 1B ---
+ switchport
+ switchport access vlan 999
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 910-916,953,990,999
+ switchport mode trunk
+ no ip address
+ power inline never
+end
+",
+Gi4/7,connected,9,a-full,a-1000,10/100/1000BaseT,n244,access,9,24,,,,,"Building configuration...
+
+Current configuration : 157 bytes
+!
+interface GigabitEthernet4/7
+ description n244
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi4/8,disabled,372,full,auto,10/100/1000BaseT,port channels to 5508 primary ,,372,,"200,252,255",,,,"Building configuration...
+
+Current configuration : 188 bytes
+!
+interface GigabitEthernet4/8
+ description port channels to 5508 primary 
+ switchport
+ switchport access vlan 372
+ switchport trunk allowed vlan 200,252,255
+ no ip address
+ shutdown
+end
+",
+Gi4/10,connected,trunk,a-full,a-1000,10/100/1000BaseT,,trunk,,,,,30,on,"Building configuration...
+
+Current configuration : 151 bytes
+!
+interface GigabitEthernet4/10
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ channel-group 30 mode on
+end
+",
+Gi4/11,notconnect,2,full,auto,10/100/1000BaseT,,access,2,,,,,,"Building configuration...
+
+Current configuration : 176 bytes
+!
+interface GigabitEthernet4/11
+ switchport
+ switchport access vlan 2
+ switchport trunk encapsulation dot1q
+ switchport mode access
+ switchport nonegotiate
+ no ip address
+end
+",
+Gi4/12,connected,trunk,a-full,a-1000,10/100/1000BaseT,,trunk,,,,,30,on,"Building configuration...
+
+Current configuration : 151 bytes
+!
+interface GigabitEthernet4/12
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ channel-group 30 mode on
+end
+",
+Gi4/20,connected,330,a-full,a-1000,10/100/1000BaseT,,access,330,24,,,,,"Building configuration...
+
+Current configuration : 142 bytes
+!
+interface GigabitEthernet4/20
+ switchport
+ switchport access vlan 330
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","5ca4.8afe.f6a0
+4ccc.6a84.b0c3
+"
+Gi4/23,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet4/23
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","7010.5c5f.6357
+4439.c43a.b3a1
+"
+Gi4/24,connected,9,a-full,a-1000,10/100/1000BaseT,,,9,,,,,,"Building configuration...
+
+Current configuration : 90 bytes
+!
+interface GigabitEthernet4/24
+ switchport
+ switchport access vlan 9
+ no ip address
+end
+","2c9e.fcd5.169f
+"
+Gi4/25,notconnect,300,full,100,10/100/1000BaseT,,access,300,,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet4/25
+ switchport
+ switchport access vlan 300
+ switchport mode access
+ no ip address
+ speed 100
+ duplex full
+end
+",
+Gi4/26,notconnect,300,full,100,10/100/1000BaseT,,access,300,,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet4/26
+ switchport
+ switchport access vlan 300
+ switchport mode access
+ no ip address
+ speed 100
+ duplex full
+end
+",
+Gi4/27,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet4/27
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","d0bf.9ce1.4058
+08cc.a7ab.b68a
+"
+Gi4/28,connected,330,a-full,a-1000,10/100/1000BaseT,- users,access,330,24,,,,,"Building configuration...
+
+Current configuration : 163 bytes
+!
+interface GigabitEthernet4/28
+ description - users
+ switchport
+ switchport access vlan 330
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","f076.1cac.6bf8
+20bb.c021.3655
+"
+Gi4/30,notconnect,255,full,auto,10/100/1000BaseT,,,255,,,,,,"Building configuration...
+
+Current configuration : 92 bytes
+!
+interface GigabitEthernet4/30
+ switchport
+ switchport access vlan 255
+ no ip address
+end
+",
+Gi4/32,notconnect,255,full,auto,10/100/1000BaseT,,,255,,,,,,"Building configuration...
+
+Current configuration : 92 bytes
+!
+interface GigabitEthernet4/32
+ switchport
+ switchport access vlan 255
+ no ip address
+end
+",
+Gi4/33,notconnect,20,full,auto,10/100/1000BaseT,,access,20,,,,,,"Building configuration...
+
+Current configuration : 115 bytes
+!
+interface GigabitEthernet4/33
+ switchport
+ switchport access vlan 20
+ switchport mode access
+ no ip address
+end
+",
+Gi4/34,connected,330,a-full,a-1000,10/100/1000BaseT,,,330,24,,,,,"Building configuration...
+
+Current configuration : 118 bytes
+!
+interface GigabitEthernet4/34
+ switchport
+ switchport access vlan 330
+ switchport voice vlan 24
+ no ip address
+end
+","90fb.a684.6c7d
+"
+Gi4/35,notconnect,20,full,auto,10/100/1000BaseT,call pilot c lan,access,20,,,,,,"Building configuration...
+
+Current configuration : 145 bytes
+!
+interface GigabitEthernet4/35
+ description call pilot c lan
+ switchport
+ switchport access vlan 20
+ switchport mode access
+ no ip address
+end
+",
+Gi4/38,connected,256,full,100,10/100/1000BaseT,,access,256,,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet4/38
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ speed 100
+ duplex full
+end
+","00a0.9831.2044
+"
+Gi4/40,connected,255,a-full,a-1000,10/100/1000BaseT,*---Cisco VM Access---*,access,255,24,,,,,"Building configuration...
+
+Current configuration : 177 bytes
+!
+interface GigabitEthernet4/40
+ description ---Cisco VM Access---
+ switchport
+ switchport access vlan 255
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","286f.7fff.6f5c
+"
+Gi4/43,notconnect,20,full,auto,10/100/1000BaseT,call center vmware,access,20,,,,,,"Building configuration...
+
+Current configuration : 147 bytes
+!
+interface GigabitEthernet4/43
+ description call center vmware
+ switchport
+ switchport access vlan 20
+ switchport mode access
+ no ip address
+end
+",
+Gi4/44,connected,trunk,a-full,a-1000,10/100/1000BaseT,port channels to 5508 primary ,trunk,,,"9,16,20,24,200,252,255,256,300,900",,15,on,"Building configuration...
+
+Current configuration : 261 bytes
+!
+interface GigabitEthernet4/44
+ description port channels to 5508 primary 
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 9,16,20,24,200,252,255,256,300,900
+ switchport mode trunk
+ no ip address
+ channel-group 15 mode on
+end
+",
+Gi4/45,connected,trunk,a-full,a-1000,10/100/1000BaseT,,trunk,,,"9,16,20,24,200,252,255,256,300,900",,15,on,"Building configuration...
+
+Current configuration : 217 bytes
+!
+interface GigabitEthernet4/45
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 9,16,20,24,200,252,255,256,300,900
+ switchport mode trunk
+ no ip address
+ channel-group 15 mode on
+end
+",
+Gi4/46,disabled,1,full,auto,10/100/1000BaseT,port channels to 5508 primary ,trunk,,,"9,16,20,24,200,252,255,256,300,900",,15,on,"Building configuration...
+
+Current configuration : 271 bytes
+!
+interface GigabitEthernet4/46
+ description port channels to 5508 primary 
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 9,16,20,24,200,252,255,256,300,900
+ switchport mode trunk
+ no ip address
+ shutdown
+ channel-group 15 mode on
+end
+",
+Gi4/48,connected,trunk,a-full,a-1000,10/100/1000BaseT,Port channel to 5508 primary,trunk,,,"9,16,20,24,200,252,255,256,300,900",,15,on,"Building configuration...
+
+Current configuration : 259 bytes
+!
+interface GigabitEthernet4/48
+ description Port channel to 5508 primary
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 9,16,20,24,200,252,255,256,300,900
+ switchport mode trunk
+ no ip address
+ channel-group 15 mode on
+end
+",
+Gi5/3,disabled,1,full,auto,10/100/1000BaseT,,,,,,,,,"Building configuration...
+
+Current configuration : 61 bytes
+!
+interface GigabitEthernet5/3
+ no ip address
+ shutdown
+end
+",
+Gi7/2,notconnect,1,full,auto,10/100/1000BaseT,,,,,,,,,"Building configuration...
+
+Current configuration : 63 bytes
+!
+interface GigabitEthernet7/2
+ switchport
+ no ip address
+end
+",
+Gi7/3,connected,9,a-full,a-1000,10/100/1000BaseT,,,9,,,,,,"Building configuration...
+
+Current configuration : 89 bytes
+!
+interface GigabitEthernet7/3
+ switchport
+ switchport access vlan 9
+ no ip address
+end
+",
+Gi7/4,connected,255,a-full,a-1000,10/100/1000BaseT,freightliner users,access,255,,,,,,"Building configuration...
+
+Current configuration : 147 bytes
+!
+interface GigabitEthernet7/4
+ description freightliner users
+ switchport
+ switchport access vlan 255
+ switchport mode access
+ no ip address
+end
+","4403.a701.4116
+"
+Gi7/5,connected,16,a-full,a-1000,10/100/1000BaseT,user port,access,16,24,,,,,"Building configuration...
+
+Current configuration : 163 bytes
+!
+interface GigabitEthernet7/5
+ description user port
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","0001.6ccf.c9b1
+"
+Gi7/6,notconnect,9,full,auto,10/100/1000BaseT,IT users,access,9,24,,,,,"Building configuration...
+
+Current configuration : 161 bytes
+!
+interface GigabitEthernet7/6
+ description IT users
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi7/7,connected,16,a-full,a-1000,10/100/1000BaseT,webgwp1,access,16,24,,,,,"Building configuration...
+
+Current configuration : 161 bytes
+!
+interface GigabitEthernet7/7
+ description webgwp1
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.36c5
+d8cb.8adb.ed06
+"
+Gi7/8,notconnect,256,full,auto,10/100/1000BaseT,adp term server 1,access,256,,,,,,"Building configuration...
+
+Current configuration : 146 bytes
+!
+interface GigabitEthernet7/8
+ description adp term server 1
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+end
+",
+Gi7/9,connected,9,a-full,a-1000,10/100/1000BaseT,webgwm1,access,9,,,,,,"Building configuration...
+
+Current configuration : 134 bytes
+!
+interface GigabitEthernet7/9
+ description webgwm1
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ no ip address
+end
+","6451.0624.c473
+"
+Gi7/10,notconnect,256,full,auto,10/100/1000BaseT,webgwm2,access,256,,,,,,"Building configuration...
+
+Current configuration : 137 bytes
+!
+interface GigabitEthernet7/10
+ description webgwm2
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+end
+",
+Gi7/12,notconnect,9,full,auto,10/100/1000BaseT,utna2,access,9,,,,,,"Building configuration...
+
+Current configuration : 133 bytes
+!
+interface GigabitEthernet7/12
+ description utna2
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ no ip address
+end
+",
+Gi7/13,connected,16,a-full,a-1000,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet7/13
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+","54e1.adda.6b0f
+20bb.c021.3671
+"
+Gi7/14,connected,16,a-full,a-1000,10/100/1000BaseT,users,access,16,24,,,,,"Building configuration...
+
+Current configuration : 160 bytes
+!
+interface GigabitEthernet7/14
+ description users
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","4437.e687.b99f
+e0d1.730a.f185
+"
+Gi7/15,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet7/15
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi7/16,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet7/16
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi7/17,connected,330,a-full,a-1000,10/100/1000BaseT,,access,330,24,,,,,"Building configuration...
+
+Current configuration : 142 bytes
+!
+interface GigabitEthernet7/17
+ switchport
+ switchport access vlan 330
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","0023.5ec8.e194
+"
+Gi7/18,notconnect,16,full,auto,10/100/1000BaseT,*--- Freightliner Users ---*,access,16,24,,,,,"Building configuration...
+
+Current configuration : 181 bytes
+!
+interface GigabitEthernet7/18
+ description --- Freightliner Users ---
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi7/19,connected,9,a-full,a-1000,10/100/1000BaseT,,access,9,,,,,,"Building configuration...
+
+Current configuration : 114 bytes
+!
+interface GigabitEthernet7/19
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ no ip address
+end
+","48ba.4e3a.1e40
+"
+Gi7/21,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet7/21
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","b4e9.b0b0.0095
+4437.e6c0.337b
+"
+Gi7/22,notconnect,255,full,auto,10/100/1000BaseT,,access,255,,,,,,"Building configuration...
+
+Current configuration : 116 bytes
+!
+interface GigabitEthernet7/22
+ switchport
+ switchport access vlan 255
+ switchport mode access
+ no ip address
+end
+",
+Gi7/24,notconnect,350,full,auto,10/100/1000BaseT,,,350,,,,,,"Building configuration...
+
+Current configuration : 92 bytes
+!
+interface GigabitEthernet7/24
+ switchport
+ switchport access vlan 350
+ no ip address
+end
+",
+Gi7/38,notconnect,1,full,auto,10/100/1000BaseT,*---Trunk to Temp 3650---*,trunk,,,"1,16,20,21,24,255,256,300",,55,on,"Building configuration...
+
+Current configuration : 246 bytes
+!
+interface GigabitEthernet7/38
+ description ---Trunk to Temp 3650---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,16,20,21,24,255,256,300
+ switchport mode trunk
+ no ip address
+ channel-group 55 mode on
+end
+",
+Gi7/39,notconnect,256,full,auto,10/100/1000BaseT,*---NetAppEtherChannel---*,access,256,,,,6,on,"Building configuration...
+
+Current configuration : 203 bytes
+!
+interface GigabitEthernet7/39
+ description ---NetAppEtherChannel---
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ flowcontrol receive on
+ channel-group 6 mode on
+end
+",
+Gi7/40,notconnect,256,full,auto,10/100/1000BaseT,*---NetAppEtherChannel---*,access,256,,,,5,on,"Building configuration...
+
+Current configuration : 203 bytes
+!
+interface GigabitEthernet7/40
+ description ---NetAppEtherChannel---
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ flowcontrol receive on
+ channel-group 5 mode on
+end
+",
+Gi7/41,notconnect,10,full,auto,10/100/1000BaseT,*--- Roof Antenna to CR England ---*,access,10,,,,,,"Building configuration...
+
+Current configuration : 163 bytes
+!
+interface GigabitEthernet7/41
+ description --- Roof Antenna to CR England ---
+ switchport
+ switchport access vlan 10
+ switchport mode access
+ no ip address
+end
+",
+Gi7/42,notconnect,255,full,auto,10/100/1000BaseT,,access,255,,,,,,"Building configuration...
+
+Current configuration : 116 bytes
+!
+interface GigabitEthernet7/42
+ switchport
+ switchport access vlan 255
+ switchport mode access
+ no ip address
+end
+",
+Gi7/43,connected,15,a-full,a-1000,10/100/1000BaseT,,access,15,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet7/43
+ switchport
+ switchport access vlan 15
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","d8cb.8ad9.bc76
+20bb.c021.36a7
+"
+Gi7/44,notconnect,1,full,auto,10/100/1000BaseT,,trunk,,,"2,40,256",,,,"Building configuration...
+
+Current configuration : 165 bytes
+!
+interface GigabitEthernet7/44
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 2,40,256
+ switchport mode trunk
+ no ip address
+end
+",
+Gi7/45,connected,9,a-full,a-1000,10/100/1000BaseT,,access,9,,,,,,"Building configuration...
+
+Current configuration : 114 bytes
+!
+interface GigabitEthernet7/45
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ no ip address
+end
+","a08c.fd17.258b
+"
+Gi7/46,notconnect,1,full,auto,10/100/1000BaseT,-- Link to Secondary ASA --,trunk,,,"260,261,900",,,,"Building configuration...
+
+Current configuration : 235 bytes
+!
+interface GigabitEthernet7/46
+ description -- Link to Secondary ASA --
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 260,261,900
+ switchport mode trunk
+ no ip address
+ service-policy input QOS
+end
+",
+Gi7/47,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet7/47
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi7/48,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet7/48
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","0001.6cd8.5435
+20bb.c021.3673
+"
+Gi8/1,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet8/1
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","5cfc.665c.4842
+0023.24ba.856d
+"
+Gi8/2,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet8/2
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","54e1.ad84.af43
+5067.ae25.9e75
+"
+Gi8/3,connected,16,a-full,a-100,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet8/3
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi8/4,notconnect,256,full,auto,10/100/1000BaseT,,access,256,,"2,40,256",,,,"Building configuration...
+
+Current configuration : 193 bytes
+!
+interface GigabitEthernet8/4
+ switchport
+ switchport access vlan 256
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 2,40,256
+ switchport mode access
+ no ip address
+end
+",
+Gi8/5,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 116 bytes
+!
+interface GigabitEthernet8/5
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi8/6,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet8/6
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3589
+54ee.751c.c8e9
+"
+Gi8/7,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet8/7
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","507b.9dc3.1805
+"
+Gi8/8,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet8/8
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","5067.ae25.9b97
+54ee.759b.0d70
+"
+Gi8/9,connected,16,a-full,a-100,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet8/9
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","0c27.2431.6cbe
+"
+Gi8/10,connected,16,a-full,a-100,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/10
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","0022.ee02.15b4
+"
+Gi8/11,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/11
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","d43d.7eab.f02d
+b4e9.b0b0.00cd
+"
+Gi8/12,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/12
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi8/13,connected,16,a-full,a-100,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/13
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","8478.aced.2249
+fc4d.d4d2.94d3
+"
+Gi8/14,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/14
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.1768
+448a.5beb.bf93
+"
+Gi8/15,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/15
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","448a.5b56.1a51
+c414.3c96.f93e
+"
+Gi8/16,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/16
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","448a.5b54.ef19
+20bb.c021.3661
+"
+Gi8/17,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/17
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","e8ed.f3a9.2acd
+ace2.d394.5f71
+"
+Gi8/18,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/18
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3517
+"
+Gi8/19,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/19
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3709
+"
+Gi8/20,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/20
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3683
+d8cb.8ad9.c044
+"
+Gi8/21,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/21
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.36e1
+"
+Gi8/22,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/22
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","90fb.a67a.58e3
+e8ed.f3a9.3121
+"
+Gi8/23,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/23
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.35f1
+"
+Gi8/24,connected,16,a-full,a-100,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/24
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.36c3
+4ccc.6aa1.416f
+"
+Gi8/25,notconnect,20,full,auto,10/100/1000BaseT,,access,20,,,,,,"Building configuration...
+
+Current configuration : 115 bytes
+!
+interface GigabitEthernet8/25
+ switchport
+ switchport access vlan 20
+ switchport mode access
+ no ip address
+end
+",
+Gi8/26,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/26
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi8/27,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/27
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","5067.ae25.9d8b
+"
+Gi8/28,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/28
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","c8d3.ffdc.2f63
+20bb.c021.3663
+"
+Gi8/29,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/29
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","e8ed.f3a9.3137
+3863.bbb7.fd1a
+"
+Gi8/30,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/30
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","a0b3.ccf9.6635
+f84f.5794.8785
+"
+Gi8/31,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/31
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3617
+98e7.f42b.f891
+"
+Gi8/32,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/32
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi8/33,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/33
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.36dd
+"
+Gi8/34,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/34
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi8/35,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/35
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","e8ed.f3a9.2bdb
+"
+Gi8/36,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/36
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","0050.b679.5810
+20bb.c021.362d
+"
+Gi8/37,connected,9,a-full,a-1000,10/100/1000BaseT,,access,9,,,,,,"Building configuration...
+
+Current configuration : 114 bytes
+!
+interface GigabitEthernet8/37
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ no ip address
+end
+","dc4a.3eb3.bd47
+"
+Gi8/38,connected,trunk,a-full,a-1000,10/100/1000BaseT,,trunk,,,"16,24,255,330",,,,"Building configuration...
+
+Current configuration : 170 bytes
+!
+interface GigabitEthernet8/38
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 16,24,255,330
+ switchport mode trunk
+ no ip address
+end
+","c85b.76d8.7bdf
+448a.5b53.4eae
+20bb.c021.3641
+b4e9.b0b0.007d
+b4e9.b0b0.00ab
+"
+Gi8/39,notconnect,15,full,auto,10/100/1000BaseT,,access,15,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/39
+ switchport
+ switchport access vlan 15
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi8/40,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/40
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3585
+"
+Gi8/41,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/41
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","68f7.284f.5209
+5ca4.8afe.7b05
+"
+Gi8/42,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/42
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","b4e9.b0b0.0067
+"
+Gi8/43,connected,1,a-full,a-100,10/100/1000BaseT,,,,24,"16,24,255",,,,"Building configuration...
+
+Current configuration : 131 bytes
+!
+interface GigabitEthernet8/43
+ switchport
+ switchport trunk allowed vlan 16,24,255
+ switchport voice vlan 24
+ no ip address
+end
+","0004.f2f5.98c8
+"
+Gi8/44,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,"16,24,255,2255",,,,"Building configuration...
+
+Current configuration : 187 bytes
+!
+interface GigabitEthernet8/44
+ switchport
+ switchport access vlan 16
+ switchport trunk allowed vlan 16,24,255,2255
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","e8ed.f3ab.0c27
+fc4d.d4d5.05ca
+"
+Gi8/45,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/45
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","5cfc.665c.6852
+0023.24ba.8a6a
+"
+Gi8/46,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/46
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","20bb.c021.3601
+"
+Gi8/47,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/47
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi8/48,connected,16,a-full,a-1000,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet8/48
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","fc4d.d44a.7c1b
+c414.3c96.f3da
+"
+Gi9/1,connected,16,a-full,a-1000,10/100/1000BaseT,"""D119""",access,16,24,,,,,"Building configuration...
+
+Current configuration : 160 bytes
+!
+interface GigabitEthernet9/1
+ description ""D119""
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","fc4d.d4d1.a51c
+20bb.c021.3557
+"
+Gi9/2,notconnect,9,full,auto,10/100/1000BaseT,,,9,,,,,,"Building configuration...
+
+Current configuration : 89 bytes
+!
+interface GigabitEthernet9/2
+ switchport
+ switchport access vlan 9
+ no ip address
+end
+",
+Gi9/13,notconnect,200,full,auto,10/100/1000BaseT,ftl sls admin office printer,access,200,,,,,,"Building configuration...
+
+Current configuration : 178 bytes
+!
+interface GigabitEthernet9/13
+ description ftl sls admin office printer
+ switchport
+ switchport access vlan 200
+ switchport mode access
+ no ip address
+ power inline never
+end
+",
+Gi9/14,connected,9,a-full,a-1000,10/100/1000BaseT,,,9,,,,,,"Building configuration...
+
+Current configuration : 90 bytes
+!
+interface GigabitEthernet9/14
+ switchport
+ switchport access vlan 9
+ no ip address
+end
+","fc3f.dbbf.3e94
+"
+Gi9/15,connected,9,a-full,a-1000,10/100/1000BaseT,ADP back counter preq printer,access,9,,,,,,"Building configuration...
+
+Current configuration : 157 bytes
+!
+interface GigabitEthernet9/15
+ description ADP back counter preq printer
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ no ip address
+end
+","a08c.fd17.350f
+"
+Gi9/16,connected,9,a-full,a-1000,10/100/1000BaseT,,access,9,24,,,,,"Building configuration...
+
+Current configuration : 160 bytes
+!
+interface GigabitEthernet9/16
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+ power inline never
+end
+","b05a.dac4.7005
+"
+Gi9/17,connected,255,a-full,a-1000,10/100/1000BaseT,*--- Freightliner ELAN ---*,access,255,,,,,,"Building configuration...
+
+Current configuration : 155 bytes
+!
+interface GigabitEthernet9/17
+ description --- Freightliner ELAN ---
+ switchport
+ switchport access vlan 255
+ switchport mode access
+ no ip address
+end
+","c84c.752c.aac2
+"
+Gi9/18,notconnect,16,full,auto,10/100/1000BaseT,user port,access,16,24,,,,,"Building configuration...
+
+Current configuration : 164 bytes
+!
+interface GigabitEthernet9/18
+ description user port
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/19,notconnect,16,full,auto,10/100/1000BaseT,,,16,24,,,,,"Building configuration...
+
+Current configuration : 117 bytes
+!
+interface GigabitEthernet9/19
+ switchport
+ switchport access vlan 16
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/20,connected,16,a-full,a-100,10/100/1000BaseT,*--- Freightliner TLAN ---*,access,16,24,,,,,"Building configuration...
+
+Current configuration : 180 bytes
+!
+interface GigabitEthernet9/20
+ description --- Freightliner TLAN ---
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","0004.f2f5.9868
+"
+Gi9/21,notconnect,30,full,auto,10/100/1000BaseT,*--- Freightliner TLAN ---*,access,30,,,,,,"Building configuration...
+
+Current configuration : 174 bytes
+!
+interface GigabitEthernet9/21
+ description --- Freightliner TLAN ---
+ switchport
+ switchport access vlan 30
+ switchport mode access
+ no ip address
+ power inline never
+end
+",
+Gi9/22,connected,256,a-full,a-1000,10/100/1000BaseT,*--- Freightliner TLAN ---*,access,256,24,,,,,"Building configuration...
+
+Current configuration : 181 bytes
+!
+interface GigabitEthernet9/22
+ description --- Freightliner TLAN ---
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","6c99.8984.867f
+"
+Gi9/23,notconnect,1,full,auto,10/100/1000BaseT,,trunk,,,,,,,"Building configuration...
+
+Current configuration : 149 bytes
+!
+interface GigabitEthernet9/23
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ no ip address
+end
+",
+Gi9/24,notconnect,9,full,auto,10/100/1000BaseT,,access,9,,,,,,"Building configuration...
+
+Current configuration : 134 bytes
+!
+interface GigabitEthernet9/24
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ no ip address
+ power inline never
+end
+",
+Gi9/25,notconnect,20,full,auto,10/100/1000BaseT,*---Users---*,access,20,,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet9/25
+ description ---Users---
+ switchport
+ switchport access vlan 20
+ switchport mode access
+ no ip address
+end
+",
+Gi9/27,notconnect,16,full,auto,10/100/1000BaseT,*--- Freightliner Users ---*,access,16,24,,,,,"Building configuration...
+
+Current configuration : 181 bytes
+!
+interface GigabitEthernet9/27
+ description --- Freightliner Users ---
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/28,notconnect,1,full,auto,10/100/1000BaseT,*--- Freightliner Users ---*,trunk,,,"1,9,16,24,255,351",,22,active,"Building configuration...
+
+Current configuration : 244 bytes
+!
+interface GigabitEthernet9/28
+ description --- Freightliner Users ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9,16,24,255,351
+ switchport mode trunk
+ no ip address
+ channel-group 22 mode active
+end
+",
+Gi9/29,notconnect,20,full,auto,10/100/1000BaseT,*--- Freightliner Users ---*,access,20,,,,,,"Building configuration...
+
+Current configuration : 155 bytes
+!
+interface GigabitEthernet9/29
+ description --- Freightliner Users ---
+ switchport
+ switchport access vlan 20
+ switchport mode access
+ no ip address
+end
+",
+Gi9/30,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/30
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/31,connected,330,a-full,a-100,10/100/1000BaseT,,,330,,,,,,"Building configuration...
+
+Current configuration : 92 bytes
+!
+interface GigabitEthernet9/31
+ switchport
+ switchport access vlan 330
+ no ip address
+end
+","d057.4c31.ed18
+"
+Gi9/32,connected,330,a-full,a-1000,10/100/1000BaseT,,access,330,24,,,,,"Building configuration...
+
+Current configuration : 142 bytes
+!
+interface GigabitEthernet9/32
+ switchport
+ switchport access vlan 330
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","6c62.6d4e.1b69
+"
+Gi9/33,notconnect,256,full,auto,10/100/1000BaseT,*---NetAppEtherChannel---*,access,256,,,,7,on,"Building configuration...
+
+Current configuration : 223 bytes
+!
+interface GigabitEthernet9/33
+ description ---NetAppEtherChannel---
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ power inline never
+ flowcontrol receive on
+ channel-group 7 mode on
+end
+",
+Gi9/34,notconnect,256,full,auto,10/100/1000BaseT,*---NetAppEtherChannel---*,access,256,,,,8,on,"Building configuration...
+
+Current configuration : 223 bytes
+!
+interface GigabitEthernet9/34
+ description ---NetAppEtherChannel---
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ power inline never
+ flowcontrol receive on
+ channel-group 8 mode on
+end
+",
+Gi9/35,notconnect,256,full,auto,10/100/1000BaseT,*---NetAppEtherChannel---*,access,256,,,,8,on,"Building configuration...
+
+Current configuration : 223 bytes
+!
+interface GigabitEthernet9/35
+ description ---NetAppEtherChannel---
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ power inline never
+ flowcontrol receive on
+ channel-group 8 mode on
+end
+",
+Gi9/36,notconnect,256,full,auto,10/100/1000BaseT,*---NetAppEtherChannel---*,access,256,,,,7,on,"Building configuration...
+
+Current configuration : 223 bytes
+!
+interface GigabitEthernet9/36
+ description ---NetAppEtherChannel---
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ power inline never
+ flowcontrol receive on
+ channel-group 7 mode on
+end
+",
+Gi9/37,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/37
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/38,notconnect,9,full,auto,10/100/1000BaseT,,access,9,,,,,,"Building configuration...
+
+Current configuration : 134 bytes
+!
+interface GigabitEthernet9/38
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ no ip address
+ power inline never
+end
+",
+Gi9/39,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/39
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/40,connected,350,a-full,a-100,10/100/1000BaseT,,,350,,,,,,"Building configuration...
+
+Current configuration : 92 bytes
+!
+interface GigabitEthernet9/40
+ switchport
+ switchport access vlan 350
+ no ip address
+end
+","accc.8e76.a640
+"
+Gi9/41,connected,16,a-full,a-100,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/41
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/42,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/42
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/43,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/43
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/44,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/44
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Gi9/45,connected,10,a-full,a-1000,10/100/1000BaseT,,access,10,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/45
+ switchport
+ switchport access vlan 10
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","f866.f264.8bf4
+9c4e.20d0.9483
+68f7.2840.d532
+3cd9.2b71.3043
+90fb.a67b.38f9
+a08c.fd17.3517
+2818.78bb.bae6
+94d4.690b.12b3
+2c41.388d.82c3
+94d4.690b.115b
+1c1b.0d8e.4c5b
+0023.5ec8.e21c
+"
+Gi9/46,connected,9,a-full,a-1000,10/100/1000BaseT,,access,9,24,,,,,"Building configuration...
+
+Current configuration : 140 bytes
+!
+interface GigabitEthernet9/46
+ switchport
+ switchport access vlan 9
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","f481.39c9.4a69
+"
+Gi9/47,connected,16,a-full,a-100,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/47
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+","0023.2462.0eba
+d0c7.8915.3255
+"
+Gi9/48,notconnect,16,full,auto,10/100/1000BaseT,,access,16,24,,,,,"Building configuration...
+
+Current configuration : 141 bytes
+!
+interface GigabitEthernet9/48
+ switchport
+ switchport access vlan 16
+ switchport mode access
+ switchport voice vlan 24
+ no ip address
+end
+",
+Po1,notconnect,0,full,auto,,*--- Sterling Building ---*,trunk,,,,,,,"Building configuration...
+
+Current configuration : 158 bytes
+!
+interface Port-channel1
+ description --- Sterling Building ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+end
+",
+Po2,notconnect,0,full,auto,,*--- FreightLiner Building - Service 4500 ---*,trunk,,,add,,,,"Building configuration...
+
+Current configuration : 297 bytes
+!
+interface Port-channel2
+ description --- FreightLiner Building - Service 4500 ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9-11,14,16,20,21,24,30,251,253,255,256,350
+ switchport trunk allowed vlan add 901-4094
+ switchport mode trunk
+ no ip address
+end
+",
+Po3,connected,trunk,a-full,a-1000,,*--- Body Shop Building ---*,trunk,,,"1,9-11,14,20,21,24,30,251,255,256,350,901-4094",,,,"Building configuration...
+
+Current configuration : 237 bytes
+!
+interface Port-channel3
+ description --- Body Shop Building ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9-11,14,20,21,24,30,251,255,256,350,901-4094
+ switchport mode trunk
+ no ip address
+end
+","accc.8e49.047b
+e8ed.f3a9.3067
+e8ed.f3a9.3131
+0021.a07b.02c2
+705a.0f14.33a6
+000f.fefc.c64f
+accc.8e3b.1103
+705a.0f14.5344
+accc.8e49.1232
+b4e9.b0b0.005f
+5006.0473.6752
+78da.6ed0.b739
+4437.e6e4.fe0a
+e8ed.f3a9.30f5
+0023.5ec8.df3c
+448a.5b53.2cb4
+0023.24b4.4807
+cc52.af44.4676
+2c27.d731.c0a4
+b4e9.b0b0.00fb
+a048.1c6a.aa64
+20bb.c021.363d
+accc.8e26.4dd9
+d0c7.8915.3d22
+3cd9.2b71.2fd7
+0023.24b3.b42e
+20bb.c021.3553
+accc.8e26.7355
+accc.8e3a.92dc
+2c27.d71a.1a7c
+0024.9b1f.cb66
+accc.8e3a.92db
+"
+Po4,connected,trunk,a-full,a-1000,,*--- Tank Building ---*,trunk,,,"1,9,10,20,24,251-253,255,256,350",,,,"Building configuration...
+
+Current configuration : 218 bytes
+!
+interface Port-channel4
+ description --- Tank Building ---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9,10,20,24,251-253,255,256,350
+ switchport mode trunk
+ no ip address
+end
+","4403.a758.d307
+7010.5c5f.6c5d
+7010.5c5e.1345
+5882.a894.3a4e
+5006.0473.6283
+0023.5ec8.e13e
+7010.5c5f.0237
+448a.5b53.4171
+90fb.a680.e8b2
+5006.0473.5d05
+448a.5b53.4699
+5006.0473.5d88
+0023.2464.b1d2
+90fb.a67b.19ea
+00e1.6dba.7a75
+7010.5c5f.09b9
+7010.5c5f.04cf
+5067.ae25.9e81
+5cfc.665c.47b3
+7010.5c5e.833c
+7010.5c5f.048a
+448a.5b53.4653
+448a.5b53.4204
+009e.1ead.89d6
+94d4.690b.1293
+accc.8e6a.8142
+0023.24e2.23f8
+7010.5c5f.0aca
+5006.0473.65e9
+7010.5c5f.051b
+7010.5c5e.8330
+5006.0473.65ea
+7010.5c5f.082a
+5006.0473.5ebd
+5006.0473.63dd
+001f.b527.4243
+7010.5c5e.23d1
+448a.5b53.4563
+7010.5c5e.8337
+7010.5c5e.184b
+7010.5c5e.1123
+7010.5c5e.8334
+448a.5b53.4694
+5006.0473.65ef
+001f.6c7f.39fa
+5006.0473.639b
+14c9.1362.8d0f
+0021.5554.a7a1
+448a.5b4c.b35c
+0023.24c6.895b
+448a.5b53.46cf
+accc.8e76.b4b7
+0023.24c6.8ae9
+7427.eaca.4eb6
+00a3.8e83.69cb
+0004.f2f5.98b7
+90fb.a680.bbec
+08cc.6830.59a7
+0023.24c6.84e4
+7010.5c5f.0413
+0023.24e2.2328
+001f.b526.0c45
+accc.8e76.b4b3
+0023.24c7.204a
+001c.eeb7.7977
+94d4.690b.1179
+accc.8e76.b4b2
+448a.5b56.19f8
+accc.8e25.af94
+448a.5b4c.b1f3
+5006.0473.616d
+acf2.c58d.2123
+0023.5ec8.e1ae
+20bb.c021.22a4
+5006.0473.61a2
+accc.8e25.af91
+0800.1f66.6601
+5cfc.665c.47a8
+7010.5c5e.a537
+5cfc.665c.47a9
+7010.5c5e.1208
+accc.8e25.af93
+accc.8e76.b17e
+5006.0473.5c85
+accc.8e25.af92
+448a.5b4d.0f7c
+accc.8e26.d1bb
+0057.d2d0.5cb0
+448a.5bea.9a55
+5006.0473.6379
+08cc.6830.7a8b
+448a.5b53.4724
+5006.0473.5cff
+5006.0473.d933
+5006.0473.67ed
+448a.5b53.46bb
+5006.0473.e048
+5006.0473.637d
+7010.5c5e.29a8
+20bb.c093.f233
+0023.24b5.5d9c
+7010.5c5f.908d
+448a.5b53.4720
+5006.0473.637e
+448a.5b53.467e
+90fb.a67b.5afb
+90fb.a677.10f0
+0023.2465.5cb6
+7010.5c5f.6a89
+3cd9.2b71.3031
+0023.24b1.c406
+448a.5bc2.a547
+7010.5c5f.05b2
+00f6.6390.43e0
+7010.5c5e.1666
+448a.5b4c.b3ab
+448a.5b4c.b362
+0023.24c2.7f8d
+7010.5c5e.9cf4
+448a.5b53.4119
+448a.5b53.45ca
+e89a.8fd6.33f9
+0004.f2f5.98cc
+ec8e.b558.c63a
+7010.5c5f.09d4
+448a.5b4c.b3af
+20bb.c021.1ee2
+308d.99c0.96c6
+0057.d2d0.5ca1
+90fb.a684.b6f3
+7010.5c5e.111c
+448a.5b53.455f
+7010.5c5e.14d9
+7010.5c5f.02c8
+7010.5c5f.6e8f
+0001.6ccf.c9da
+448a.5b53.45d2
+0023.24e2.234d
+7010.5c5e.8121
+accc.8e26.7f7e
+7010.5c5f.bbfb
+5cfc.665c.474e
+7010.5c5f.8c01
+08cc.6830.5654
+accc.8e26.735a
+d8cb.8a0b.7b6d
+5006.0472.a22c
+6c62.6db2.42bf
+448a.5b53.41c2
+7010.5c5f.056e
+0023.24c6.8404
+0023.24a5.e4d3
+ec8e.b59c.2c4a
+448a.5b4d.0adb
+5006.0473.67b0
+0023.24c7.2654
+e8ed.f3a9.2be7
+0cbf.1500.33f8
+20bb.c093.f2a7
+7010.5c5f.0ab9
+448a.5b53.459e
+7010.5c5f.0afd
+0080.876c.43c9
+7010.5c5f.031d
+448a.5b53.45d8
+0023.5ec8.e188
+7010.5c5f.0a31
+90fb.a67b.3f48
+"
+Po5,notconnect,256,full,auto,,,access,256,,,,,,"Building configuration...
+
+Current configuration : 134 bytes
+!
+interface Port-channel5
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ flowcontrol receive on
+end
+",
+Po6,notconnect,256,full,auto,,,access,256,,,,,,"Building configuration...
+
+Current configuration : 134 bytes
+!
+interface Port-channel6
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ flowcontrol receive on
+end
+",
+Po7,notconnect,256,full,auto,,,access,256,,,,,,"Building configuration...
+
+Current configuration : 134 bytes
+!
+interface Port-channel7
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ flowcontrol receive on
+end
+",
+Po8,notconnect,256,full,auto,,,access,256,,,,,,"Building configuration...
+
+Current configuration : 134 bytes
+!
+interface Port-channel8
+ switchport
+ switchport access vlan 256
+ switchport mode access
+ no ip address
+ flowcontrol receive on
+end
+",
+Po9,notconnect,0,full,auto,,*--- Service East shop ---*,,,,,,,,"Building configuration...
+
+Current configuration : 97 bytes
+!
+interface Port-channel9
+ description --- Service East shop ---
+ switchport
+ no ip address
+end
+",
+Po13,disabled,0,full,auto,,utna1,,,,,,,,"Building configuration...
+
+Current configuration : 76 bytes
+!
+interface Port-channel13
+ description utna1
+ no ip address
+ shutdown
+end
+",
+Po14,disabled,0,full,auto,,utna2,,,,,,,,"Building configuration...
+
+Current configuration : 76 bytes
+!
+interface Port-channel14
+ description utna2
+ no ip address
+ shutdown
+end
+",
+Po15,connected,trunk,a-full,a-1000,,Port channel 15 to wlc 5508,trunk,,,"9,16,20,24,200,252,255,256,300,900",,,,"Building configuration...
+
+Current configuration : 227 bytes
+!
+interface Port-channel15
+ description Port channel 15 to wlc 5508
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 9,16,20,24,200,252,255,256,300,900
+ switchport mode trunk
+ no ip address
+end
+","1874.2e03.4507
+9cf4.8e18.882a
+a48d.3be1.88e3
+8441.672a.0e19
+0015.7085.1525
+0811.9666.04f4
+a088.6983.69c7
+78f8.82d1.8e38
+2c0e.3d41.35f7
+100b.a97d.87ac
+5c97.f310.a7a7
+0016.a4fe.5cf2
+843a.4b33.260c
+dcef.caf5.51e3
+0016.a423.792e
+cc2d.b7e9.466a
+5ce0.c551.4fa5
+b48b.19b6.a3bd
+18cf.5e35.1e54
+6817.296f.d69b
+3c2e.f9c9.aac6
+90b2.1f24.8d2f
+cc08.8da7.0d37
+70f0.8799.5ee4
+48bf.6ba5.7594
+7888.6d42.5637
+8866.a564.c79c
+2cd0.5aec.308b
+0811.9606.c564
+a44e.311a.24cc
+48bf.6ba4.c01a
+2c20.0b4c.b50f
+18a6.f711.822a
+5840.4ebf.c116
+3052.cb77.8f09
+5087.89fb.3caf
+fca6.670e.b07d
+5087.89fb.3caf
+5087.89fb.3caf
+1874.2e04.dcec
+3052.cb77.7503
+3052.cb76.ae75
+e8b1.fc4a.5f2e
+a48d.3b31.7eed
+fc2d.5e42.c6cb
+1040.f3e5.f6ef
+00c2.c60a.d052
+0016.a423.b3ef
+f0d7.aa95.2a34
+8441.675a.1c7f
+a8be.2767.c477
+6cab.3120.b260
+a0d7.9562.81bc
+0016.a423.84d0
+100b.a908.9d2c
+4400.1055.7798
+3c2e.f9ec.ef81
+3052.cb77.112d
+00b3.625a.19b6
+3052.cb76.bfd3
+8ceb.c6af.4b0d
+ac37.4349.9977
+9465.9c7e.61ac
+3052.cb76.bf93
+00fc.8b9e.39b2
+f0d5.bf27.6771
+48e9.f1c0.5cea
+3402.8636.0aec
+18a6.f710.fed6
+fcdb.b3ba.8b8a
+b47c.9c32.b7eb
+0016.a420.1fd8
+3052.cb76.aeb5
+e0b9.a5f1.2c55
+70ef.0071.c06d
+74de.2b3b.4d4d
+5087.89fb.3caf
+fcdb.b371.0d0f
+dc85.def4.9e1b
+64b0.a69a.0540
+3051.f860.00d8
+2cf0.a2a3.ab06
+a44e.3189.517c
+a408.ea82.3e1c
+00b3.628c.fc3d
+3052.cb76.ae45
+0016.a401.8443
+a0c9.a07c.78b0
+e4a4.71fb.dec5
+ac7b.a1c4.0518
+fcdb.b333.a96e
+8c79.67fb.d03d
+4851.b7a0.18ce
+4851.b79f.b77b
+accf.5ca6.cac3
+6c4d.73b1.42f7
+4025.c256.f98c
+fcc2.de4f.c15a
+e48b.7fd3.f8a5
+1874.2e02.871f
+3052.cb77.891f
+1c91.48dc.2763
+a417.3162.dd4f
+344d.f761.2fab
+4485.0076.d36a
+1865.9007.29f5
+e8b1.fc4a.c162
+00fc.8bbb.2a93
+8866.a5e7.26ea
+bc9f.ef70.a8f6
+00fc.8b6b.506d
+dcef.caf5.66fe
+00fc.8b97.5e0a
+a4f1.e829.98ce
+a48d.3be1.434b
+b853.acae.bf2c
+4098.ad9b.2767
+d02b.2057.3a90
+0016.a401.5dd7
+3052.cb71.16df
+0016.a4fe.67c9
+00fc.8b97.f57a
+5c51.4fa9.6073
+00fc.8b4f.daed
+3052.cb77.8eef
+74de.2b12.2218
+34f3.9a2e.ca8e
+b8d7.af0b.16d4
+a86b.ad2b.6485
+cc61.e50b.1af1
+203c.ae41.d5da
+6c88.148e.47f8
+00b3.628f.b213
+404d.7ff3.194f
+e43e.d7cc.e742
+74e5.0bdf.f8d0
+2477.03d7.b228
+60f1.89a0.db47
+4851.b79f.b6f9
+ac37.4350.cfbc
+e4a7.a01e.ff46
+3052.cb63.2abd
+e43e.d7cc.d999
+00cd.fe23.340a
+f834.41bf.bd6e
+0016.a401.99d4
+30b5.c219.a190
+94a1.a222.fe73
+3052.cb77.1097
+a44e.315f.fa54
+4478.3e0f.3974
+d8bb.2c49.cf75
+041b.6dcf.3eb2
+7081.ebd9.be54
+0015.7089.b85e
+843a.4b06.e848
+60f4.4507.52e4
+bc9f.ef9e.f925
+a0a8.cd08.a124
+8c18.d9cc.fe37
+"
+Po16,notconnect,1,full,auto,,Port channel to 5508 backup,,,,,,,,"Building configuration...
+
+Current configuration : 100 bytes
+!
+interface Port-channel16
+ description Port channel to 5508 backup
+ switchport
+ no ip address
+end
+",
+Po20,connected,trunk,a-full,a-1000,,port channel to mdf1 - server switches,trunk,,,,,,,"Building configuration...
+
+Current configuration : 172 bytes
+!
+interface Port-channel20
+ description port channel to mdf1 - server switches
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+end
+","0050.5694.279a
+00c0.b7a1.f014
+0050.5694.137b
+00a0.9831.2041
+0cc4.7a4f.6e17
+0050.5694.4a53
+00c0.b7b7.6f32
+0cc4.7ac3.659e
+0050.5664.7892
+a036.9f9b.fa4f
+a036.9f9b.fa4e
+a036.9f9b.fa4d
+0050.569d.6d6a
+a036.9f9b.fa4c
+00c0.b7a1.c539
+00a0.9831.5988
+fc5b.39a1.394b
+a036.9f6f.0cc4
+a036.9f6f.0cc5
+00c0.b7b8.ed9f
+0cc4.7a4f.6fa0
+a036.9f6f.0cc7
+0cc4.7a4f.6fa1
+00c0.b7b8.ee26
+0cc4.7ac3.69da
+"
+Po22,notconnect,0,full,auto,,,trunk,,,"1,9,16,24,255,351",,,,"Building configuration...
+
+Current configuration : 169 bytes
+!
+interface Port-channel22
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9,16,24,255,351
+ switchport mode trunk
+ no ip address
+end
+",
+Po30,connected,trunk,a-full,a-1000,,Port-channel to C3850's,trunk,,,,,,,"Building configuration...
+
+Current configuration : 157 bytes
+!
+interface Port-channel30
+ description Port-channel to C3850's
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+end
+","000c.29c3.1391
+0050.5694.0137
+7cad.746f.a064
+0050.56a4.9b67
+accc.8e26.7f86
+fc99.4749.63f6
+0050.5694.22a7
+0050.56a4.5689
+accc.8e25.af04
+accc.8e26.669a
+8890.8dcd.edb2
+0050.569d.ace7
+accc.8e25.af03
+0050.5694.3bbd
+0050.56a4.7963
+00c0.b7e9.2c3d
+accc.8e25.af02
+0050.56ba.9b62
+0050.56a4.8639
+accc.8e25.af01
+000c.2950.0b5a
+10f3.11fa.b33e
+000c.29fb.0d13
+0050.56a4.033a
+0050.56a4.823a
+0050.56a4.fdf1
+0cc4.7a95.3d4b
+0025.b510.002f
+802a.a8df.9961
+0050.569d.e71a
+0050.56a4.6785
+0050.56a4.6ef3
+0050.56a4.8236
+0050.5694.7079
+accc.8e26.7f8a
+000c.2950.0b50
+0050.56a4.0238
+0025.b510.006f
+4c00.8248.1362
+0050.56a4.970a
+accc.8e26.6697
+80e0.1d59.b5f0
+accc.8e26.7f89
+0050.5694.06ac
+0050.56a4.fc31
+0050.56a4.b3e7
+0050.56a4.4218
+0050.56a4.0de9
+8890.8dcd.eddb
+0050.56ba.5c06
+0050.56ba.91b0
+0cc4.7a95.3ee2
+0050.56a4.54f2
+000c.29ec.ded0
+4c00.8248.135c
+0050.56a4.5bed
+000c.29cf.d5a7
+8c60.4f7c.a3c1
+0050.5694.6b54
+0050.5694.148f
+0050.56ba.d160
+0025.b510.00ff
+7cad.746f.abd8
+0cc4.7a94.a2ea
+0025.b510.00fe
+0050.56a4.00c0
+0050.56a4.630f
+0050.56a4.fbc1
+0050.56a4.41c2
+000c.29e1.6456
+44d9.e76a.85c7
+10f3.11fa.b344
+0050.56a4.2a6c
+0050.569d.b81a
+0cc4.7a94.a08d
+0050.5694.2bab
+7cad.746f.a05e
+0050.569d.e1f4
+000c.295a.fe43
+0023.68de.4841
+0050.56ba.4458
+0050.56a4.5ee9
+0050.56a4.4a4d
+0050.56a4.3d7c
+0050.5694.6972
+0050.5694.2ff4
+0050.56a4.047d
+0050.569d.dfd4
+0050.569d.a8c1
+0cbf.1500.3146
+0050.56a4.a6f1
+0050.56a4.bcd4
+0050.56a4.fcd0
+0025.b510.00ce
+0050.56a4.2459
+0050.56a4.6fd6
+0025.b510.00cf
+0050.56a4.e3bf
+0050.5694.5a59
+fc99.4749.63fc
+000c.29cf.d59d
+0050.56a4.e4d1
+0050.5694.0260
+000c.29d5.ec3e
+0050.5694.4b0d
+accc.8e26.7fed
+0050.56a4.f990
+0050.569d.4ca5
+0050.56a4.e510
+0050.56a4.46d3
+8c60.4f79.3e21
+0050.56a4.600f
+0050.56a4.af5a
+0800.1bff.f3ab
+accc.8e26.66aa
+000c.29ff.1eac
+accc.8e26.66ab
+accc.8e26.66a8
+8890.8dcd.d432
+7cad.746f.abde
+000c.2946.0af8
+0050.569d.daf2
+accc.8e26.66ac
+0050.56a4.6c74
+0050.56a4.ddb8
+0050.56a4.412e
+0050.5694.1523
+0060.1674.35e5
+0050.56a4.7355
+000c.2915.3650
+0050.569d.8c34
+0050.56a4.ab9d
+0050.56a4.5b4c
+0050.566f.0b33
+0050.56a4.b5bb
+000c.29d5.7bb9
+0050.5694.1098
+0050.5694.0ddf
+0050.5694.22dc
+0050.569d.dff0
+0050.56a4.7709
+accc.8e3a.92d9
+accc.8e26.66a7
+80e0.1d59.b5c0
+0050.56a4.83d8
+0050.56a4.6824
+0050.56a4.438e
+802a.a86e.215f
+00c0.b7e9.2c41
+"
+Po33,connected,trunk,a-full,a-1000,,*---Channel to Service 3560 Stack---*,trunk,,,"1,9-11,16,20,24,30,251-253,255,256,300,350",,,,"Building configuration...
+
+Current configuration : 243 bytes
+!
+interface Port-channel33
+ description ---Channel to Service 3560 Stack---
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,9-11,16,20,24,30,251-253,255,256,300,350
+ switchport mode trunk
+ no ip address
+end
+","accc.8e25.aedf
+accc.8e25.aede
+5006.0473.5d8d
+d8cb.8a4a.7499
+accc.8e26.4caf
+accc.8e25.aedd
+7010.5c5e.892f
+705a.0f14.530e
+ccd5.39d7.4388
+0023.5ec8.e1b0
+6c62.6dac.4d4d
+d0c7.8915.3c92
+accc.8e49.047c
+5006.0473.65e7
+0023.24ba.8a89
+accc.8e26.7f8e
+d0c7.8915.41ff
+accc.8e49.1235
+9457.a5cc.2f84
+4487.fccb.9bba
+90fb.a67b.5a15
+705a.0f14.5342
+d43d.7e4f.692d
+64d8.1418.97d0
+5006.0473.65ed
+5006.0473.6399
+b4e9.b0b0.00d5
+f078.16d0.1561
+accc.8e3b.1107
+2893.febf.0dc1
+5006.0473.63de
+0050.c277.d105
+0023.5ec8.e1e0
+fc4d.d4d7.a35f
+0050.c277.d104
+0023.5ec8.e1a4
+9ceb.e850.9af2
+accc.8e26.7f96
+74d4.35c1.1e69
+7010.5c5e.11f0
+705a.0f14.531e
+accc.8e26.7f94
+448a.5b53.2cbb
+7010.5c5f.0541
+0050.c277.d101
+5006.0473.6259
+d0c7.8914.e22c
+0050.c277.d103
+0050.c277.d102
+a0d3.c108.9f1b
+f078.16d0.09ad
+7010.5c5f.86f4
+3c2e.f9ec.ef81
+d0c7.8915.2f4a
+d0c7.8914.e04a
+fc4d.d4d1.a4d0
+0023.2462.0ea6
+fcaa.146c.a25a
+0024.7e0a.5ae6
+a08c.fd17.15cd
+0023.24b4.47eb
+1803.7347.fc04
+5006.ab80.a98e
+7081.05e7.adba
+5cfc.665c.4846
+7010.5c5e.2456
+fc3f.dbbf.3ec0
+00f6.6390.56d4
+0023.2461.d44c
+accc.8e26.7fe6
+accc.8e49.33e1
+d0c7.8915.d1a3
+0023.5ec8.df0c
+1c1b.0dbb.e5fa
+20bb.c021.36b9
+0026.0b45.1752
+6c62.6d6f.8464
+7010.5c5e.88db
+00a3.8e60.7e4b
+5006.0473.61d1
+c03f.d56b.871c
+0004.f2f5.9802
+448a.5b56.1a37
+0023.5ec8.e236
+0023.2461.da9f
+1c1b.0dbe.a1e1
+d0c7.8915.d650
+d0c7.8915.2b3c
+0023.2462.0db6
+4437.e688.098a
+d8cb.8a0a.6b43
+7010.5c5f.9188
+5006.0473.666a
+7010.5c5f.052a
+2818.78ba.5279
+7010.5c5f.0249
+b8ae.ed71.68fd
+0023.2462.0e82
+d0c7.8915.2bb9
+001d.9234.6488
+7010.5c5f.0282
+accc.8e25.aee0
+d0c7.8915.2b70
+d0c7.8914.e3df
+d0c7.8915.2b71
+0023.5ec8.e102
+b4e9.b0b0.00e7
+"
+Po55,notconnect,1,full,auto,,,trunk,,,"1,16,20,21,24,255,256,300",,,,"Building configuration...
+
+Current configuration : 177 bytes
+!
+interface Port-channel55
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,16,20,21,24,255,256,300
+ switchport mode trunk
+ no ip address
+end
+",
+Po66,notconnect,1,full,auto,,,trunk,,,,,,,"Building configuration...
+
+Current configuration : 120 bytes
+!
+interface Port-channel66
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+end
+",
