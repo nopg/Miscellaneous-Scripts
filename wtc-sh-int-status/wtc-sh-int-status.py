@@ -68,7 +68,17 @@ def format_fsm_output(re_table, fsm_results):
 
     return result
 
-def build_csv(ip, username, password):
+def build_csv(output):
+
+    fout = open('int-status-output.csv', 'w')
+
+    writer = csv.DictWriter(fout, fieldnames=re_table.header, lineterminator='\n')
+    writer.writeheader()
+    writer.writerows(output)
+
+    fout.close()
+
+def main(ip, username, password):
 
     int_status = get_show_int_status(ip, username, password)
 
@@ -83,15 +93,7 @@ def build_csv(ip, username, password):
     ## REFORMAT THE OUTPUT ##
     output = format_fsm_output(re_table, fsm_results)
 
-    print(output)
-
-    fout = open('int-status-output.csv', 'w')
-
-    writer = csv.DictWriter(fout, fieldnames=re_table.header, lineterminator='\n')
-    writer.writeheader()
-    writer.writerows(output)
-
-    fout.close()
+    build_csv(output)
 
 
 if __name__ == "__main__":
@@ -105,5 +107,5 @@ if __name__ == "__main__":
     username = sys.argv[2]
     password = input("Type the password: ")
 
-    build_csv(target_ip, username, password)
+    main(target_ip, username, password)
     print("Done.")
