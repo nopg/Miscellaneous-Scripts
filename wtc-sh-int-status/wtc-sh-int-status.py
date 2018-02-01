@@ -87,7 +87,7 @@ def build_csv(ip, username, password):
 
     fout = open('int-status-output.csv', 'w')
 
-    writer = csv.DictWriter(fout, fieldnames=re_table.header)
+    writer = csv.DictWriter(fout, fieldnames=re_table.header, lineterminator='\n')
     writer.writeheader()
     writer.writerows(output)
 
