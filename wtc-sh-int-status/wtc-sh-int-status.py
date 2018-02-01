@@ -94,7 +94,7 @@ def build_csv(ip, username, password):
 
 if __name__ == "__main__":
 
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print("\nplease provide the following arguments:")
         print("\tcollect-cdp-information.py <ip> <username>\n\n")
         sys.exit(0)
