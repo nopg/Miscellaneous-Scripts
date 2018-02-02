@@ -147,7 +147,9 @@ def main(ip, username, password):
         mac_table_formatted = format_fsm_output(re_table, fsm_results)
         macs = {'MAC_ADDRESS': ''}
         
-        if not mac_table_formatted == []:
+        if mac_table_formatted.__len__() == 1:
+            macs['MAC_ADDRESS'] = mac_table_formatted[0]['MAC_ADDRESS']
+        elif not mac_table_formatted == []:
             for item in mac_table_formatted:
                 macs['MAC_ADDRESS'] += item['MAC_ADDRESS']
                 macs['MAC_ADDRESS'] += '\n'
