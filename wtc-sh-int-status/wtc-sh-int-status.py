@@ -162,7 +162,6 @@ def main(ip, username, password):
     # BUILD CSV ##
     ssh_connection.disconnect()
     build_csv(newoutput, headers)
-    print("Time elapsed: {}".format(datetime.now() - start_time))
     
 if __name__ == "__main__":
 
@@ -177,4 +176,6 @@ if __name__ == "__main__":
 
     start_time = datetime.now()
     main(target_ip, username, password)
+    print()
     print("Done.")
+    print("Time elapsed: {}".format(datetime.now() - start_time))
