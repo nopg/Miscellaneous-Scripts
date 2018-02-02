@@ -140,7 +140,7 @@ def main(ip, username, password):
         print("Checking mac-address-table on port {}...".format(line['PORT']))
         mac_table = ssh_connection.send_command("show mac-address-table interface {}".format(line['PORT']))
             
-        re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac-address-table.textfsm"))
+        re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac_address_table.textfsm"))
         fsm_results = re_table.ParseText(mac_table)
         
         mac_table_formatted = format_fsm_output(re_table, fsm_results)
