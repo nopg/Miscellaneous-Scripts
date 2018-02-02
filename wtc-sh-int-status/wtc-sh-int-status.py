@@ -5,6 +5,7 @@ import sys
 import jtextfsm
 import csv
 import getpass
+from datetime import datetime
 from netmiko import ConnectHandler
 from netmiko.ssh_exception import *
 
@@ -161,7 +162,8 @@ def main(ip, username, password):
     # BUILD CSV ##
     ssh_connection.disconnect()
     build_csv(newoutput, headers)
-
+    print("Time elapsed: {}".format(datetime.now() - start_time))
+    
 if __name__ == "__main__":
 
     if len(sys.argv) != 3:
@@ -173,5 +175,6 @@ if __name__ == "__main__":
     username = sys.argv[2]
     password = getpass.getpass("Type the password: ")
 
+    start_time = datetime.now()
     main(target_ip, username, password)
     print("Done.")
