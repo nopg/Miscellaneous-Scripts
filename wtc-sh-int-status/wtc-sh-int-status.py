@@ -118,11 +118,11 @@ def main(ip, username, password):
         portconfig = format_fsm_output(re_table, fsm_results)
 
         if not portconfig == []:
-            newline = {**line, **portconfig[0]}
+            newline = {**line, **portconfig[0]}     ## Combine dictionaries
         else:
             newline = {**line}
         
-        newline['OTHER'] = port_config
+        newline['OTHER'] = port_config          ## Add full config to catch anything extra (need to update)
         output.append(newline)
         
     ## Grab MAC Addresses ##
@@ -131,7 +131,6 @@ def main(ip, username, password):
     debcount = 0
     newoutput = []
     for line in output:
-    
         if DEBUG == True:
             if debcount > DEBMAXLINES:
                 break
@@ -145,23 +144,22 @@ def main(ip, username, password):
         fsm_results = re_table.ParseText(mac_table)
         
         mac_table_formatted = format_fsm_output(re_table, fsm_results)
-        macs = {}
-        macs['MAC_ADDRESS'] = ''
+        macs = {'MAC_ADDRESS': ''}
         
         if not mac_table_formatted == []:
             for item in mac_table_formatted:
                 macs['MAC_ADDRESS'] += item['MAC_ADDRESS']
                 macs['MAC_ADDRESS'] += '\n'
                 
-        if not macs == []:
+        if not macs == {'MAC_ADDRESS': ''}:
             newline = {**line, **macs}
         else:
             newline = {**line}
             
         newoutput.append(newline)        
-                
+
+    # BUILD CSV ##
     ssh_connection.disconnect()
-    
     build_csv(newoutput, headers)
 
 if __name__ == "__main__":
