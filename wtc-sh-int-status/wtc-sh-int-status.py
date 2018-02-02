@@ -57,7 +57,7 @@ def get_show_int_status(ip, username, password):
     return result, ssh_connection
 
 def format_fsm_output(re_table, fsm_results):
-    #   FORMAT FSM OUTPUT(LIST OF LIST) INTO PYTHON LIST OF DICTIONARY VALUES BASED ON TEMPLATE #
+    #   FORMAT FSM OUTPUT(LIST OF LIST) INTO PYTHON LIST OF DICTIONARY VALUES BASED ON TEXTFSM TEMPLATE #
     result = []
     for item in fsm_results:
         tempdevice = {}
@@ -88,21 +88,20 @@ def main(ip, username, password):
     # parse the show cdp details command using TextFSM
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_interfaces_status.textfsm"))
     fsm_results = re_table.ParseText(int_status)
+    headers = re_table.header
 
     ## REFORMAT THE OUTPUT ##
     int_status = format_fsm_output(re_table, fsm_results)
 
-    ## Grab config ##
-    headers = re_table.header
-    headers.remove('DESCRIPTION')
+    ## Grab interface config ##
+    headers.remove('DESCRIPTION')   ## Don't want duplicate description headers
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_run_interface.textfsm"))
     headers += re_table.header
-    headers.append('OTHER')
-    debcount = 0
+    headers.append('OTHER')         ## For other configuration not found with TexfFSM
 
+    debcount = 0
     output = []
     for line in int_status:
-    
         if DEBUG == True:
             if debcount > DEBMAXLINES:
                 break
