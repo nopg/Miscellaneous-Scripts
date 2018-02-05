@@ -50,7 +50,13 @@ def get_connection(device_type, ip, username, password):
     return ssh_connection
 
 def format_fsm_output(re_table, fsm_results):
-    #   FORMAT FSM OUTPUT(LIST OF LIST) INTO PYTHON LIST OF DICTIONARY VALUES BASED ON TEXTFSM TEMPLATE #
+    """
+    FORMAT FSM OUTPUT(LIST OF LIST) INTO PYTHON LIST OF DICTIONARY VALUES BASED ON TEXTFSM TEMPLATE
+
+    :param re_table: re_table from generic fsm search
+    :param fsm_results: fsm results from generic fsm search
+    :return result: updated list of dictionary values
+    """
     result = []
     for item in fsm_results:
         tempdevice = {}
@@ -63,7 +69,15 @@ def format_fsm_output(re_table, fsm_results):
 
     return result
 
-def build_csv(output, headers):
+def build_csv(output):
+    """
+    BUILD CSV BASED ON AN EXISTING DICTIONARY
+
+    :param output: existing dictionary to be written
+    :return:
+    """
+
+    headers = list(output[0].keys())
     fout = open('int-status-output.csv', 'w')
     writer = csv.DictWriter(fout, fieldnames=headers, lineterminator='\n')
     writer.writeheader()
@@ -71,8 +85,16 @@ def build_csv(output, headers):
     fout.close()
 
 def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
-    output = []
+    """
+    CORRELATE ARP AND MAC TABLES FOR EACH INTERFACE ON DEVICE
 
+    :param arp_table: arp table in dictionary format
+    :param mac_table: mac table in dictionary format
+    :param ouldoutput: existing output to be written to CSV
+    :return output: updated output including arp/mac entries found
+    """
+
+    output = []
     for line in oldoutput:
         mydict = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': ''}
         for mac in mac_table:
@@ -159,9 +181,8 @@ def main(device_type, ip, username, password):
     myoutput = correlate_arp_and_mac(arp_table_formatted, mac_table_formatted, tempoutput1)
 
     # BUILD CSV ##
-    headers = list(myoutput[0].keys())
     ssh_connection.disconnect()
-    build_csv(myoutput, headers)
+    build_csv(myoutput)
     
 if __name__ == "__main__":
 
