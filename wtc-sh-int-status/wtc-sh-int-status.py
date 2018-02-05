@@ -170,7 +170,7 @@ def main(device_type, ip, username, password):
                 macs['MACVLAN'] += vlan
                 macs['MACVLAN'] += '\n'
 
-            newline = {**line, **macs}
+        newline = {**line, **macs}
 
         tempoutput2.append(newline)
 
