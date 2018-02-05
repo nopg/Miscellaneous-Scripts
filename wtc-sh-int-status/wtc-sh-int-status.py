@@ -131,25 +131,25 @@ def main(device_type, ip, username, password):
         print(ssh_connection)
         sys.exit(0)
 
-    ## GRAB ARP TABLE ##
+    # GRAB ARP TABLE #
     arp_table = ssh_connection.send_command("show ip arp", delay_factor=2)
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_arp.textfsm"))
     fsm_results = re_table.ParseText(arp_table)
     arp_table_formatted = format_fsm_output(re_table, fsm_results)
 
-    ## GRAB MAC TABLE ##
+    # GRAB MAC TABLE #
     arp_table = ssh_connection.send_command("show mac-address-table", delay_factor=2)
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac_address_table.textfsm"))
     fsm_results = re_table.ParseText(arp_table)
     mac_table_formatted = format_fsm_output(re_table, fsm_results)
 
-    # GRAB INTERFACE STATUS ##
+    # GRAB INTERFACE STATUS #
     int_status = ssh_connection.send_command("show interface status", delay_factor=2)
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_interfaces_status.textfsm"))
     fsm_results = re_table.ParseText(int_status)
     int_status_formatted = format_fsm_output(re_table, fsm_results)
 
-    ## GRAB INTERFACE CONFIG ##
+    # GRAB INTERFACE CONFIG #
     debcount = 0
     tempoutput1 = []
     for line in int_status_formatted:
@@ -161,11 +161,10 @@ def main(device_type, ip, username, password):
                 
         print("Checking config on port {}...".format(line['PORT']))
 
+        # PARSE INTERFACE CONFIG VIA FSM
         port_config = ssh_connection.send_command("show run int {}".format(line['PORT']))
-
         re_table = jtextfsm.TextFSM(open("cisco_ios_show_run_interface.textfsm"))
         fsm_results = re_table.ParseText(port_config)
-        
         portconfig = format_fsm_output(re_table, fsm_results)
 
         if not portconfig == []:
