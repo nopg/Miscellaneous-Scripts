@@ -9,10 +9,10 @@ from datetime import datetime
 from netmiko import ConnectHandler
 from netmiko.ssh_exception import *
 
-DEBUG = False
+DEBUG = True
 DEBMAXLINES = 3
 
-def get_show_int_status(ip, username, password):
+def get_show_int_status(device_type, ip, username, password):
     """
     get the CDP neighbor detail from the device using SSH
 
@@ -23,10 +23,9 @@ def get_show_int_status(ip, username, password):
     :return:
     """
     # establish a connection to the device
-
     try:
         ssh_connection = ConnectHandler(
-            device_type='cisco_ios_telnet',
+            device_type=device_type,
             ip=ip,
             username=username,
             password=password,
@@ -78,9 +77,9 @@ def build_csv(output, headers):
     writer.writerows(output)
     fout.close()
 
-def main(ip, username, password):
+def main(device_type, ip, username, password):
 
-    int_status, ssh_connection = get_show_int_status(ip, username, password)
+    int_status, ssh_connection = get_show_int_status(device_type, ip, username, password)
 
     if int_status in ("TIMEOUT", "AUTHFAIL", "CONNECTREFUSED", "UNKNOWN"):
         print(int_status)
@@ -167,17 +166,27 @@ def main(ip, username, password):
     
 if __name__ == "__main__":
 
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
-        print("\tcollect-cdp-information.py <ip> <username>\n\n")
+        print("\tcollect-cdp-information.py <telnet or ssh> <ip> <username>\n\n")
         sys.exit(0)
 
-    target_ip = sys.argv[1]
-    username = sys.argv[2]
+    ssh_or_telnet = sys.argv[1]
+    if ssh_or_telnet == 'ssh':
+        device_type = 'cisco_ios'
+    elif ssh_or_telnet == 'telnet':
+        device_type = 'cisco_ios_telnet'
+    else:
+        print("\nplease provide the following arguments:")
+        print("\tcollect-cdp-information.py <telnet or ssh> <ip> <username>\n\n")
+        sys.exit(0)
+
+    target_ip = sys.argv[2]
+    username = sys.argv[3]
     password = getpass.getpass("Type the password: ")
 
     start_time = datetime.now()
-    main(target_ip, username, password)
+    main(device_type, target_ip, username, password)
     print()
     print("Done.")
     print("Time elapsed: {}".format(datetime.now() - start_time))
