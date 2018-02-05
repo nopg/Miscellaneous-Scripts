@@ -102,7 +102,7 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
                 mydict['MAC_ADDRESS'] += mac['MAC_ADDRESS']
                 mydict['MAC_ADDRESS'] += '\n'
 
-                ## Search ARP for this MAC
+                # Search ARP for this MAC #
                 for ip in arp_table:
                     if ip['MAC'] == mac['MAC_ADDRESS']:
                         mydict['IP'] += ip['ADDRESS']
@@ -113,7 +113,7 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
                 if mydict['IP'] == '':
                     mydict['IP'] = 'not found\n'
 
-        ## EXCEL DOESN'T LIKE NEWLINES IN SOME CASES ##
+        # EXCEL DOESN'T LIKE NEWLINES IN SOME CASES #
         mydict['IP'] = mydict['IP'].rstrip()
         mydict['MACVLAN'] = mydict['MACVLAN'].rstrip()
         mydict['MAC_ADDRESS'] = mydict['MAC_ADDRESS'].rstrip()
@@ -168,14 +168,14 @@ def main(device_type, ip, username, password):
         portconfig = format_fsm_output(re_table, fsm_results)
 
         if not portconfig == []:
-            newline = {**line, **portconfig[0]}     ## Combine dictionaries
+            newline = {**line, **portconfig[0]}     # Combine dictionaries
         else:
             newline = {**line}
         
-        newline['OTHER'] = port_config          ## Add full config to catch anything extra (update to only extra's)
+        newline['OTHER'] = port_config          # Add full config to catch anything extra (update to only extra's)
         tempoutput1.append(newline)
 
-    ## CORRELATE ARP AND MAC TABLES ##
+    # CORRELATE ARP AND MAC TABLES #
     myoutput = correlate_arp_and_mac(arp_table_formatted, mac_table_formatted, tempoutput1)
 
     # BUILD CSV ##
@@ -204,7 +204,10 @@ if __name__ == "__main__":
     password = getpass.getpass("Type the password: ")
 
     start_time = datetime.now()
+
+    # RUN PROGRAM #
     main(device_type, target_ip, username, password)
+
     print()
     print("Done.")
     print("Time elapsed: {}\n".format(datetime.now() - start_time))
