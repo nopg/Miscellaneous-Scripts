@@ -125,9 +125,8 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
 
 def main(device_type, ip, username, password):
 
-    # GRAB INTERFACE STATUS ##
+    # GET CONNECTION ##
     ssh_connection = get_connection(device_type, ip, username, password)
-
     if ssh_connection in ("TIMEOUT", "AUTHFAIL", "CONNECTREFUSED", "UNKNOWN"):
         print(ssh_connection)
         sys.exit(0)
