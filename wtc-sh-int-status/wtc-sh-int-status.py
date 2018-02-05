@@ -81,13 +81,38 @@ def check_arp_table(arp_table_formatted, mac_address):
     for ip in arp_table_formatted:
         if ip['MAC'] == mac_address:
             return ip['ADDRESS'], ip['MACVLAN']
-        else:
-            pass
+
     return 'not found', ''
 
+def tempcorrelate(arp_table, mac_table, int_status):
+    output = []
+
+    for line in int_status:
+        mydict = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': ''}
+        for mac in mac_table:
+            if mac['DESTINATION_PORT'] == line['PORT']:
+                mydict['MAC_ADDRESS'] += mac['MAC_ADDRESS']
+                mydict['MAC_ADDRESS'] += '\n'
+
+                ## Search ARP for this MAC
+                for ip in arp_table:
+                    if ip['MAC'] == mac['MAC_ADDRESS']:
+                        mydict['IP'] += ip['ADDRESS']
+                        mydict['IP'] += '\n'
+                        mydict['MACVLAN'] += ip['MACVLAN']
+                        mydict['MACVLAN'] += '\n'
+
+                if mydict['IP'] == '':
+                    mydict['IP'] = 'not found\n'
+
+        newline = {**line, **mydict}
+        output.append(newline)
+
+    return output
 
 def main(device_type, ip, username, password):
 
+    # GRAB INTERFACE STATUS ##
     int_status, ssh_connection = get_show_int_status(device_type, ip, username, password)
 
     if int_status in ("TIMEOUT", "AUTHFAIL", "CONNECTREFUSED", "UNKNOWN"):
@@ -95,24 +120,26 @@ def main(device_type, ip, username, password):
         sys.exit(0)
 
     ## GRAB ARP Table ##
-
-    arp_table = ssh_connection.send_command("show ip arp")
-
+    arp_table = ssh_connection.send_command("show ip arp", delay_factor=2)
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_arp.textfsm"))
     fsm_results = re_table.ParseText(arp_table)
     arp_table_formatted = format_fsm_output(re_table, fsm_results)
 
-    # GRAB INTERFACE STATUS ##
+    ## GRAB MAC Table ##
+    arp_table = ssh_connection.send_command("show mac-address-table", delay_factor=2)
+    re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac_address_table.textfsm"))
+    fsm_results = re_table.ParseText(arp_table)
+    mac_table_formatted = format_fsm_output(re_table, fsm_results)
+
+    # FORMAT INTERFACE STATUS ##
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_interfaces_status.textfsm"))
     fsm_results = re_table.ParseText(int_status)
-
-    ## REFORMAT THE OUTPUT ##
-    int_status = format_fsm_output(re_table, fsm_results)
+    int_status_formatted = format_fsm_output(re_table, fsm_results)
 
     ## Grab interface config ##
     debcount = 0
     tempoutput1 = []
-    for line in int_status:
+    for line in int_status_formatted:
         if DEBUG == True:
             if debcount > DEBMAXLINES:
                 break
@@ -135,48 +162,51 @@ def main(device_type, ip, username, password):
         
         newline['OTHER'] = port_config          ## Add full config to catch anything extra (need to update)
         tempoutput1.append(newline)
-        
-    ## Grab MAC Addresses ##
-    debcount = 0
-    tempoutput2 = []
-    for line in tempoutput1:
-        if DEBUG == True:
-            if debcount > DEBMAXLINES:
-                break
-            else:
-                debcount += 1
-                
-        print("Checking mac-address-table on port {}...".format(line['PORT']))
-        mac_table = ssh_connection.send_command("show mac-address-table interface {}".format(line['PORT']))
-            
-        re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac_address_table.textfsm"))
-        fsm_results = re_table.ParseText(mac_table)
-        
-        mac_table_formatted = format_fsm_output(re_table, fsm_results)
-        macs = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': ''}
-        
-        if mac_table_formatted.__len__() == 1:
-            macs['MAC_ADDRESS'] = mac_table_formatted[0]['MAC_ADDRESS']
-            macs['IP'], macs['MACVLAN'] = check_arp_table(arp_table_formatted, macs['MAC_ADDRESS'])
 
-        elif not mac_table_formatted == []:
-            for item in mac_table_formatted:
-                macs['MAC_ADDRESS'] += item['MAC_ADDRESS']
-                macs['MAC_ADDRESS'] += '\n'
+    myoutput = tempcorrelate(arp_table_formatted, mac_table_formatted, tempoutput1)
 
-                ip,vlan = check_arp_table(arp_table_formatted, item['MAC_ADDRESS'])
-                macs['IP'] += ip
-                macs['IP'] += '\n'
-                macs['MACVLAN'] += vlan
-                macs['MACVLAN'] += '\n'
 
-        newline = {**line, **macs}
-        tempoutput2.append(newline)
+        ### Grab MAC Addresses ##
+    #debcount = 0
+    #tempoutput2 = []
+    #for line in tempoutput1:
+    #    if DEBUG == True:
+    #        if debcount > DEBMAXLINES:
+    #            break
+    #        else:
+    #            debcount += 1
+    #
+    #    print("Checking mac-address-table on port {}...".format(line['PORT']))
+    #    mac_table = ssh_connection.send_command("show mac-address-table interface {}".format(line['PORT']))
+    #
+    #    re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac_address_table.textfsm"))
+    #    fsm_results = re_table.ParseText(mac_table)
+    #
+    #    mac_table_formatted = format_fsm_output(re_table, fsm_results)
+    #    macs = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': ''}
+    #
+    #    if mac_table_formatted.__len__() == 1:
+    #        macs['MAC_ADDRESS'] = mac_table_formatted[0]['MAC_ADDRESS']
+    #        macs['IP'], macs['MACVLAN'] = check_arp_table(arp_table_formatted, macs['MAC_ADDRESS'])
+#
+    #    elif not mac_table_formatted == []:
+    #        for item in mac_table_formatted:
+    #            macs['MAC_ADDRESS'] += item['MAC_ADDRESS']
+    #            macs['MAC_ADDRESS'] += '\n'
+#
+    #            ip,vlan = check_arp_table(arp_table_formatted, item['MAC_ADDRESS'])
+    #            macs['IP'] += ip
+    #            macs['IP'] += '\n'
+    #            macs['MACVLAN'] += vlan
+    #            macs['MACVLAN'] += '\n'
+#
+    #    newline = {**line, **macs}
+    #    tempoutput2.append(newline)
 
     # BUILD CSV ##
-    headers = list(tempoutput2[0].keys())
+    headers = list(myoutput[0].keys())
     ssh_connection.disconnect()
-    build_csv(tempoutput2, headers)
+    build_csv(myoutput, headers)
     
 if __name__ == "__main__":
 
