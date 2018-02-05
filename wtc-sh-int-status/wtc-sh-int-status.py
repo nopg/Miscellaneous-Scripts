@@ -12,7 +12,7 @@ from netmiko.ssh_exception import *
 DEBUG = False
 DEBMAXLINES = 3
 
-def get_show_int_status(device_type, ip, username, password):
+def get_connection(device_type, ip, username, password):
     """
     get the CDP neighbor detail from the device using SSH
 
@@ -33,28 +33,21 @@ def get_show_int_status(device_type, ip, username, password):
         ssh_connection.enable()
     except NetMikoTimeoutException:
         print("\nSSH session timed trying to connect to the device: {}\n".format(ip))
-        return "TIMEOUT", None
+        return "TIMEOUT"
     except NetMikoAuthenticationException:
         print("\nSSH authentication failed for device: {}\n".format(ip))
-        return "AUTHFAIL", None
+        return "AUTHFAIL"
     except ConnectionRefusedError:
         print("\nConnection refused for device: {}\n".format(ip))
-        return "CONNECTREFUSED", None
+        return "CONNECTREFUSED"
     except KeyboardInterrupt:
         print("\nUser interupted connection, closing program.\n")
         sys.exit(0)
     except Exception:
         print("\nUnknown error connecting to device: {}\n".format(ip))
-        return "UNKNOWN", None
+        return "UNKNOWN"
 
-    # execute the show cdp neighbor detail command
-    # we increase the delay_factor for this command, because it take some time if many devices are seen by CDP
-    result = ssh_connection.send_command("show interface status", delay_factor=2)
-
-    # close SSH connection
-    #ssh_connection.disconnect()
-
-    return result, ssh_connection
+    return ssh_connection
 
 def format_fsm_output(re_table, fsm_results):
     #   FORMAT FSM OUTPUT(LIST OF LIST) INTO PYTHON LIST OF DICTIONARY VALUES BASED ON TEXTFSM TEMPLATE #
@@ -77,17 +70,10 @@ def build_csv(output, headers):
     writer.writerows(output)
     fout.close()
 
-def check_arp_table(arp_table_formatted, mac_address):
-    for ip in arp_table_formatted:
-        if ip['MAC'] == mac_address:
-            return ip['ADDRESS'], ip['MACVLAN']
-
-    return 'not found', ''
-
-def tempcorrelate(arp_table, mac_table, int_status):
+def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
     output = []
 
-    for line in int_status:
+    for line in oldoutput:
         mydict = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': ''}
         for mac in mac_table:
             if mac['DESTINATION_PORT'] == line['PORT']:
@@ -105,6 +91,11 @@ def tempcorrelate(arp_table, mac_table, int_status):
                 if mydict['IP'] == '':
                     mydict['IP'] = 'not found\n'
 
+        ## EXCEL DOESN'T LIKE NEWLINES IN SOME CASES ##
+        mydict['IP'] = mydict['IP'].rstrip()
+        mydict['MACVLAN'] = mydict['MACVLAN'].rstrip()
+        mydict['MAC_ADDRESS'] = mydict['MAC_ADDRESS'].rstrip()
+
         newline = {**line, **mydict}
         output.append(newline)
 
@@ -113,30 +104,31 @@ def tempcorrelate(arp_table, mac_table, int_status):
 def main(device_type, ip, username, password):
 
     # GRAB INTERFACE STATUS ##
-    int_status, ssh_connection = get_show_int_status(device_type, ip, username, password)
+    ssh_connection = get_connection(device_type, ip, username, password)
 
-    if int_status in ("TIMEOUT", "AUTHFAIL", "CONNECTREFUSED", "UNKNOWN"):
-        print(int_status)
+    if ssh_connection in ("TIMEOUT", "AUTHFAIL", "CONNECTREFUSED", "UNKNOWN"):
+        print(ssh_connection)
         sys.exit(0)
 
-    ## GRAB ARP Table ##
+    ## GRAB ARP TABLE ##
     arp_table = ssh_connection.send_command("show ip arp", delay_factor=2)
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_arp.textfsm"))
     fsm_results = re_table.ParseText(arp_table)
     arp_table_formatted = format_fsm_output(re_table, fsm_results)
 
-    ## GRAB MAC Table ##
+    ## GRAB MAC TABLE ##
     arp_table = ssh_connection.send_command("show mac-address-table", delay_factor=2)
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac_address_table.textfsm"))
     fsm_results = re_table.ParseText(arp_table)
     mac_table_formatted = format_fsm_output(re_table, fsm_results)
 
-    # FORMAT INTERFACE STATUS ##
+    # GRAB INTERFACE STATUS ##
+    int_status = ssh_connection.send_command("show interface status", delay_factor=2)
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_interfaces_status.textfsm"))
     fsm_results = re_table.ParseText(int_status)
     int_status_formatted = format_fsm_output(re_table, fsm_results)
 
-    ## Grab interface config ##
+    ## GRAB INTERFACE CONFIG ##
     debcount = 0
     tempoutput1 = []
     for line in int_status_formatted:
@@ -160,48 +152,11 @@ def main(device_type, ip, username, password):
         else:
             newline = {**line}
         
-        newline['OTHER'] = port_config          ## Add full config to catch anything extra (need to update)
+        newline['OTHER'] = port_config          ## Add full config to catch anything extra (update to only extra's)
         tempoutput1.append(newline)
 
-    myoutput = tempcorrelate(arp_table_formatted, mac_table_formatted, tempoutput1)
-
-
-        ### Grab MAC Addresses ##
-    #debcount = 0
-    #tempoutput2 = []
-    #for line in tempoutput1:
-    #    if DEBUG == True:
-    #        if debcount > DEBMAXLINES:
-    #            break
-    #        else:
-    #            debcount += 1
-    #
-    #    print("Checking mac-address-table on port {}...".format(line['PORT']))
-    #    mac_table = ssh_connection.send_command("show mac-address-table interface {}".format(line['PORT']))
-    #
-    #    re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac_address_table.textfsm"))
-    #    fsm_results = re_table.ParseText(mac_table)
-    #
-    #    mac_table_formatted = format_fsm_output(re_table, fsm_results)
-    #    macs = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': ''}
-    #
-    #    if mac_table_formatted.__len__() == 1:
-    #        macs['MAC_ADDRESS'] = mac_table_formatted[0]['MAC_ADDRESS']
-    #        macs['IP'], macs['MACVLAN'] = check_arp_table(arp_table_formatted, macs['MAC_ADDRESS'])
-#
-    #    elif not mac_table_formatted == []:
-    #        for item in mac_table_formatted:
-    #            macs['MAC_ADDRESS'] += item['MAC_ADDRESS']
-    #            macs['MAC_ADDRESS'] += '\n'
-#
-    #            ip,vlan = check_arp_table(arp_table_formatted, item['MAC_ADDRESS'])
-    #            macs['IP'] += ip
-    #            macs['IP'] += '\n'
-    #            macs['MACVLAN'] += vlan
-    #            macs['MACVLAN'] += '\n'
-#
-    #    newline = {**line, **macs}
-    #    tempoutput2.append(newline)
+    ## CORRELATE ARP AND MAC TABLES ##
+    myoutput = correlate_arp_and_mac(arp_table_formatted, mac_table_formatted, tempoutput1)
 
     # BUILD CSV ##
     headers = list(myoutput[0].keys())
