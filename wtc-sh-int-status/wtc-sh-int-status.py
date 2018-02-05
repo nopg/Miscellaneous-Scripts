@@ -171,9 +171,7 @@ def main(device_type, ip, username, password):
                 macs['MACVLAN'] += '\n'
 
         newline = {**line, **macs}
-
         tempoutput2.append(newline)
-
 
     # BUILD CSV ##
     headers = list(tempoutput2[0].keys())
