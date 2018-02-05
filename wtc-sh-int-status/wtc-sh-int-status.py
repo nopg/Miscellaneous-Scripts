@@ -9,7 +9,7 @@ from datetime import datetime
 from netmiko import ConnectHandler
 from netmiko.ssh_exception import *
 
-DEBUG = True
+DEBUG = False
 DEBMAXLINES = 3
 
 def get_show_int_status(device_type, ip, username, password):
@@ -77,6 +77,15 @@ def build_csv(output, headers):
     writer.writerows(output)
     fout.close()
 
+def check_arp_table(arp_table_formatted, mac_address):
+    for ip in arp_table_formatted:
+        if ip['MAC'] == mac_address:
+            return ip['ADDRESS'], ip['MACVLAN']
+        else:
+            pass
+    return 'not found', ''
+
+
 def main(device_type, ip, username, password):
 
     int_status, ssh_connection = get_show_int_status(device_type, ip, username, password)
@@ -85,22 +94,24 @@ def main(device_type, ip, username, password):
         print(int_status)
         sys.exit(0)
 
-    # parse the show cdp details command using TextFSM
+    ## GRAB ARP Table ##
+
+    arp_table = ssh_connection.send_command("show ip arp")
+
+    re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_arp.textfsm"))
+    fsm_results = re_table.ParseText(arp_table)
+    arp_table_formatted = format_fsm_output(re_table, fsm_results)
+
+    # GRAB INTERFACE STATUS ##
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_interfaces_status.textfsm"))
     fsm_results = re_table.ParseText(int_status)
-    headers = re_table.header
 
     ## REFORMAT THE OUTPUT ##
     int_status = format_fsm_output(re_table, fsm_results)
 
     ## Grab interface config ##
-    headers.remove('DESCRIPTION')   ## Don't want duplicate description headers
-    re_table = jtextfsm.TextFSM(open("cisco_ios_show_run_interface.textfsm"))
-    headers += re_table.header
-    headers.append('OTHER')         ## For other configuration not found with TexfFSM
-
     debcount = 0
-    output = []
+    tempoutput1 = []
     for line in int_status:
         if DEBUG == True:
             if debcount > DEBMAXLINES:
@@ -123,14 +134,12 @@ def main(device_type, ip, username, password):
             newline = {**line}
         
         newline['OTHER'] = port_config          ## Add full config to catch anything extra (need to update)
-        output.append(newline)
+        tempoutput1.append(newline)
         
     ## Grab MAC Addresses ##
-    headers.append('MAC_ADDRESS')
-    
     debcount = 0
-    newoutput = []
-    for line in output:
+    tempoutput2 = []
+    for line in tempoutput1:
         if DEBUG == True:
             if debcount > DEBMAXLINES:
                 break
@@ -144,25 +153,32 @@ def main(device_type, ip, username, password):
         fsm_results = re_table.ParseText(mac_table)
         
         mac_table_formatted = format_fsm_output(re_table, fsm_results)
-        macs = {'MAC_ADDRESS': ''}
+        macs = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': ''}
         
         if mac_table_formatted.__len__() == 1:
             macs['MAC_ADDRESS'] = mac_table_formatted[0]['MAC_ADDRESS']
+            macs['IP'], macs['MACVLAN'] = check_arp_table(arp_table_formatted, macs['MAC_ADDRESS'])
+
         elif not mac_table_formatted == []:
             for item in mac_table_formatted:
                 macs['MAC_ADDRESS'] += item['MAC_ADDRESS']
                 macs['MAC_ADDRESS'] += '\n'
-                
-        if not macs == {'MAC_ADDRESS': ''}:
+
+                ip,vlan = check_arp_table(arp_table_formatted, item['MAC_ADDRESS'])
+                macs['IP'] += ip
+                macs['IP'] += '\n'
+                macs['MACVLAN'] += vlan
+                macs['MACVLAN'] += '\n'
+
             newline = {**line, **macs}
-        else:
-            newline = {**line}
-            
-        newoutput.append(newline)        
+
+        tempoutput2.append(newline)
+
 
     # BUILD CSV ##
+    headers = list(tempoutput2[0].keys())
     ssh_connection.disconnect()
-    build_csv(newoutput, headers)
+    build_csv(tempoutput2, headers)
     
 if __name__ == "__main__":
 
@@ -177,7 +193,7 @@ if __name__ == "__main__":
     elif ssh_or_telnet == 'telnet':
         device_type = 'cisco_ios_telnet'
     else:
-        print("\nplease provide the following arguments:")
+        print("\nUnknown connection type '{}', please provide the following arguments:".format(ssh_or_telnet))
         print("\tcollect-cdp-information.py <telnet or ssh> <ip> <username>\n\n")
         sys.exit(0)
 
