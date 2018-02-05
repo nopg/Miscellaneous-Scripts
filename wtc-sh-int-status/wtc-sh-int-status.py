@@ -207,4 +207,4 @@ if __name__ == "__main__":
     main(device_type, target_ip, username, password)
     print()
     print("Done.")
-    print("Time elapsed: {}".format(datetime.now() - start_time))
+    print("Time elapsed: {}\n".format(datetime.now() - start_time))
