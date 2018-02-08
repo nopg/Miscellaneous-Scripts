@@ -12,7 +12,8 @@ from netmiko import ConnectHandler
 from netmiko.ssh_exception import *
 
 DEBUG = False
-DEBMAXLINES = 3
+DEBMAXLINES = 10
+MACVENDOR = False
 
 def get_connection(device_type, ip, username, password):
     """
@@ -95,6 +96,7 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
     :param ouldoutput: existing output to be written to CSV
     :return output: updated output including arp/mac entries found
     """
+    global MACVENDOR
 
     output = []
     for line in oldoutput:
@@ -111,6 +113,7 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
                     response = requests.get(url=url)
                     mydict['MAC_VENDOR'] += response.text
                     mydict['MAC_VENDOR'] += '\n'
+                    print(response.text)
 
                 # Search ARP for this MAC #
                 for ip in arp_table:
@@ -233,6 +236,8 @@ def main(device_type, ip, username, password):
     
 if __name__ == "__main__":
 
+    MACVENDOR = False
+
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
         print("\tcollect-cdp-information.py <telnet or ssh> <ip> <username>\n\n")
@@ -263,7 +268,7 @@ if __name__ == "__main__":
 
     start_time = datetime.now()
     print("Thank you! Pulling data...")
-    
+
     # RUN PROGRAM #
     main(device_type, target_ip, username, password)
 
