@@ -113,7 +113,6 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
                     response = requests.get(url=url)
                     mydict['MAC_VENDOR'] += response.text
                     mydict['MAC_VENDOR'] += '\n'
-                    print(response.text)
 
                 # Search ARP for this MAC #
                 for ip in arp_table:
