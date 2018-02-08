@@ -149,6 +149,12 @@ def main(device_type, ip, username, password):
     fsm_results = re_table.ParseText(int_status)
     int_status_formatted = format_fsm_output(re_table, fsm_results)
 
+    # GRAB CDP NEIGHBORS #
+    cdp_neighbors = ssh_connection.send_command("show cdp neighbor detail", delay_factor=2)
+    re_table = jtextfsm.TextFSM(open("show_cdp_neighbor_detail-m.textfsm"))
+    fsm_results = re_table.ParseText(cdp_neighbors)
+    cdp_neighbors = format_fsm_output(re_table, fsm_results)
+
     # GRAB INTERFACE CONFIG #
     debcount = 0
     tempoutput1 = []
@@ -176,7 +182,32 @@ def main(device_type, ip, username, password):
         tempoutput1.append(newline)
 
     # CORRELATE ARP AND MAC TABLES #
-    myoutput = correlate_arp_and_mac(arp_table_formatted, mac_table_formatted, tempoutput1)
+    tempoutput2 = correlate_arp_and_mac(arp_table_formatted, mac_table_formatted, tempoutput1)
+
+    # ADD CDP INFORMATION #
+    myoutput = []
+    for port in tempoutput2:
+        mydict = {'MANAGEMENT_IP': '', 'DESTINATION_HOST': '', 'REMOTE_PORT': '', 'PLATFORM': ''}
+        for neighbor in cdp_neighbors:
+            if port['PORT'] == neighbor['LOCAL_PORT']:
+                mydict['MANAGEMENT_IP'] += neighbor['MANAGEMENT_IP']
+                mydict['MANAGEMENT_IP'] += '\n'
+                mydict['DESTINATION_HOST'] += neighbor['DESTINATION_HOST']
+                mydict['DESTINATION_HOST'] += '\n'
+                mydict['REMOTE_PORT'] += neighbor['REMOTE_PORT']
+                mydict['REMOTE_PORT'] += '\n'
+                mydict['MODEL'] += neighbor['PLATFORM']
+                mydict['MODEL'] += '\n'
+
+
+                # EXCEL DOESN'T LIKE NEWLINES IN SOME CASES #
+                mydict['MANAGEMENT_IP'] = mydict['MANAGEMENT_IP'].rstrip()
+                mydict['DESTINATION_HOST'] = mydict['DESTINATION_HOST'].rstrip()
+                mydict['REMOTE_PORT'] = mydict['REMOTE_PORT'].rstrip()
+                mydict['MODEL'] = mydict['MODEL'].rstrip()
+
+                newline = {**line, **mydict}
+                myoutput.append(newline)
 
     # BUILD CSV ##
     ssh_connection.disconnect()
