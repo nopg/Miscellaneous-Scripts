@@ -6,6 +6,7 @@ import jtextfsm
 import csv
 import getpass
 import re
+import requests
 from datetime import datetime
 from netmiko import ConnectHandler
 from netmiko.ssh_exception import *
@@ -77,7 +78,7 @@ def build_csv(output):
     :param output: existing dictionary to be written
     :return:
     """
-
+    print("Building CSV...")
     headers = list(output[0].keys())
     fout = open('int-status-output.csv', 'w')
     writer = csv.DictWriter(fout, fieldnames=headers, lineterminator='\n')
@@ -97,11 +98,19 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
 
     output = []
     for line in oldoutput:
-        mydict = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': ''}
+        mydict = {'MAC_ADDRESS': '', 'IP': '', 'MACVLAN': '', 'MAC_VENDOR': ''}
         for mac in mac_table:
             if mac['DESTINATION_PORT'] == line['PORT']:
                 mydict['MAC_ADDRESS'] += mac['MAC_ADDRESS']
                 mydict['MAC_ADDRESS'] += '\n'
+
+                # CALL API FOR MACVENDORS TO GRAB THE MAC VENDOR #
+                if MACVENDOR == True:
+                    print("Grabbing MAC Vendor info for mac: {}".format(mac['MAC_ADDRESS']))
+                    url = 'http://api.macvendors.com/' + mac['MAC_ADDRESS']
+                    response = requests.get(url=url)
+                    mydict['MAC_VENDOR'] += response.text
+                    mydict['MAC_VENDOR'] += '\n'
 
                 # Search ARP for this MAC #
                 for ip in arp_table:
@@ -118,6 +127,7 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
         mydict['IP'] = mydict['IP'].rstrip()
         mydict['MACVLAN'] = mydict['MACVLAN'].rstrip()
         mydict['MAC_ADDRESS'] = mydict['MAC_ADDRESS'].rstrip()
+        mydict['MAC_VENDOR'] = mydict['MAC_VENDOR'].rstrip()
 
         newline = {**line, **mydict}
         output.append(newline)
@@ -242,8 +252,18 @@ if __name__ == "__main__":
     username = sys.argv[3]
     password = getpass.getpass("Type the password: ")
 
-    start_time = datetime.now()
+    while True:
+        macvendor = input("Pull MAC Vendor information? (y/n)")
+        if macvendor == 'y':
+            MACVENDOR = True
+            break
+        elif macvendor == 'n':
+            MACVENDOR = False
+            break
 
+    start_time = datetime.now()
+    print("Thank you! Pulling data...")
+    
     # RUN PROGRAM #
     main(device_type, target_ip, username, password)
 
