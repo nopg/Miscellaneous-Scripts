@@ -8,7 +8,7 @@ Value LOCAL_PORT (.*)
 Value SOFTWARE_VERSION (.*)
 
 Start
-  ^${local_host}[>#].*
+  ^${LOCAL_HOST}[>#].*
   ^Device ID: ${DESTINATION_HOST}
   ^Entry address\(es\): -> ParseIP
   ^Platform: ${PLATFORM},.*Capabilities: ${CAPABILITIES}

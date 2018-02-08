@@ -5,6 +5,7 @@ import sys
 import jtextfsm
 import csv
 import getpass
+import re
 from datetime import datetime
 from netmiko import ConnectHandler
 from netmiko.ssh_exception import *
@@ -62,7 +63,7 @@ def format_fsm_output(re_table, fsm_results):
         tempdevice = {}
         for position, header in enumerate(re_table.header):
             tempdevice[header] = item[position]
-        ## EXCEL DOESN'T LIKE FIELDS STARTING WITH --- ##
+        ## EXCEL DOESN'T LIKE FIELDS STARTING WITH '-' ##
             if  tempdevice[header].startswith('-'):
                 tempdevice[header] = '*' + tempdevice[header] + '*'
         result.append(tempdevice)
@@ -187,9 +188,16 @@ def main(device_type, ip, username, password):
     # ADD CDP INFORMATION #
     myoutput = []
     for port in tempoutput2:
-        mydict = {'MANAGEMENT_IP': '', 'DESTINATION_HOST': '', 'REMOTE_PORT': '', 'PLATFORM': ''}
+        mydict = {'MANAGEMENT_IP': '', 'DESTINATION_HOST': '', 'REMOTE_PORT': '', 'MODEL': ''}
         for neighbor in cdp_neighbors:
-            if port['PORT'] == neighbor['LOCAL_PORT']:
+            # TRUNCATE 'GigabitEthernet1/1' TO 'Gi1/1' TO MATCH INT STATUS PORT NAME#
+            e = neighbor['LOCAL_PORT']
+            type = e[0:2]                           # FIRST TWO CHARACTERS #
+            numindex = re.search('\d', e).start()   # INDEX OF FIRST DIGIT #
+            num = e[numindex:]                      # EVERYTHING AFTER FIRST DIGIT #
+            local_port = type + num                 # Gi + 1/1
+
+            if port['PORT'] == local_port:
                 mydict['MANAGEMENT_IP'] += neighbor['MANAGEMENT_IP']
                 mydict['MANAGEMENT_IP'] += '\n'
                 mydict['DESTINATION_HOST'] += neighbor['DESTINATION_HOST']
@@ -199,15 +207,14 @@ def main(device_type, ip, username, password):
                 mydict['MODEL'] += neighbor['PLATFORM']
                 mydict['MODEL'] += '\n'
 
+        # EXCEL DOESN'T LIKE NEWLINES IN SOME CASES #
+        mydict['MANAGEMENT_IP'] = mydict['MANAGEMENT_IP'].rstrip()
+        mydict['DESTINATION_HOST'] = mydict['DESTINATION_HOST'].rstrip()
+        mydict['REMOTE_PORT'] = mydict['REMOTE_PORT'].rstrip()
+        mydict['MODEL'] = mydict['MODEL'].rstrip()
 
-                # EXCEL DOESN'T LIKE NEWLINES IN SOME CASES #
-                mydict['MANAGEMENT_IP'] = mydict['MANAGEMENT_IP'].rstrip()
-                mydict['DESTINATION_HOST'] = mydict['DESTINATION_HOST'].rstrip()
-                mydict['REMOTE_PORT'] = mydict['REMOTE_PORT'].rstrip()
-                mydict['MODEL'] = mydict['MODEL'].rstrip()
-
-                newline = {**line, **mydict}
-                myoutput.append(newline)
+        newline = {**port, **mydict}
+        myoutput.append(newline)
 
     # BUILD CSV ##
     ssh_connection.disconnect()
