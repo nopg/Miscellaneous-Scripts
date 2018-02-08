@@ -63,7 +63,7 @@ def format_fsm_output(re_table, fsm_results):
         for position, header in enumerate(re_table.header):
             tempdevice[header] = item[position]
         ## EXCEL DOESN'T LIKE FIELDS STARTING WITH --- ##
-            if '---' in tempdevice[header]:
+            if  tempdevice[header].startswith('-'):
                 tempdevice[header] = '*' + tempdevice[header] + '*'
         result.append(tempdevice)
 
