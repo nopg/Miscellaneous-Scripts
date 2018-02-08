@@ -164,7 +164,7 @@ def main(device_type, ip, username, password):
 
     # GRAB CDP NEIGHBORS #
     cdp_neighbors = ssh_connection.send_command("show cdp neighbor detail", delay_factor=2)
-    re_table = jtextfsm.TextFSM(open("show_cdp_neighbor_detail-m.textfsm"))
+    re_table = jtextfsm.TextFSM(open("show_cdp_neighbor_detail.textfsm"))
     fsm_results = re_table.ParseText(cdp_neighbors)
     cdp_neighbors = format_fsm_output(re_table, fsm_results)
 
