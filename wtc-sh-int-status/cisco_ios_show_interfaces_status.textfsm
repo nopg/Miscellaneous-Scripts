@@ -1,5 +1,4 @@
-Value Key PORT (([a-zA-Z])\w+/\d+|mgmt\d+|Po\d+|Lo\d+|Vlan\d+)
-Value Key PORT2 (([a-zA-Z])\w+/\d+/\d+|mgmt\d+|Po\d+|Lo\d+|Vlan\d+)
+Value Key PORT (([a-zA-Z])\w+/\d+|mgmt\d+|Po\d+|Lo\d+|Vlan\d+|([a-zA-Z])\w+/\d+/\d+)
 Value DESCRIPTION (\S+((\s\w+)+)?)
 Value STATUS (err-disabled|disabled|connected|notconnect|inactive)
 Value VLAN (\w+)
@@ -10,5 +9,3 @@ Value TYPE (.*)
 Start
   ^${PORT}\s+${DESCRIPTION}\s+${STATUS}\s+${VLAN}\s+${DUPLEX}\s+${SPEED}\s+${TYPE} -> Record
   ^${PORT}\s+${STATUS}\s+${VLAN}\s+${DUPLEX}\s+${SPEED}\s+${TYPE} -> Record
-  ^${PORT2}\s+${DESCRIPTION}\s+${STATUS}\s+${VLAN}\s+${DUPLEX}\s+${SPEED}\s+${TYPE} -> Record
-  ^${PORT2}\s+${STATUS}\s+${VLAN}\s+${DUPLEX}\s+${SPEED}\s+${TYPE} -> Record
