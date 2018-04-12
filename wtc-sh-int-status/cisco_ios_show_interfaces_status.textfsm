@@ -3,7 +3,7 @@ Value DESCRIPTION (\S+((\s\w+)+)?)
 Value STATUS (err-disabled|disabled|connected|notconnect|inactive)
 Value VLAN (\w+)
 Value DUPLEX (full|a-full|auto|half)
-Value SPEED (auto|\w+-\d+|\d+)
+Value SPEED (auto|\w+-\d+|\d+|w+\d+)
 Value TYPE (.*)
 
 Start
