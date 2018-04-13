@@ -189,7 +189,8 @@ def main(device_type, ip, username, password):
         if not portconfig == []:
             newline = {**line, **portconfig[0]}     # Combine dictionaries
         else:
-            newline = {**line}
+            newline = {**line, 'DESCRIPTION': '', 'MODE': '', 'DATAVLAN': '', 'VOICEVLAN': '', 'ALLOWEDVLANS': '',
+                      'NATIVEVLAN': '', 'PORTCHANNEL': '', 'PCMODE': ''}
         
         newline['OTHER'] = port_config          # Add full config to catch anything extra (update to only extra's)
         tempoutput1.append(newline)
