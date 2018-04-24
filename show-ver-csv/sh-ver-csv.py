@@ -23,6 +23,7 @@ def build_csv(output, filename):
     BUILD CSV BASED ON AN EXISTING DICTIONARY
 
     :param output: existing dictionary to be written
+    :param filename: filename to create csv
     :return:
     """
     print("Building CSV...")
@@ -64,25 +65,8 @@ def version_csv(type, path):
 
         tempoutput = format_fsm_cdp_output(re_table, fsm_results)
         output.append(tempoutput[0])
-        #for item in output:
-        #    for key in item:
-        #        print(f"item[{key}] = {item[key]}")
-        #    
-        #    print()
-        #print('temp = {}'.format(tempoutput))
 
-    #print('output = {}'.format(output))
     return output
-
-#def merge_lists(l1, l2, key):
-#    merged = {}
-#    for item in l1+l2:
-#        if item[key] in merged:
-#            merged[item[key]].update(item)
-#        else:
-#            merged[item[key]] = item
-#    return merged
-
 
 def main():
 
@@ -94,20 +78,9 @@ def main():
     build_csv(nxosoutput, 'nxos-version-output.csv')
 
     iosoutput.extend(nxosoutput)
-    #test = []
-    #test.append(merge_lists(iosoutput, nxosoutput, 'HOSTNAME'))
+
     build_csv(iosoutput, 'test.csv')
 
 if __name__ == "__main__":
     main()
     print("Done.")
-
-
-
-    #for e in fsm_results:
-    #   print(e)
-    #   for item in e:
-    #       print(item)
-    #for e in fsm_results:
-    #    for x,y in enumerate(re_table.header):
-    #        print(f"x = {x}\ny = {y}\ne = {e}")
