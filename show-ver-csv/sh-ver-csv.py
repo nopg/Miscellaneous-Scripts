@@ -79,7 +79,7 @@ def main():
 
     iosoutput.extend(nxosoutput)
 
-    build_csv(iosoutput, 'test.csv')
+    build_csv(iosoutput, 'combined-version-output.csv')
 
 if __name__ == "__main__":
     main()
