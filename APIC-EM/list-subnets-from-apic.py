@@ -66,8 +66,12 @@ if count > 0 :
         response_json = resp.json()
 
         for interface in response_json["response"]:
-            if interface['ipv4Address'] != None: 
-                interface_list.append([interface['ipv4Address'],interface['ipv4Mask']])
+            #print(interface['ipv4Address'])
+            try:
+                if interface['ipv4Address'] != None: 
+                    interface_list.append([interface['ipv4Address'],interface['ipv4Mask']])
+            except:
+                pass
 
     subnets =[]
 

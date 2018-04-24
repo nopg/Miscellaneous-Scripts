@@ -4,7 +4,7 @@ import re
 ### Disable invalid certificate warnings.
 requests.packages.urllib3.disable_warnings()
 
-apicem_ip = "devnetapi.cisco.com/sandbox/apic_em"
+apicem_ip = "10.15.192.152"
 
 def createserviceticket():
     response = requests.post(
@@ -14,8 +14,8 @@ def createserviceticket():
         },
         verify=False,
         data=json.dumps({
-            "username": 'devnetuser',
-            "password": 'Cisco123!'
+            "username": 'network',
+            "password": 'Kq3yZnmr4bY'
         })
     )
     output = ('Response HTTP Response Body: {content}'.format(content=response.content))
@@ -31,7 +31,7 @@ data = response.json()
 
 device_list = data['response']
 for device in device_list:
-    if device['reachabilityStatus'] == 'Unreachable':
+    if device['reachabilityStatus'] == 'Reachable':
         print('Hostname: %s' % device['hostname'])
         print(device['errorCode'])
         print()
