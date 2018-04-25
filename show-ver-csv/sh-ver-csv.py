@@ -70,16 +70,25 @@ def version_csv(type, path):
 
 def main():
 
-    iosoutput = version_csv('ios', './version2/ios')
+    path = input("""\n\t\tAdd folders underneath root folder:
+                        './ios' for IOS devices
+                        './nxos' for NX-OS devices
+                        
+                        Do not add quotes("")
+                        
+                Full path to root version folder: """)
+    outputpath = input("\n\t\tFull path for output files: """) 
+                   
+    iosoutput = version_csv('ios', path + '/ios')
 
-    nxosoutput = version_csv('nx-os', './version2/nxos')
+    nxosoutput = version_csv('nx-os', path + '/nxos')
 
-    build_csv(iosoutput, 'ios-version-output.csv')
-    build_csv(nxosoutput, 'nxos-version-output.csv')
+    build_csv(iosoutput, outputpath + '/ios-version-output.csv')
+    build_csv(nxosoutput, outputpath + '/nxos-version-output.csv')
 
     iosoutput.extend(nxosoutput)
 
-    build_csv(iosoutput, 'combined-version-output.csv')
+    build_csv(iosoutput, outputpat + '/combined-version-output.csv')
 
 if __name__ == "__main__":
     main()
