@@ -1,5 +1,7 @@
 """
-Built for Warner Truck Center 6500 Migration
+Points to an individual switch and outputs all switch port settings & configuration. 
+    Prompts the user for 'show mac address-table' command and whether they would like to pull device brand 
+    from MAC via macvendors.com API
 """
 import sys
 import jtextfsm
@@ -136,7 +138,7 @@ def correlate_arp_and_mac(arp_table, mac_table, oldoutput):
 
     return output
 
-def main(device_type, ip, username, password):
+def main(device_type, ip, username, password, mac_table_command):
 
     # GET CONNECTION ##
     ssh_connection = get_connection(device_type, ip, username, password)
@@ -151,7 +153,7 @@ def main(device_type, ip, username, password):
     arp_table_formatted = format_fsm_output(re_table, fsm_results)
 
     # GRAB MAC TABLE #
-    arp_table = ssh_connection.send_command("show mac-address-table", delay_factor=2)
+    arp_table = ssh_connection.send_command(mac_table_command, delay_factor=2)
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_mac_address_table.textfsm"))
     fsm_results = re_table.ParseText(arp_table)
     mac_table_formatted = format_fsm_output(re_table, fsm_results)
@@ -240,7 +242,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
-        print("\tcollect-cdp-information.py <telnet or ssh> <ip> <username>\n\n")
+        print("\tpython switch-ports-csv.py <telnet or ssh> <ip> <username>\n\n")
         sys.exit(0)
 
     ssh_or_telnet = sys.argv[1]
@@ -258,6 +260,18 @@ if __name__ == "__main__":
     password = getpass.getpass("Type the password: ")
 
     while True:
+        mac_table_command = input("""
+        Choose the correct command to pull the MAC table for your device:
+            1) 'show mac-address-table' (most common)
+            2) 'show mac address-table'
+        Enter 1 or 2: """)
+        if mac_table_command == '1':
+            mac_table_command = 'show mac-address-table'
+            break
+        elif mac_table_command == '2':
+            mac_table_command = 'show mac address-table'
+            break
+    while True:
         macvendor = input("Pull MAC Vendor information? (y/n)")
         if macvendor == 'y':
             MACVENDOR = True
@@ -270,7 +284,7 @@ if __name__ == "__main__":
     print("Thank you! Pulling data...")
 
     # RUN PROGRAM #
-    main(device_type, target_ip, username, password)
+    main(device_type, target_ip, username, password, mac_table_command)
 
     print()
     print("Done.")
