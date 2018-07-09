@@ -26,6 +26,12 @@ def build_csv(output, filename):
     :param filename: filename to create csv
     :return:
     """
+    
+    if output:
+        pass
+    else:
+        return
+        
     print("Building CSV...")
     headers = list(output[0].keys())
     fout = open(filename, 'w')
@@ -88,7 +94,7 @@ def main():
 
     iosoutput.extend(nxosoutput)
 
-    build_csv(iosoutput, outputpat + '/combined-version-output.csv')
+    build_csv(iosoutput, outputpath + '/combined-version-output.csv')
 
 if __name__ == "__main__":
     main()
