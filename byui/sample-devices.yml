@@ -1,0 +1,10 @@
+---
+# List device ip/fqdn's in each section, only need to specify the types in use #
+# Defaults to SSH unless using the TELNET section #
+
+MASTER:
+  - 192.168.77.1
+IOS:
+  - 192.168.77.54
+  - 192.168.77.52
+  - 192.168.77.58
