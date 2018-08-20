@@ -70,10 +70,10 @@ def connect(device_list,username,password):
     ## GRAB MASTER DATABASE ##
     connect_dict = {'device_type': 'cisco_ios', 'ip': device_list['MASTER'][0], 'username': username, 'password': password}
     net_connect = ConnectHandler(**connect_dict)  
-    master = net_connect.send_command("show ip ospf 77 database")
-    re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_ospf_database.textfsm"))
+    master = net_connect.send_command("show ip bgp")
+    re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_bgp.template"))
     fsm_results = re_table.ParseText(master)
-    master_ospf = format_fsm_output(re_table, fsm_results)
+    master_bgp = format_fsm_output(re_table, fsm_results)
 
     with open("MASTER.txt", "w") as fout:
         fout.write(master)
@@ -125,18 +125,18 @@ def connect(device_list,username,password):
             successes.append( (ip , filename) )
             print("Success!")
 
-            output = net_connect.send_command("show ip ospf database")
+            output = net_connect.send_command("show ip bgp")
 
             if device_type == 'cisco_nxos':
-                re_table = jtextfsm.TextFSM(open("cisco_nxos_show_ip_ospf_database.textfsm"))
-            re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_ospf_database.textfsm"))
+                re_table = jtextfsm.TextFSM(open("cisco_nxos_show_ip_bgp.template"))
+            re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_bgp.template"))
             fsm_results = re_table.ParseText(output)
-            ospf_output = format_fsm_output(re_table, fsm_results)
+            bgp_output = format_fsm_output(re_table, fsm_results)
 
             with open(filename, "w") as fout:
                 fout.write(output)
                 fout.write("\n\n\n")
-                for diff in list(dictdiffer.diff(master_ospf, ospf_output)):
+                for diff in list(dictdiffer.diff(master_bgp, bgp_output)):
                     fout.write(str(diff) + '\n')
 
     output2()
@@ -146,7 +146,7 @@ def main():
 
     if len(sys.argv) != 3:
         print("\nplease provide the following arguments:")
-        print("\tpython3 compare-ospf.py <device-list-file> <username>\n\n")
+        print("\tpython3 compare-bgp.py <device-list-file> <username>\n\n")
         sys.exit(0)
 
     device_list = ly(sys.argv[1])
