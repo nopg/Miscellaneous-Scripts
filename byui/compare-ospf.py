@@ -68,14 +68,14 @@ def connect(device_list,username,password):
         print("Time elapsed: {}".format(datetime.now() - start_time))
 
     ## GRAB MASTER DATABASE ##
-    connect_dict = {'device_type': 'cisco_ios', 'ip': device_list['MASTER'][0], 'username': username, 'password': password}
+    connect_dict = {'device_type': 'cisco_ios', 'ip': device_list['MASTER'][0], 'username': username, 'password': password, 'secret': '6R1mL0k!'}
     net_connect = ConnectHandler(**connect_dict)  
-    master = net_connect.send_command("show ip ospf 77 database")
+    master = net_connect.send_command("show ip ospf database")
     re_table = jtextfsm.TextFSM(open("cisco_ios_show_ip_ospf_database.textfsm"))
     fsm_results = re_table.ParseText(master)
     master_ospf = format_fsm_output(re_table, fsm_results)
 
-    with open("MASTER.txt", "w") as fout:
+    with open("output/MASTER.log", "w") as fout:
         fout.write(master)
 
     for type in device_list:
@@ -112,6 +112,7 @@ def connect(device_list,username,password):
                 print("\nUnknown error connecting to device: {}\n".format(ip))
                 continue
 
+            net_connect.enable()
             filename = net_connect.find_prompt().rstrip('#')
             
             filename = filename + '--' + \
@@ -133,7 +134,7 @@ def connect(device_list,username,password):
             fsm_results = re_table.ParseText(output)
             ospf_output = format_fsm_output(re_table, fsm_results)
 
-            with open(filename, "w") as fout:
+            with open('output/' + filename, "w") as fout:
                 fout.write(output)
                 fout.write("\n\n\n")
                 for diff in list(dictdiffer.diff(master_ospf, ospf_output)):
