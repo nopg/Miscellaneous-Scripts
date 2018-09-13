@@ -19,6 +19,15 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
+def pp_json(json_thing, sort=True, indents=4):
+    if type(json_thing) is str:
+        print("STR")
+        print(json.dumps(json.loads(json_thing), sort_keys=sort, indent=indents))
+    else:
+        print(json.dumps(json_thing, sort_keys=sort, indent=indents))
+    return None
+
+
 class rest_api_lib:
     def __init__(self, vmanage_ip, username, password):
         self.vmanage_ip = vmanage_ip
@@ -75,15 +84,6 @@ class rest_api_lib:
             print("Error: " + str(response.status_code))
             print(response.content)
             sys.exit(0)
-
-
-def pp_json(json_thing, sort=True, indents=4):
-    if type(json_thing) is str:
-        print("STR")
-        print(json.dumps(json.loads(json_thing), sort_keys=sort, indent=indents))
-    else:
-        print(json.dumps(json_thing, sort_keys=sort, indent=indents))
-    return None
 
 
 def grab_files_read(folder_name):
@@ -165,4 +165,4 @@ if __name__ == "__main__":
     obj = rest_api_lib(dest_vmanage_ip, username, password)
     main(obj, root_folder)
 
-    print("\nComplete!\n")
+    print("\n\nComplete!\n")
