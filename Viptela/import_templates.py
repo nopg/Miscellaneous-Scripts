@@ -67,9 +67,14 @@ class rest_api_lib:
         response = self.session[self.vmanage_ip].post(
             url=url, data=payload, headers=headers, verify=False
         )
-        print(response)
-        data = response.content
-        return data
+        if response.status_code == 200:
+            return response.content
+        else:
+            print("\nERROR sending Post request: \n")
+            print(url)
+            print("Error: " + str(response.status_code))
+            print(response.content)
+            sys.exit(0)
 
 
 
@@ -91,42 +96,63 @@ def grab_files_read(folder_name):
                     device_templates.append(data)
     return device_templates
 
-def create_files(data, subfolder):
-    subfolder = "/"+subfolder+"/"
-    for each in data:
-        #if not each["factoryDefault"]:
-            response = obj.get_request("template" + subfolder + "object/" + each["templateId"])
-            template = json.loads(response)
-            filename = template["templateName"].replace(os.path.sep,'_') + ".vipt"
-            fout = open(root_folder + subfolder + filename, "w")
-            fout.write(json.dumps(template))
-            fout.close()
+
+def find_feature_template(old_id, feature_templates):
+
+    # SEARCH THROUGH TEMPLATES #
+    for template in feature_templates:
+        data = json.loads(template)
+        if data["templateId"] == old_id:
+            data["factoryDefault"] = False
+            if "Factory_Default_" in data["templateName"]:
+                data["templateName"] = "Imported_" + data["templateName"]
+            # CREATE NEW TEMPLATE #
+            response = obj.post_request("template/feature", data)
+            print("\tImported feature template: {}".format(data["templateName"]))
+            new_id = json.loads(response)["templateId"]
+            return new_id
+
+    # TEMPLATE NOT FOUND! #
+    print("\nRequired feature template not found! ID: {}".format(old_id))
+    print("Exiting...\n")
+    sys.exit(0)
 
 def main(obj, root_folder):
 
-    os.makedirs(root_folder + "/device", exist_ok=True)
-    os.makedirs(root_folder + "/feature", exist_ok=True)
+    # GRAB TEMPLATES, creates list containing output of each file #
+    device_templates = grab_files_read(root_folder + "/device/")
+    feature_templates = grab_files_read(root_folder + "/feature/")
 
-    ## OUTPUT ALL FEATURE TEMPLATES
-    response = obj.get_request("template/feature")
-    json_response = json.loads(response)
+    for template in device_templates:
+        data = json.loads(template)
+        data["policyId"] = ""                       #   ATTACHED TO ROUTING POLICY?
+        data["factoryDefault"] = ""                 #   NEVER A DEFAULT
+        if data["configType"] == "template":        #   NOT A CLI BASED TEMPLATE
+            # UPDATE OLD FEATURE TEMPLATE ID'S #
+            for feature_template in data["generalTemplates"]:
+                if "subTemplates" in feature_template:
+                    for sub_template in feature_template["subTemplates"]:
+                        old_feat_id = sub_template["templateId"]
+                        # FIND FEATURE TEMPLATE AND CREATE NEW ONE #
+                        new_id = find_feature_template(old_feat_id, feature_templates) 
+                        sub_template["templateId"] = new_id
 
-    feature_data = json_response["data"]
-    create_files(feature_data, "feature")
+                old_feat_id = feature_template["templateId"]
+                # FIND FEATURE TEMPLATE AND CREATE NEW ONE #
+                new_id = find_feature_template(old_feat_id, feature_templates)
+                feature_template["templateId"] = new_id
 
-    ## GET ALL DEVICE TEMPLATES
-    response = obj.get_request("template/device")
-    json_response = json.loads(response)
+        # CREATE DEVICE TEMPLATE
+        response = obj.post_request("template/device/feature", data)
+        print("Imported device template: {}\n".format(data["templateName"]))
 
-    device_data = json_response["data"]
-    create_files(device_data, "device")
 
 
 if __name__ == "__main__":
     
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
-        print("\tpython3 put-templates.py <output template folder> <destination vmanage> <username>\n\n")
+        print("\tpython3 put-templates.py <root template folder> <destination vmanage> <username>\n\n")
         sys.exit(0)
 
     root_folder = sys.argv[1]
@@ -137,4 +163,4 @@ if __name__ == "__main__":
     obj = rest_api_lib(dest_vmanage_ip, username, password)
     main(obj, root_folder)
 
-    print("\n\nComplete!\n")
+    print("\nComplete!\n")

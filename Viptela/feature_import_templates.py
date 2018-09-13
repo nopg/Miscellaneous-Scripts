@@ -67,9 +67,14 @@ class rest_api_lib:
         response = self.session[self.vmanage_ip].post(
             url=url, data=payload, headers=headers, verify=False
         )
-        print(response)
-        data = response.content
-        return data
+        if response.status_code == 200:
+            return response.content
+        else:
+            print("\nERROR sending Post request: \n")
+            print(url)
+            print("Error: " + str(response.status_code))
+            print(response.content)
+            sys.exit(0)
 
 
 
@@ -91,42 +96,24 @@ def grab_files_read(folder_name):
                     device_templates.append(data)
     return device_templates
 
-def create_files(data, subfolder):
-    subfolder = "/"+subfolder+"/"
-    for each in data:
-        #if not each["factoryDefault"]:
-            response = obj.get_request("template" + subfolder + "object/" + each["templateId"])
-            template = json.loads(response)
-            filename = template["templateName"].replace(os.path.sep,'_') + ".vipt"
-            fout = open(root_folder + subfolder + filename, "w")
-            fout.write(json.dumps(template))
-            fout.close()
-
 def main(obj, root_folder):
 
-    os.makedirs(root_folder + "/device", exist_ok=True)
-    os.makedirs(root_folder + "/feature", exist_ok=True)
+    # GRAB TEMPLATES, creates list containing output of each file #
+    feature_templates = grab_files_read(root_folder + "/feature/")
 
-    ## OUTPUT ALL FEATURE TEMPLATES
-    response = obj.get_request("template/feature")
-    json_response = json.loads(response)
+    for template in feature_templates:
+        data = json.loads(template)
 
-    feature_data = json_response["data"]
-    create_files(feature_data, "feature")
-
-    ## GET ALL DEVICE TEMPLATES
-    response = obj.get_request("template/device")
-    json_response = json.loads(response)
-
-    device_data = json_response["data"]
-    create_files(device_data, "device")
+        response = obj.post_request("template/feature", data)
+        new_id = json.loads(response)["templateId"]
+        print("Imported feature template: {}".format(data["templateName"]))
 
 
 if __name__ == "__main__":
     
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
-        print("\tpython3 put-templates.py <output template folder> <destination vmanage> <username>\n\n")
+        print("\tpython3 put-templates.py <root template folder> <destination vmanage> <username>\n\n")
         sys.exit(0)
 
     root_folder = sys.argv[1]
@@ -134,7 +121,8 @@ if __name__ == "__main__":
     username = sys.argv[3]
     password = getpass.getpass("Enter Password: ")
 
+
     obj = rest_api_lib(dest_vmanage_ip, username, password)
     main(obj, root_folder)
 
-    print("\n\nComplete!\n")
+    print("\nComplete!\n")
