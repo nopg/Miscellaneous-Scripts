@@ -18,6 +18,19 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+def pp_json(json_thing, sort=True, indents=4):
+    """
+    PRETTY PRINT JSON WHETHER STRING OR DICTIONARY
+
+    :param json_thing: object to be printed
+    :return: None, print output
+    """
+    if type(json_thing) is str:
+        print("STR")
+        print(json.dumps(json.loads(json_thing), sort_keys=sort, indent=indents))
+    else:
+        print(json.dumps(json_thing, sort_keys=sort, indent=indents))
+    return None
 
 class rest_api_lib:
     def __init__(self, vmanage_ip, username, password):
@@ -73,25 +86,33 @@ class rest_api_lib:
 
 
 
-def pp_json(json_thing, sort=True, indents=4):
-    if type(json_thing) is str:
-        print("STR")
-        print(json.dumps(json.loads(json_thing), sort_keys=sort, indent=indents))
-    else:
-        print(json.dumps(json_thing, sort_keys=sort, indent=indents))
-    return None
-
 def grab_files_read(folder_name):
-    device_templates = []
+    """
+    GRAB ALL FILES WITH ".vipt" EXTENSION WITHIN A FOLDER,
+    RETURN LIST CONTAINING TEXT FOUND WITHIN FILES
+
+    :param folder_name: base folder to recursively search
+    :return: list containing the output of each folder
+    """
+    templates = []
     for root, dirs, files in os.walk(folder_name):
         for file in files:
             if file.endswith(".vipt"):
                 with open(root + file, "r") as fin:
                     data = fin.read()
-                    device_templates.append(data)
-    return device_templates
+                    templates.append(data)
+    return templates
 
 def create_files(data, subfolder):
+    """
+    CREATE OUTPUT FILES BY FIRST RETRIEVING EACH OBJECT (FEATURE OR TEMPLATE)
+    Based on 'subfolder' will pull individal 'device' or 'feature' templates
+    and output them to a file
+
+    :param data: list of data to be written
+    :param subfolder: 'feature' or 'device'
+    :return: None, print output
+    """
     subfolder = "/"+subfolder+"/"
     for each in data:
         #if not each["factoryDefault"]:
