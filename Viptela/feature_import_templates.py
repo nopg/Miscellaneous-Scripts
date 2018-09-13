@@ -77,7 +77,6 @@ class rest_api_lib:
             sys.exit(0)
 
 
-
 def pp_json(json_thing, sort=True, indents=4):
     if type(json_thing) is str:
         print("STR")
@@ -85,6 +84,7 @@ def pp_json(json_thing, sort=True, indents=4):
     else:
         print(json.dumps(json_thing, sort_keys=sort, indent=indents))
     return None
+
 
 def grab_files_read(folder_name):
     device_templates = []
@@ -95,6 +95,7 @@ def grab_files_read(folder_name):
                     data = fin.read()
                     device_templates.append(data)
     return device_templates
+
 
 def main(obj, root_folder):
 
@@ -110,17 +111,18 @@ def main(obj, root_folder):
 
 
 if __name__ == "__main__":
-    
+
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
-        print("\tpython3 put-templates.py <root template folder> <destination vmanage> <username>\n\n")
+        print(
+            "\tpython3 put-templates.py <root template folder> <destination vmanage> <username>\n\n"
+        )
         sys.exit(0)
 
     root_folder = sys.argv[1]
     dest_vmanage_ip = sys.argv[2]
     username = sys.argv[3]
     password = getpass.getpass("Enter Password: ")
-
 
     obj = rest_api_lib(dest_vmanage_ip, username, password)
     main(obj, root_folder)

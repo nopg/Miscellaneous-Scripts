@@ -77,7 +77,6 @@ class rest_api_lib:
             sys.exit(0)
 
 
-
 def pp_json(json_thing, sort=True, indents=4):
     if type(json_thing) is str:
         print("STR")
@@ -85,6 +84,7 @@ def pp_json(json_thing, sort=True, indents=4):
     else:
         print(json.dumps(json_thing, sort_keys=sort, indent=indents))
     return None
+
 
 def grab_files_read(folder_name):
     device_templates = []
@@ -117,6 +117,7 @@ def find_feature_template(old_id, feature_templates):
     print("Exiting...\n")
     sys.exit(0)
 
+
 def main(obj, root_folder):
 
     # GRAB TEMPLATES, creates list containing output of each file #
@@ -125,16 +126,16 @@ def main(obj, root_folder):
 
     for template in device_templates:
         data = json.loads(template)
-        data["policyId"] = ""                       #   ATTACHED TO ROUTING POLICY?
-        data["factoryDefault"] = ""                 #   NEVER A DEFAULT
-        if data["configType"] == "template":        #   NOT A CLI BASED TEMPLATE
+        data["policyId"] = ""  #   ATTACHED TO ROUTING POLICY?
+        data["factoryDefault"] = ""  #   NEVER A DEFAULT
+        if data["configType"] == "template":  #   NOT A CLI BASED TEMPLATE
             # UPDATE OLD FEATURE TEMPLATE ID'S #
             for feature_template in data["generalTemplates"]:
                 if "subTemplates" in feature_template:
                     for sub_template in feature_template["subTemplates"]:
                         old_feat_id = sub_template["templateId"]
                         # FIND FEATURE TEMPLATE AND CREATE NEW ONE #
-                        new_id = find_feature_template(old_feat_id, feature_templates) 
+                        new_id = find_feature_template(old_feat_id, feature_templates)
                         sub_template["templateId"] = new_id
 
                 old_feat_id = feature_template["templateId"]
@@ -147,12 +148,13 @@ def main(obj, root_folder):
         print("Imported device template: {}\n".format(data["templateName"]))
 
 
-
 if __name__ == "__main__":
-    
+
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
-        print("\tpython3 put-templates.py <root template folder> <destination vmanage> <username>\n\n")
+        print(
+            "\tpython3 put-templates.py <root template folder> <destination vmanage> <username>\n\n"
+        )
         sys.exit(0)
 
     root_folder = sys.argv[1]

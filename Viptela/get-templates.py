@@ -18,6 +18,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+
 def pp_json(json_thing, sort=True, indents=4):
     """
     PRETTY PRINT JSON WHETHER STRING OR DICTIONARY
@@ -31,6 +32,7 @@ def pp_json(json_thing, sort=True, indents=4):
     else:
         print(json.dumps(json_thing, sort_keys=sort, indent=indents))
     return None
+
 
 class rest_api_lib:
     def __init__(self, vmanage_ip, username, password):
@@ -85,7 +87,6 @@ class rest_api_lib:
         return data
 
 
-
 def grab_files_read(folder_name):
     """
     GRAB ALL FILES WITH ".vipt" EXTENSION WITHIN A FOLDER,
@@ -103,6 +104,7 @@ def grab_files_read(folder_name):
                     templates.append(data)
     return templates
 
+
 def create_files(data, subfolder):
     """
     CREATE OUTPUT FILES BY FIRST RETRIEVING EACH OBJECT (FEATURE OR TEMPLATE)
@@ -113,15 +115,18 @@ def create_files(data, subfolder):
     :param subfolder: 'feature' or 'device'
     :return: None, print output
     """
-    subfolder = "/"+subfolder+"/"
+    subfolder = "/" + subfolder + "/"
     for each in data:
-        #if not each["factoryDefault"]:
-            response = obj.get_request("template" + subfolder + "object/" + each["templateId"])
-            template = json.loads(response)
-            filename = template["templateName"].replace(os.path.sep,'_') + ".vipt"
-            fout = open(root_folder + subfolder + filename, "w")
-            fout.write(json.dumps(template))
-            fout.close()
+        # if not each["factoryDefault"]:
+        response = obj.get_request(
+            "template" + subfolder + "object/" + each["templateId"]
+        )
+        template = json.loads(response)
+        filename = template["templateName"].replace(os.path.sep, "_") + ".vipt"
+        fout = open(root_folder + subfolder + filename, "w")
+        fout.write(json.dumps(template))
+        fout.close()
+
 
 def main(obj, root_folder):
 
@@ -144,10 +149,12 @@ def main(obj, root_folder):
 
 
 if __name__ == "__main__":
-    
+
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
-        print("\tpython3 put-templates.py <output template folder> <destination vmanage> <username>\n\n")
+        print(
+            "\tpython3 put-templates.py <output template folder> <destination vmanage> <username>\n\n"
+        )
         sys.exit(0)
 
     root_folder = sys.argv[1]
