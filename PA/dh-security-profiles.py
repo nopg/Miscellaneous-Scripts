@@ -109,6 +109,8 @@ class rest_api_lib_pa:
     #     data = response.text
     #     return data
 
+def grab_objects():
+    pass
 
 if __name__ == "__main__":
 
@@ -129,19 +131,20 @@ if __name__ == "__main__":
 
     av_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
 
-
-
     with open("virus-alert-only.xml", "r") as fin:
          av = fin.read()
 
     entry_element = av
 
+    tree = etree.parse(io.StringIO(av))
+    print(tree.getroot().text)
+
     response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
 
-    for elem in response.iter():
-         print(elem)
-         print(elem.attrib)
-         print(elem.text)
+    # for elem in response.iter():
+    #      print(elem)
+    #      print(elem.attrib)
+    #      print(elem.text)
 
 
     print("\n\nComplete!\n")
