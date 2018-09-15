@@ -1,0 +1,89 @@
+get key:
+https://192.168.77.254/api?type=keygen&user=glspi&password=gcisco
+
+request clone:
+<request cmd="multi-clone" to="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus" cookie="0589975235864439">
+  <selected-list>
+    <source xpath="/config/predefined/profiles/virus">
+      <member>default</member>
+    </source>
+  </selected-list>
+  <all-errors>no</all-errors>
+</request>
+
+build clone??
+<request cmd="get" skip-invalid-xpath="yes" cookie="0589975235864439">
+  <entry tag-name="__recordInfo" tag-value="{&quot;permission&quot;:&quot;readonly&quot;,&quot;xpathId&quot;:&quot;predefined&quot;}" obj="/config/predefined/profiles/virus/entry"/>
+  <entry tag-name="__recordInfo" tag-value="{&quot;permission&quot;:&quot;readwrite&quot;,&quot;xpathId&quot;:&quot;shared&quot;}" obj="/config/shared/profiles/virus/entry"/>
+  <entry tag-name="__recordInfo" tag-value="{&quot;permission&quot;:&quot;readwrite&quot;,&quot;xpathId&quot;:&quot;vsys&quot;,&quot;vsysName&quot;:&quot;vsys1&quot;}" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus/entry"/>
+  <entry tag-name="__recordInfo" tag-value="{&quot;permission&quot;:&quot;readonly&quot;,&quot;xpathId&quot;:&quot;panorama&quot;,&quot;vsysName&quot;:&quot;vsys1&quot;}" obj="/config/panorama/vsys/entry[@name='vsys1']/profiles/virus/entry"/>
+</request>
+
+edit existing entry:
+<request cmd="edit" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus/entry[@name='default-1']" cookie="0589975235864439">
+  <entry name="default-1">
+    <decoder>
+      <entry name="http">
+        <action>alert</action>
+        <wildfire-action>allow</wildfire-action>
+      </entry>
+      <entry name="smtp">
+        <action>alert</action>
+        <wildfire-action>allow</wildfire-action>
+      </entry>
+      <entry name="imap">
+        <action>alert</action>
+        <wildfire-action>allow</wildfire-action>
+      </entry>
+      <entry name="pop3">
+        <action>alert</action>
+        <wildfire-action>allow</wildfire-action>
+      </entry>
+      <entry name="ftp">
+        <action>alert</action>
+        <wildfire-action>allow</wildfire-action>
+      </entry>
+      <entry name="smb">
+        <action>alert</action>
+        <wildfire-action>allow</wildfire-action>
+      </entry>
+    </decoder>
+  </entry>
+</request>
+
+response: Response took 0.039s <response status="success" code="20"><msg>command succeeded</msg></response>
+
+
+add new object:
+<request cmd="set" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus/entry[@name='test-1']" cookie="0589975235864439" newonly="yes">
+  <decoder>
+    <entry name="ftp">
+      <action>default</action>
+      <wildfire-action>default</wildfire-action>
+    </entry>
+    <entry name="http">
+      <action>default</action>
+      <wildfire-action>default</wildfire-action>
+    </entry>
+    <entry name="imap">
+      <action>drop</action>
+      <wildfire-action>default</wildfire-action>
+    </entry>
+    <entry name="pop3">
+      <action>default</action>
+      <wildfire-action>default</wildfire-action>
+    </entry>
+    <entry name="smb">
+      <action>default</action>
+      <wildfire-action>default</wildfire-action>
+    </entry>
+    <entry name="smtp">
+      <action>default</action>
+      <wildfire-action>default</wildfire-action>
+    </entry>
+  </decoder>
+</request>
+
+
+commit:
+<request cookie="0589975235864439" cmd="commit"/>

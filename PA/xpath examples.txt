@@ -1,0 +1,14 @@
+xpath examples:
+
+to antirus objects:
+/api/?type=config&action=get&xpath=/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus
+
+load xml config into this xpath:
+/api/?type=op&cmd=<load><config><partial><to-xpath></to-xpath></partial></config></load>&key=KEY
+
+
+POST example body:
+POST /api/ HTTP/1.1 
+Content-Type: application/x-www-form-urlencoded 
+password=<password>&user=<username>&type=keygen
+
