@@ -1,0 +1,33 @@
+<spyware>
+  <entry name="15000">
+    <signature>
+      <standard>
+        <entry name="test-standard">
+          <and-condition>
+            <entry name="And Condition 1">
+              <or-condition>
+                <entry name="Or Condition 1">
+                  <operator>
+                    <pattern-match>
+                      <pattern>xxy=ouo,</pattern>
+                      <context>dhcp-req-chaddr</context>
+                      <negate>no</negate>
+                    </pattern-match>
+                  </operator>
+                </entry>
+              </or-condition>
+            </entry>
+          </and-condition>
+          <order-free>no</order-free>
+          <scope>protocol-data-unit</scope>
+        </entry>
+      </standard>
+    </signature>
+    <default-action>
+      <alert />
+    </default-action>
+    <threatname>test-spyware</threatname>
+    <severity>low</severity>
+    <direction>client2server</direction>
+  </entry>
+</spyware>

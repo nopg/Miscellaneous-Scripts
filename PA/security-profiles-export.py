@@ -8,11 +8,14 @@ import rest_api_lib_pa as pa
 
 # Global Variables, debug & xpath location for each profile type
 #ENTRY = + "/entry[@name='alert-only']"
-DEBUG = True
+DEBUG = False
 ANTIVIRUS =     "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
+SPYWARESIG =    "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/spyware"
 VULNERABILITY = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/vulnerability"
+VULNERABLESIG = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/vulnerability"
 URLFILTERING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/url-filtering"
+URLCATEGORY =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category"
 FILEBLOCKING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/file-blocking"
 WILDFIRE =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/wildfire-analysis"
 DATAFILTERING = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-filtering"
@@ -37,11 +40,14 @@ def find_profile_objects(destination_folder, profile_type, xpath):
         new_destination = destination_folder + "/antivirus"
         filename = new_destination + "/antivirus-profiles.xml"
     else:
+
         new_destination = destination_folder + "/" + profile_type
-        filename = new_destination + "/" + profile_type + "-profiles.xml"
-    
-    if profile_type == 'data-filtering':
-        find_profile_objects(destination_folder, 'data-objects', DATAPATTERN)
+
+        # remove 'threats/' out of filename for custom objects
+        if 'threats' in profile_type:
+            filename = new_destination + "/" + profile_type.replace("threats","") + "-profiles.xml"
+        else:
+            filename = new_destination + "/" + profile_type + "-profiles.xml"
 
     # Create the folder under root folder if it doesn't exist
     os.makedirs(new_destination, exist_ok=True)
@@ -49,7 +55,7 @@ def find_profile_objects(destination_folder, profile_type, xpath):
     # Export xml via Palo Alto API
     profile_objects = obj.get_request_pa(call_type='config',action='show',xpath=xpath)
 
-    #Print out result
+    # Print out result
     result = profile_objects.attrib
 
     if result["status"] == 'success':
@@ -85,16 +91,20 @@ def main(profile_list, destination_folder):
         if profile == '2':
             find_profile_objects(destination_folder, 'virus', ANTIVIRUS)
         elif profile == '3':
+            find_profile_objects(destination_folder, 'threats/spyware', SPYWARESIG)
             find_profile_objects(destination_folder, 'spyware', SPYWARE)
         elif profile == '4':
+            find_profile_objects(destination_folder,'threats/vulnerability', VULNERABLESIG)
             find_profile_objects(destination_folder,'vulnerability', VULNERABILITY)
         elif profile == '5':
+            find_profile_objects(destination_folder,'custom-url-category', URLCATEGORY)
             find_profile_objects(destination_folder,'url-filtering', URLFILTERING)
         elif profile == '6':
             find_profile_objects(destination_folder,'file-blocking', FILEBLOCKING)
         elif profile == '7':
             find_profile_objects(destination_folder,'wildfire-analysis', WILDFIRE)
         elif profile == '8':
+            find_profile_objects(destination_folder, 'data-objects', DATAPATTERN)
             find_profile_objects(destination_folder,'data-filtering', DATAFILTERING)
         elif profile == '9':
             find_profile_objects(destination_folder,'dos-protection', DDOS)

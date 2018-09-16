@@ -10,8 +10,11 @@ import rest_api_lib_pa as pa
 DEBUG = False
 ANTIVIRUS =     "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
+SPYWARESIG =    "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/spyware"
 VULNERABILITY = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/vulnerability"
+VULNERABLESIG = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/vulnerability"
 URLFILTERING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/url-filtering"
+URLCATEGORY =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category"
 FILEBLOCKING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/file-blocking"
 WILDFIRE =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/wildfire-analysis"
 DATAFILTERING = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-filtering"
@@ -38,17 +41,15 @@ def import_profile_objects(root_folder, profile_type, xpath):
         new_root = root_folder + "/antivirus"
     else:
         new_root = root_folder + "/" + profile_type
-    
-    if profile_type == 'data-filtering':
-        import_profile_objects(root_folder, 'data-objects', DATAPATTERN)
-
+        
     # Gather all files, returns string containing xml
     files = grab_files_read(new_root)
 
-    # because: xml.
-    # create root tags (i.e. <virus>, </spyware>, etc)
-    root_tag = "<" + profile_type + ">"
-    root_tag_end = "</" + profile_type + ">"
+    # Because: xml.
+    # Create root tags (i.e. <virus>, </spyware>, etc)
+    # Remove 'threats/' if found
+    root_tag = "<" + profile_type.replace("threats/","") + ">"
+    root_tag_end = "</" + profile_type.replace("threats/","") + ">"
 
     for xml in files:        
         # because: xml.
@@ -92,16 +93,20 @@ def main(profile_list, root_folder):
         if profile == '2':
             import_profile_objects(root_folder,'virus', ANTIVIRUS)
         elif profile == '3':
+            import_profile_objects(root_folder,'threats/spyware', SPYWARESIG)
             import_profile_objects(root_folder,'spyware', SPYWARE)
         elif profile == '4':
+            import_profile_objects(root_folder,'threats/vulnerability', VULNERABLESIG)
             import_profile_objects(root_folder,'vulnerability', VULNERABILITY)
         elif profile == '5':
+            import_profile_objects(root_folder,'custom-url-category', URLCATEGORY)
             import_profile_objects(root_folder,'url-filtering', URLFILTERING)
         elif profile == '6':
             import_profile_objects(root_folder,'file-blocking', FILEBLOCKING)
         elif profile == '7':
             import_profile_objects(root_folder,'wildfire-analysis', WILDFIRE)
         elif profile == '8':
+            import_profile_objects(root_folder, 'data-objects', DATAPATTERN)
             import_profile_objects(root_folder,'data-filtering', DATAFILTERING)
         elif profile == '9':
             import_profile_objects(root_folder,'dos-protection', DDOS)
