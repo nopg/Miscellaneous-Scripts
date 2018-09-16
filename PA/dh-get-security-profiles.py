@@ -12,10 +12,14 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 #ENTRY = + "/entry[@name='alert-only']"
 DEBUG = True
-ANTIVIRUS = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
-SPYWARE =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
+ANTIVIRUS =     "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
+SPYWARE =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
 VULNERABILITY = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/vulnerability"
-
+URLFILTERING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/url-filtering"
+FILEBLOCKING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/file-blocking"
+WILDFIRE =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/wildfire-analysis"
+DATAFILTERING = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-filtering"
+DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/dos-protection"
 
 class rest_api_lib_pa:
     def __init__(self, pa_ip, username, password):
@@ -62,88 +66,40 @@ class rest_api_lib_pa:
         data = etree.fromstring(response.text)
         return data
 
-    # def get_request_pa_cli(self, mount_point, commands):
-    #     """GET request"""
-
-    #     command_list = commands.split()
-        
-    #     params = []
-    #     for command in command_list:
-    #         params.append("<" + command + ">")
-    #     for command in command_list[::-1]:
-    #         params.append("</" + command + ">")
-        
-    #     command = ''.join(params)
-
-    #     url = "https://{}:443/api{}{}&key={}".format(self.pa_ip, mount_point, command, self.key)
-    #     print(url)
-    #     response = self.session[self.pa_ip].get(url, verify=False)
-    #     data = response.text
-    #     return data
-
-    # def get_request_pa_cli_and_param(self, mount_point, commands):
-    #     """GET request"""
-
-    #     command_list = commands.split()
-    #     value = command_list.pop()
-    #     params = []
-
-    #     for command in command_list:
-    #         params.append("<" + command + ">")
-    #     params.append(value)
-
-    #     for command in command_list[::-1]:
-    #         params.append("</" + command + ">")
-        
-    #     command = ''.join(params)
-
-    #     url = "https://{}:443/api{}{}&key={}".format(self.pa_ip, mount_point, command, self.key)
-    #     print(url)
-    #     response = self.session[self.pa_ip].get(url, verify=False)
-    #     data = response.text
-    #     return data
-
-    # def post_request(
-    #     self, mount_point, payload, headers={"Content-Type": "application/json"}
-    # ):
-    #     """POST request"""
-    #     url = "https://{}:443/dataservice/{}".format(self.vmanage_ip, mount_point)
-    #     payload = json.dumps(payload)
-    #     response = self.session[self.vmanage_ip].post(
-    #         url=url, data=payload, headers=headers, verify=False
-    #     )
-    #     print(response)
-    #     data = response.text
-    #     return data
 
 def write_etree_output(profile, prof_type, destination_folder):
 
-    #GRAB FILENAME
+    #GRAB FILENAME FROM FIRST ENTRY?
     if prof_type == 'virus':
-        data = etree.tostring(profile[0][0]).decode()
-        with open (destination_folder + "/antivirus-profiles.xml", "w") as fout:
-            fout.write(data)
-
-    if prof_type == 'spyware':
-        data = etree.tostring(profile[0][0]).decode()
-        with open (destination_folder + "/spyware-profiles.xml", "w") as fout:
-            fout.write(data)
-
-    if prof_type == 'vulnerability':
-        data = etree.tostring(profile[0][0]).decode()
-        with open (destination_folder + "/vulnerability-profiles.xml", "w") as fout:
-            fout.write(data)
+        filename = destination_folder + "/antivirus-profiles.xml"
+    else:
+        filename = destination_folder + "/" + prof_type + "-profiles.xml"
+            
+    data = etree.tostring(profile[0][0]).decode()
+    with open (filename, "w") as fout:
+        fout.write(data)
 
 def find_profile_objects(destination_folder, prof_type):
+    
+    new_destination = destination_folder + "/" + prof_type
+
     if prof_type == 'virus':
         xpath = ANTIVIRUS
         new_destination = destination_folder + "/antivirus"
     elif prof_type == 'spyware':
         xpath = SPYWARE
-        new_destination = destination_folder + "/spyware"
     elif prof_type == 'vulnerability':
         xpath = VULNERABILITY
-        new_destination = destination_folder + "/vulnerability"
+    elif prof_type == 'url-filtering':
+        xpath = URLFILTERING
+    elif prof_type == 'file-blocking':
+        xpath = FILEBLOCKING
+    elif prof_type == 'wildfire-analysis':
+        xpath = WILDFIRE
+    elif prof_type == 'data-filtering':
+        xpath = DATAFILTERING
+    elif prof_type == 'dos-protection':
+        xpath = DDOS
 
     os.makedirs(new_destination, exist_ok=True)
 
@@ -166,8 +122,18 @@ def main(profile_list, destination_folder):
             find_profile_objects(destination_folder, 'spyware')
         elif profile == '4':
             find_profile_objects(destination_folder,'vulnerability')
+        elif profile == '5':
+            find_profile_objects(destination_folder,'url-filtering')
+        elif profile == '6':
+            find_profile_objects(destination_folder,'file-blocking')
+        elif profile == '7':
+            find_profile_objects(destination_folder,'wildfire-analysis')
+        elif profile == '8':
+            find_profile_objects(destination_folder,'data-filtering')
+        elif profile == '9':
+            find_profile_objects(destination_folder,'dos-protection')
         else:
-            print("\nOnly option 2 and 3 is currently supported.\n")
+            print("\nOnly option 2, 3, 4, 5, 6, 7, and 8 are currently supported.\n")
             continue
 
 
@@ -205,42 +171,4 @@ if __name__ == "__main__":
     
     main(profile_list, destination_folder)
 
-   
-
-    # with open("virus-alert-only.xml", "r") as fin:
-    #      av = fin.read()
-
-    # entry_element = av
-
-    # tree = etree.parse(io.StringIO(av))
-    # root = tree.getroot()
-    #print(tree.getroot().text)
-    #print(tree[0])
-    #print(root.tag)
-
-    #d = xmltodict.parse(av)
-    #print(d)
-
-    #response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
-
-
-
-
     print("\n\nComplete!\n")
-
-
-    #test = obj.get_request_pa_cli_and_param("?type=op&cmd=",command)
-
-    # def pp_xml(text):
-    #     b = xmltodict.parse(test)
-    #     pp_json(b)
-
-    #for elem in av_objects.iter():
-    #    print(elem)
-    # tree = etree.ElementTree(av_objects)
-    # e = av_objects.findall(".//result/virus/entry")
-    # for i in e:
-    #     print(i)
-    #     print(i.text)
-    #     print(i.attrib)
-
