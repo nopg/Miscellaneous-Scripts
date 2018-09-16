@@ -4,6 +4,7 @@ import sys
 import xmltodict, json
 import xml.etree.ElementTree as etree
 import io
+import os
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
@@ -117,27 +118,33 @@ def write_etree_output(profile, prof_type, destination_folder):
     #GRAB FILENAME
     if prof_type == 'virus':
         data = etree.tostring(profile[0][0]).decode()
-        with open (destination_folder + "/Antivirus-profiles.xml", "w") as fout:
+        with open (destination_folder + "/antivirus-profiles.xml", "w") as fout:
             fout.write(data)
 
     if prof_type == 'spyware':
-        data = etree.tostring(profile).decode()
-        with open (destination_folder + "/Spyware-profiles.xml", "w") as fout:
+        data = etree.tostring(profile[0][0]).decode()
+        with open (destination_folder + "/spyware-profiles.xml", "w") as fout:
             fout.write(data)
 
 def main(profile_list, destination_folder):
 
-    if profile_list != ['2'] and profile_list != ['3']:
-        print("\nOnly option 2 is currently supported.\n")
-        sys.exit(0)
-    if profile_list == ['2']:
-        xpath = ANTIVIRUS 
-        av_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
-        write_etree_output(av_objects, 'virus', destination_folder)
-    if profile_list == ['3']:
-        xpath = SPYWARE
-        spy_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
-        write_etree_output(spy_objects, 'spyware', destination_folder)
+    for profile in profile_list:
+
+        if profile == '2':
+            xpath = ANTIVIRUS
+            os.makedirs(destination_folder + "/antivirus", exist_ok=True) 
+            new_destination = destination_folder + "/antivirus"
+            av_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
+            write_etree_output(av_objects, 'virus', new_destination)
+        if profile == '3':
+            xpath = SPYWARE
+            os.makedirs(destination_folder + "/spyware", exist_ok=True) 
+            new_destination = destination_folder + "/spyware"
+            spy_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
+            write_etree_output(spy_objects, 'spyware', new_destination)
+        else:
+            print("\nOnly option 2 and 3 is currently supported.\n")
+            continue
 
 
 if __name__ == "__main__":

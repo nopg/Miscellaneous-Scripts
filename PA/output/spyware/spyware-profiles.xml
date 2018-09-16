@@ -1,4 +1,4 @@
-<response status="success"><result><spyware>
+<spyware>
   <entry name="strict-custom">
     <rules>
       <entry name="simple-critical">
@@ -68,4 +68,4 @@
       <packet-capture>disable</packet-capture>
     </botnet-domains>
   </entry>
-</spyware></result></response>
+</spyware>
