@@ -25,8 +25,6 @@ DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 
 # Create file for each profile type
 def write_etree_output(profile, filename):
-
-    # NEED TO GRAB FILENAME FROM FIRST ENTRY?
             
     data = etree.tostring(profile[0][0]).decode()
     with open (filename, "w") as fout:
