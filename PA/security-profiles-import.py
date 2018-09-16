@@ -3,11 +3,11 @@ import sys
 import os
 import xml.etree.ElementTree as etree
 
-import xmltodict
 import rest_api_lib_pa as pa
 
+# Global Variables, debug & xpath location for each profile type
 #ENTRY = + "/entry[@name='alert-only']"
-DEBUG = True
+DEBUG = False
 ANTIVIRUS =     "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
 VULNERABILITY = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/vulnerability"
@@ -18,6 +18,7 @@ DATAFILTERING = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/dos-protection"
 
 
+# Read all files found in folder_name, return list containing all the output
 def grab_files_read(folder_name):
     profile_objects = []
     for root, dirs, files in os.walk(folder_name):
@@ -28,84 +29,88 @@ def grab_files_read(folder_name):
                     profile_objects.append(data)
     return profile_objects
 
-def import_profile_objects(root_folder, prof_type):
+# Imports profiles into Palo Alto API based on profile type
+def import_profile_objects(root_folder, profile_type, xpath):
 
-    new_root = root_folder + "/" + prof_type
-
-    if prof_type == 'virus':
-        xpath = ANTIVIRUS
+    # Rename 'virus' folder to 'antivirus' (just makes more sense)
+    if profile_type == 'virus':
         new_root = root_folder + "/antivirus"
-    elif prof_type == 'spyware':
-        xpath = SPYWARE
-    elif prof_type == 'vulnerability':
-        xpath = VULNERABILITY
-    elif prof_type == 'url-filtering':
-        xpath = URLFILTERING
-    elif prof_type == 'file-blocking':
-        xpath = FILEBLOCKING
-    elif prof_type == 'wildfire-analysis':
-        xpath = WILDFIRE
-    elif prof_type == 'data-filtering':
-        xpath = DATAFILTERING
-    elif prof_type == 'dos-protection':
-        xpath = DDOS
+    else:
+        new_root = root_folder + "/" + profile_type
 
-    #os.makedirs(new_root, exist_ok=True) 
+    # Gather all files, returns string containing xml
     files = grab_files_read(new_root)
 
-    remove_root_tag = "<" + prof_type + ">"
-    remove_root_tag_end = "</" + prof_type + ">"
+    # because: xml.
+    # create root tags (i.e. <virus>, </spyware>, etc)
+    root_tag = "<" + profile_type + ">"
+    root_tag_end = "</" + profile_type + ">"
 
     for xml in files:        
         # because: xml.
-        temp = xmltodict.parse(xml)
-        entry_element = xmltodict.unparse(temp)
-        entry_element = entry_element.replace(remove_root_tag,"")
-        entry_element = entry_element.replace(remove_root_tag_end,"")
-        entry_element = entry_element.replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>","")
+        # remove root tag (i.e. <virus>, </spyware>, etc)
+        entry_element = xml.replace(root_tag,"")
+        entry_element = entry_element.replace(root_tag_end,"")
         
-        response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
+        # Import xml via Palo Alto API
+        response = obj.get_request_pa(call_type="config",action="set",xpath=xpath,element=entry_element)
     
-        if DEBUG:
-            for elem in response.iter():
-                print(elem)
-                print(elem.attrib)
-                print(elem.text)
+        #Print out result
+        result = response.attrib
 
+        if result["status"] == 'success':
+            print(f"\nImported {profile_type} object.")
+        else:
+            # Extra logging when debugging
+            if DEBUG:
+                for elem in response.iter():
+                    print(elem)
+                    print(elem.attrib)
+                    print(elem.text)
+            else:
+                print(f"Error importing {profile_type} object.")
+
+# Main Program
 def main(profile_list, root_folder):
 
+    # Organize user input
+    
+    # Expand '1' to '2,3,4,5,6,7,8,9'
     if '1' in profile_list:
         profile_list = [str(x) for x in range(2,10)]
-
+    # Expand '2-5' to '2,3,4,5'
     if '-' in profile_list:
         start = int (profile_list[0])
         end = profile_list[-1:]
         end = int (end[0]) + 1
         profile_list = [str(x) for x in range(start,end)]
 
+    # Loop through user provided input, import each profile
     for profile in profile_list:
         if profile == '2':
-            import_profile_objects(root_folder,'virus')
+            import_profile_objects(root_folder,'virus', ANTIVIRUS)
         elif profile == '3':
-            import_profile_objects(root_folder,'spyware')
+            import_profile_objects(root_folder,'spyware', SPYWARE)
         elif profile == '4':
-            import_profile_objects(root_folder,'vulnerability')
+            import_profile_objects(root_folder,'vulnerability', VULNERABILITY)
         elif profile == '5':
-            import_profile_objects(root_folder,'url-filtering')
+            import_profile_objects(root_folder,'url-filtering', URLFILTERING)
         elif profile == '6':
-            import_profile_objects(root_folder,'file-blocking')
+            import_profile_objects(root_folder,'file-blocking', FILEBLOCKING)
         elif profile == '7':
-            import_profile_objects(root_folder,'wildfire-analysis')
+            import_profile_objects(root_folder,'wildfire-analysis', WILDFIRE)
         elif profile == '8':
-            import_profile_objects(root_folder,'data-filtering')
+            import_profile_objects(root_folder,'data-filtering', DATAFILTERING)
         elif profile == '9':
-            import_profile_objects(root_folder,'dos-protection')
+            import_profile_objects(root_folder,'dos-protection', DDOS)
         else:
             print("\nHuh?. You entered {}\n".format(profile))
             continue
 
+# If run from the command line
 if __name__ == "__main__":
 
+    # Guidance on how to use the script
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
         print(
@@ -113,15 +118,17 @@ if __name__ == "__main__":
         )
         sys.exit(0)
 
+    # Gather input
     root_folder = sys.argv[1]
     pa_ip = sys.argv[2]
     username = sys.argv[3]
     password = getpass.getpass("Enter Password: ")
 
+    # Create connection with the Palo Alto as 'obj'
     obj = pa.rest_api_lib_pa(pa_ip, username, password)
 
-
-    selection = input("""\nWhat type of security profiles to import??
+    # MENU
+    selection = input("""\nWhat type of security profiles to import?
 
                 1) ALL Profiles
                 2) Antivirus
@@ -133,10 +140,16 @@ if __name__ == "__main__":
                 8) Data Filtering
                 9) DoS Protection
 
-                Separate selection by comma: """)
+                For multiple enter: ('1' or 2-4' or '2,5,7')
+
+                Enter Selection: """)
+
+    # Turn input into list, remove commas
     profile_list = list(selection.replace(',',''))
     
+    # Run program
     main(profile_list, root_folder)
 
+    # Done!
     print("\n\nComplete!\n")
 
