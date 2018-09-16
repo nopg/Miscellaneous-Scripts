@@ -148,11 +148,11 @@ def find_profile_objects(destination_folder, prof_type):
     os.makedirs(new_destination, exist_ok=True)
 
     profile_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
-    if DEBUG:
-        for elem in profile_objects.iter():
-            print(elem)
-            print(elem.attrib)
-            print(elem.text)
+    # if DEBUG:
+    #     for elem in profile_objects.iter():
+    #         print(elem)
+    #         print(elem.attrib)
+    #         print(elem.text)
 
     write_etree_output(profile_objects, prof_type, new_destination)
 
@@ -161,20 +161,11 @@ def main(profile_list, destination_folder):
     for profile in profile_list:
 
         if profile == '2':
-            xpath = ANTIVIRUS
-            os.makedirs(destination_folder + "/antivirus", exist_ok=True) 
-            new_destination = destination_folder + "/antivirus"
-            av_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
-            write_etree_output(av_objects, 'virus', new_destination)
+            find_profile_objects(destination_folder, 'virus')
         elif profile == '3':
-            xpath = SPYWARE
-            os.makedirs(destination_folder + "/spyware", exist_ok=True) 
-            new_destination = destination_folder + "/spyware"
-            spy_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
-            write_etree_output(spy_objects, 'spyware', new_destination)
+            find_profile_objects(destination_folder, 'spyware')
         elif profile == '4':
             find_profile_objects(destination_folder,'vulnerability')
-
         else:
             print("\nOnly option 2 and 3 is currently supported.\n")
             continue

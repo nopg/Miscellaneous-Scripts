@@ -133,6 +133,9 @@ def grab_files_read(folder_name):
                     profile_objects.append(data)
     return profile_objects
 
+def import_profile_objects(root_folder, prof_type):
+    pass
+
 def main(profile_list, root_folder):
 
     for profile in profile_list:
