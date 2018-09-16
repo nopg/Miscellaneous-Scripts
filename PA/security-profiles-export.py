@@ -16,6 +16,7 @@ URLFILTERING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 FILEBLOCKING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/file-blocking"
 WILDFIRE =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/wildfire-analysis"
 DATAFILTERING = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-filtering"
+DATAPATTERN =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-objects"
 DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/dos-protection"
 
 
@@ -38,6 +39,9 @@ def find_profile_objects(destination_folder, profile_type, xpath):
     else:
         new_destination = destination_folder + "/" + profile_type
         filename = new_destination + "/" + profile_type + "-profiles.xml"
+    
+    if profile_type == 'data-filtering':
+        find_profile_objects(destination_folder, 'data-objects', DATAPATTERN)
 
     # Create the folder under root folder if it doesn't exist
     os.makedirs(new_destination, exist_ok=True)
@@ -53,12 +57,11 @@ def find_profile_objects(destination_folder, profile_type, xpath):
     else:
         # Extra logging when debugging
         if DEBUG:
-            for elem in profile_objects.iter():
-                print(elem)
-                print(elem.attrib)
-                print(elem.text)
+            print(f"\nGET request sent: xpath={xpath}.\n")
+            string_response = etree.tostring(profile_objects).decode()
+            print(string_response)
         else:
-            print(f"Error importing {profile_type} object, check {filename} for response.")
+            print(f"\nError exporting {profile_type} object, check {filename} for response.")
     
     # Create file 
     write_etree_output(profile_objects, filename)
@@ -66,7 +69,6 @@ def find_profile_objects(destination_folder, profile_type, xpath):
 def main(profile_list, destination_folder):
 
     # Organize user input
-    
     # Expand '1' to '2,3,4,5,6,7,8,9'
     if '1' in profile_list:
         profile_list = [str(x) for x in range(2,10)]

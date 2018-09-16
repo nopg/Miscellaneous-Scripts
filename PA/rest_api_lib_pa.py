@@ -62,7 +62,6 @@ class rest_api_lib_pa:
             print(f"URL = {url}")
             print(f"\nGET request sent: type={call_type}, action={action}, \n  xpath={xpath}.\n")
             
-
         # Turn into ElementTree (XML) and return
         data = etree.fromstring(response.text)
         return data

@@ -15,6 +15,7 @@ URLFILTERING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 FILEBLOCKING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/file-blocking"
 WILDFIRE =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/wildfire-analysis"
 DATAFILTERING = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-filtering"
+DATAPATTERN =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-objects"
 DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/dos-protection"
 
 
@@ -37,6 +38,9 @@ def import_profile_objects(root_folder, profile_type, xpath):
         new_root = root_folder + "/antivirus"
     else:
         new_root = root_folder + "/" + profile_type
+    
+    if profile_type == 'data-filtering':
+        import_profile_objects(root_folder, 'data-objects', DATAPATTERN)
 
     # Gather all files, returns string containing xml
     files = grab_files_read(new_root)
@@ -63,18 +67,16 @@ def import_profile_objects(root_folder, profile_type, xpath):
         else:
             # Extra logging when debugging
             if DEBUG:
-                for elem in response.iter():
-                    print(elem)
-                    print(elem.attrib)
-                    print(elem.text)
+                print(f"\nGET request sent: xpath={xpath}.\n element={entry_element}\n")
+                string_response = etree.tostring(response).decode()
+                print(string_response)
             else:
-                print(f"Error importing {profile_type} object.")
+                print(f"\nError importing {profile_type} object.")
 
 # Main Program
 def main(profile_list, root_folder):
 
     # Organize user input
-    
     # Expand '1' to '2,3,4,5,6,7,8,9'
     if '1' in profile_list:
         profile_list = [str(x) for x in range(2,10)]
