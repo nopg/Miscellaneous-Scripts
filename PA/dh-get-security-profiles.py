@@ -11,7 +11,8 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 #ENTRY = + "/entry[@name='alert-only']"
 ANTIVIRUS = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
-SPYWARE =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware/entry"
+SPYWARE =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
+
 
 class rest_api_lib_pa:
     def __init__(self, pa_ip, username, password):
@@ -111,23 +112,33 @@ class rest_api_lib_pa:
     #     data = response.text
     #     return data
 
-def write_etree_output(profile, type, destination_folder):
+def write_etree_output(profile, prof_type, destination_folder):
 
     #GRAB FILENAME
-    if type == 'virus':
+    if prof_type == 'virus':
         data = etree.tostring(profile[0][0]).decode()
         with open (destination_folder + "/Antivirus-profiles.xml", "w") as fout:
             fout.write(data)
 
+    if prof_type == 'spyware':
+        data = etree.tostring(profile).decode()
+        with open (destination_folder + "/Spyware-profiles.xml", "w") as fout:
+            fout.write(data)
+
 def main(profile_list, destination_folder):
 
-    if profile_list != ['2']:
+    if profile_list != ['2'] and profile_list != ['3']:
         print("\nOnly option 2 is currently supported.\n")
         sys.exit(0)
     if profile_list == ['2']:
         xpath = ANTIVIRUS 
         av_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
         write_etree_output(av_objects, 'virus', destination_folder)
+    if profile_list == ['3']:
+        xpath = SPYWARE
+        spy_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
+        write_etree_output(spy_objects, 'spyware', destination_folder)
+
 
 if __name__ == "__main__":
 
@@ -181,10 +192,7 @@ if __name__ == "__main__":
 
     #response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
 
-    # for elem in response.iter():
-    #      print(elem)
-    #      print(elem.attrib)
-    #      print(elem.text)
+
 
 
     print("\n\nComplete!\n")

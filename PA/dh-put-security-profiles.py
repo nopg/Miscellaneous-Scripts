@@ -12,7 +12,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 #ENTRY = + "/entry[@name='alert-only']"
 ANTIVIRUS = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
-SPYWARE =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware/entry"
+SPYWARE =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
 
 class rest_api_lib_pa:
     def __init__(self, pa_ip, username, password):
@@ -139,12 +139,13 @@ def main(profile_list, root_folder):
         xpath = ANTIVIRUS 
         files = grab_files_read(root_folder)
 
-        for entry_element in files:
+        for xml in files:
             
             # because: xml.
-            test = xmltodict.parse(entry_element)
-            a = test['virus']
-            entry_element = xmltodict.unparse(a)
+            temp = xmltodict.parse(xml)
+            entry_element = xmltodict.unparse(temp)
+            entry_element = entry_element.replace("<virus>","")
+            entry_element = entry_element.replace("</virus>","")
             entry_element = entry_element.replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>","")
             
             response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
@@ -187,9 +188,6 @@ if __name__ == "__main__":
     profile_list = list(selection.replace(',',''))
     
     main(profile_list, root_folder)
-
-   
-
 
 
     # tree = etree.parse(io.StringIO(av))
