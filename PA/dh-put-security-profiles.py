@@ -11,8 +11,10 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 #ENTRY = + "/entry[@name='alert-only']"
+DEBUG = True
 ANTIVIRUS = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
+VULNERABILITY = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/vulnerability"
 
 class rest_api_lib_pa:
     def __init__(self, pa_ip, username, password):
@@ -53,7 +55,8 @@ class rest_api_lib_pa:
             url = f"https://{self.pa_ip}:443/api?type={type}&action={action}&xpath={xpath}&key={self.key}"
         else:
             url = f"https://{self.pa_ip}:443/api?type={type}&action={action}&xpath={xpath}&key={self.key}&element={element}"
-        print(url)
+        if DEBUG:
+            print(url)
         response = self.session[self.pa_ip].get(url, verify=False)
         data = etree.fromstring(response.text)
         return data
@@ -132,28 +135,55 @@ def grab_files_read(folder_name):
 
 def main(profile_list, root_folder):
 
-    if profile_list != ['2']:
-        print("\nOnly option 2 is currently supported.\n")
-        sys.exit(0)
-    if profile_list == ['2']:
-        xpath = ANTIVIRUS 
-        files = grab_files_read(root_folder)
+    for profile in profile_list:
+        if profile == '2':
+            xpath = ANTIVIRUS 
+            os.makedirs(root_folder + "/antivirus", exist_ok=True) 
+            new_root = root_folder + "/antivirus"
+            files = grab_files_read(new_root)
 
-        for xml in files:
+            for xml in files:
+                
+                # because: xml.
+                temp = xmltodict.parse(xml)
+                entry_element = xmltodict.unparse(temp)
+                entry_element = entry_element.replace("<virus>","")
+                entry_element = entry_element.replace("</virus>","")
+                entry_element = entry_element.replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>","")
+                
+                response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
             
-            # because: xml.
-            temp = xmltodict.parse(xml)
-            entry_element = xmltodict.unparse(temp)
-            entry_element = entry_element.replace("<virus>","")
-            entry_element = entry_element.replace("</virus>","")
-            entry_element = entry_element.replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>","")
+                if DEBUG:
+                    for elem in response.iter():
+                        print(elem)
+                        print(elem.attrib)
+                        print(elem.text)
+        elif profile == '3':
+            xpath = SPYWARE 
+            os.makedirs(root_folder + "/spyware", exist_ok=True) 
+            new_root = root_folder + "/spyware"
+            files = grab_files_read(new_root)
+
+            for xml in files:
+                
+                # because: xml.
+                temp = xmltodict.parse(xml)
+                entry_element = xmltodict.unparse(temp)
+                entry_element = entry_element.replace("<spyware>","")
+                entry_element = entry_element.replace("</spyware>","")
+                entry_element = entry_element.replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>","")
+                
+                response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
             
-            response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
-        
-            for elem in response.iter():
-                print(elem)
-                print(elem.attrib)
-                print(elem.text)
+                if DEBUG:
+                    for elem in response.iter():
+                        print(elem)
+                        print(elem.attrib)
+                        print(elem.text)
+        else:
+            print(profile)
+            print("\nOnly option 2 and 3 is currently supported.\n")
+            continue
 
 if __name__ == "__main__":
 

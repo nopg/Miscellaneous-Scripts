@@ -11,8 +11,10 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 #ENTRY = + "/entry[@name='alert-only']"
+DEBUG = True
 ANTIVIRUS = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
+VULNERABILITY = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/vulnerability"
 
 
 class rest_api_lib_pa:
@@ -54,7 +56,8 @@ class rest_api_lib_pa:
             url = f"https://{self.pa_ip}:443/api?type={type}&action={action}&xpath={xpath}&key={self.key}"
         else:
             url = f"https://{self.pa_ip}:443/api?type={type}&action={action}&xpath={xpath}&key={self.key}&element={element}"
-        #print(url)
+        if DEBUG:
+            print(url)
         response = self.session[self.pa_ip].get(url, verify=False)
         data = etree.fromstring(response.text)
         return data
@@ -126,6 +129,33 @@ def write_etree_output(profile, prof_type, destination_folder):
         with open (destination_folder + "/spyware-profiles.xml", "w") as fout:
             fout.write(data)
 
+    if prof_type == 'vulnerability':
+        data = etree.tostring(profile[0][0]).decode()
+        with open (destination_folder + "/vulnerability-profiles.xml", "w") as fout:
+            fout.write(data)
+
+def find_profile_objects(destination_folder, prof_type):
+    if prof_type == 'virus':
+        xpath = ANTIVIRUS
+        new_destination = destination_folder + "/antivirus"
+    elif prof_type == 'spyware':
+        xpath = SPYWARE
+        new_destination = destination_folder + "/spyware"
+    elif prof_type == 'vulnerability':
+        xpath = VULNERABILITY
+        new_destination = destination_folder + "/vulnerability"
+
+    os.makedirs(new_destination, exist_ok=True)
+
+    profile_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
+    if DEBUG:
+        for elem in profile_objects.iter():
+            print(elem)
+            print(elem.attrib)
+            print(elem.text)
+
+    write_etree_output(profile_objects, prof_type, new_destination)
+
 def main(profile_list, destination_folder):
 
     for profile in profile_list:
@@ -136,12 +166,15 @@ def main(profile_list, destination_folder):
             new_destination = destination_folder + "/antivirus"
             av_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
             write_etree_output(av_objects, 'virus', new_destination)
-        if profile == '3':
+        elif profile == '3':
             xpath = SPYWARE
             os.makedirs(destination_folder + "/spyware", exist_ok=True) 
             new_destination = destination_folder + "/spyware"
             spy_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
             write_etree_output(spy_objects, 'spyware', new_destination)
+        elif profile == '4':
+            find_profile_objects(destination_folder,'vulnerability')
+
         else:
             print("\nOnly option 2 and 3 is currently supported.\n")
             continue
