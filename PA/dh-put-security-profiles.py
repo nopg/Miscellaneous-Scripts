@@ -4,12 +4,14 @@ import sys
 import xmltodict, json
 import xml.etree.ElementTree as etree
 import io
+import os
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-ANTIVIRUS = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware/entry[@name='strict']"
+#ENTRY = + "/entry[@name='alert-only']"
+ANTIVIRUS = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware/entry"
 
 class rest_api_lib_pa:
@@ -51,7 +53,7 @@ class rest_api_lib_pa:
             url = f"https://{self.pa_ip}:443/api?type={type}&action={action}&xpath={xpath}&key={self.key}"
         else:
             url = f"https://{self.pa_ip}:443/api?type={type}&action={action}&xpath={xpath}&key={self.key}&element={element}"
-        #print(url)
+        print(url)
         response = self.session[self.pa_ip].get(url, verify=False)
         data = etree.fromstring(response.text)
         return data
@@ -110,54 +112,99 @@ class rest_api_lib_pa:
     #     data = response.text
     #     return data
 
-def grab_objects():
-    pass
+# def write_etree_output(profile, type):
+
+#     #GRAB FILENAME
+#     if type == 'virus':
+#         data = etree.tostring(profile[0][0]).decode()
+#         with open ("Antivirus-profiles.xml", "w") as fout:
+#             fout.write(data)
+
+def grab_files_read(folder_name):
+    profile_objects = []
+    for root, dirs, files in os.walk(folder_name):
+        for file in files:
+            if file.endswith(".xml"):
+                with open(root + "/" + file, "r") as fin:
+                    data = fin.read()
+                    profile_objects.append(data)
+    return profile_objects
+
+def main(profile_list, root_folder):
+
+    if profile_list != ['2']:
+        print("\nOnly option 2 is currently supported.\n")
+        sys.exit(0)
+    if profile_list == ['2']:
+        xpath = ANTIVIRUS 
+        files = grab_files_read(root_folder)
+
+        for entry_element in files:
+            
+            # because: xml.
+            test = xmltodict.parse(entry_element)
+            a = test['virus']
+            entry_element = xmltodict.unparse(a)
+            entry_element = entry_element.replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>","")
+            
+            response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
+        
+            for elem in response.iter():
+                print(elem)
+                print(elem.attrib)
+                print(elem.text)
 
 if __name__ == "__main__":
 
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
         print(
-            "\tpython3 dh-security-profiles.py <PA mgmt IP> <username>\n\n"
+            "\tpython3 dh-security-profiles.py <root folder for profiles> <PA mgmt IP> <username>\n\n"
         )
         sys.exit(0)
 
-    pa_ip = sys.argv[1]
-    username = sys.argv[2]
+    root_folder = sys.argv[1]
+    pa_ip = sys.argv[2]
+    username = sys.argv[3]
     password = getpass.getpass("Enter Password: ")
 
     obj = rest_api_lib_pa(pa_ip, username, password)
 
-    xpath = ANTIVIRUS #+ "/entry[@name='alert-only']"
 
-    av_objects = obj.get_request_pa(type='config',action='show',xpath=xpath)
+    selection = input("""\nWhat type of security profiles to import??
 
-    with open("virus-alert-only.xml", "r") as fin:
-         av = fin.read()
+                1) ALL Profiles
+                2) Antivirus
+                3) Anti-Spyware
+                4) Vulnerability Protection
+                5) URL Filtering
+                6) File Blocking
+                7) Wildfire Analysis
+                8) Data Filtering
+                9) DoS Protection
 
-    entry_element = av
+                Separate selection by comma: """)
+    profile_list = list(selection.replace(',',''))
+    
+    main(profile_list, root_folder)
 
-    tree = etree.parse(io.StringIO(av))
-    root = tree.getroot()
+   
+
+
+
+    # tree = etree.parse(io.StringIO(av))
+    # root = tree.getroot()
     #print(tree.getroot().text)
     #print(tree[0])
-    print(root.tag)
+    #print(root.tag)
 
-    d = xmltodict.parse(av)
+    #d = xmltodict.parse(av)
     #print(d)
 
-    response = obj.get_request_pa(type="config",action="set",xpath=xpath,element=entry_element)
-
-    # for elem in response.iter():
-    #      print(elem)
-    #      print(elem.attrib)
-    #      print(elem.text)
 
 
     print("\n\nComplete!\n")
 
-
-    #test = obj.get_request_pa_cli_and_param("?type=op&cmd=",command)
 
     # def pp_xml(text):
     #     b = xmltodict.parse(test)
@@ -172,7 +219,3 @@ if __name__ == "__main__":
     #     print(i.text)
     #     print(i.attrib)
 
-# def write_etree_output():
-    data = etree.tostring(av_objects).decode()
-    with open ("xmltest.xml", "w") as fout:
-          fout.write(data)

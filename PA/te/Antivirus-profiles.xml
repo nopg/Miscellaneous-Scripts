@@ -1,5 +1,5 @@
 <virus>
-  <entry name="alert-only">
+  <entry name="alert-api-only">
     <decoder>
       <entry name="http">
         <action>alert</action>
