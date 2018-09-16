@@ -42,7 +42,7 @@ class rest_api_lib_pa:
 
         sess = requests.session()
 
-        # If the vmanage has a certificate signed by a trusted authority change verify to True
+        # If the pa has a certificate signed by a trusted authority change verify to True
         login_response = sess.post(url=login_url, verify=False)
 
         if login_response.status_code == 403:
@@ -114,6 +114,15 @@ def find_profile_objects(destination_folder, prof_type):
 
 def main(profile_list, destination_folder):
 
+    if '1' in profile_list:
+        profile_list = [str(x) for x in range(2,10)]
+
+    if '-' in profile_list:
+        start = int (profile_list[0])
+        end = profile_list[-1:]
+        end = int (end[0]) + 1
+        profile_list = [str(x) for x in range(start,end)]
+
     for profile in profile_list:
 
         if profile == '2':
@@ -133,7 +142,7 @@ def main(profile_list, destination_folder):
         elif profile == '9':
             find_profile_objects(destination_folder,'dos-protection')
         else:
-            print("\nOnly option 2, 3, 4, 5, 6, 7, and 8 are currently supported.\n")
+            print("\nHuh?. You entered {}\n".format(profile))
             continue
 
 

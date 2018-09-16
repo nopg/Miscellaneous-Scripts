@@ -1,0 +1,58 @@
+<virus>
+  <entry name="alert-only">
+    <decoder>
+      <entry name="http">
+        <action>alert</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="smtp">
+        <action>alert</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="imap">
+        <action>alert</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="pop3">
+        <action>alert</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="ftp">
+        <action>alert</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="smb">
+        <action>alert</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+    </decoder>
+  </entry>
+  <entry name="alert-api-only">
+    <decoder>
+      <entry name="ftp">
+        <action>drop</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="http">
+        <action>drop</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="imap">
+        <action>drop</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="pop3">
+        <action>drop</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="smb">
+        <action>drop</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+      <entry name="smtp">
+        <action>drop</action>
+        <wildfire-action>alert</wildfire-action>
+      </entry>
+    </decoder>
+  </entry>
+</virus>

@@ -42,7 +42,7 @@ class rest_api_lib_pa:
 
         sess = requests.session()
 
-        # If the vmanage has a certificate signed by a trusted authority change verify to True
+        # If the pa has a certificate signed by a trusted authority change verify to True
         login_response = sess.post(url=login_url, verify=False)
 
         if login_response.status_code == 403:
@@ -123,6 +123,15 @@ def import_profile_objects(root_folder, prof_type):
 
 def main(profile_list, root_folder):
 
+    if '1' in profile_list:
+        profile_list = [str(x) for x in range(2,10)]
+
+    if '-' in profile_list:
+        start = int (profile_list[0])
+        end = profile_list[-1:]
+        end = int (end[0]) + 1
+        profile_list = [str(x) for x in range(start,end)]
+
     for profile in profile_list:
         if profile == '2':
             import_profile_objects(root_folder,'virus')
@@ -141,7 +150,7 @@ def main(profile_list, root_folder):
         elif profile == '9':
             import_profile_objects(root_folder,'dos-protection')
         else:
-            print("\nHUH?.\n")
+            print("\nHuh?. You entered {}\n".format(profile))
             continue
 
 if __name__ == "__main__":

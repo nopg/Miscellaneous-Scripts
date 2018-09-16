@@ -1,0 +1,71 @@
+<spyware>
+  <entry name="strict-custom">
+    <rules>
+      <entry name="simple-critical">
+        <action>
+          <reset-both />
+        </action>
+        <severity>
+          <member>critical</member>
+        </severity>
+        <threat-name>any</threat-name>
+        <category>any</category>
+        <packet-capture>disable</packet-capture>
+      </entry>
+      <entry name="simple-high">
+        <action>
+          <reset-both />
+        </action>
+        <severity>
+          <member>high</member>
+        </severity>
+        <threat-name>any</threat-name>
+        <category>any</category>
+        <packet-capture>disable</packet-capture>
+      </entry>
+      <entry name="simple-medium">
+        <action>
+          <reset-both />
+        </action>
+        <severity>
+          <member>medium</member>
+        </severity>
+        <threat-name>any</threat-name>
+        <category>any</category>
+        <packet-capture>disable</packet-capture>
+      </entry>
+      <entry name="simple-informational">
+        <action>
+          <default />
+        </action>
+        <severity>
+          <member>informational</member>
+        </severity>
+        <threat-name>any</threat-name>
+        <category>any</category>
+        <packet-capture>disable</packet-capture>
+      </entry>
+      <entry name="simple-low">
+        <action>
+          <default />
+        </action>
+        <severity>
+          <member>low</member>
+        </severity>
+        <threat-name>any</threat-name>
+        <category>any</category>
+        <packet-capture>disable</packet-capture>
+      </entry>
+    </rules>
+    <botnet-domains>
+      <lists>
+        <entry name="default-paloalto-dns">
+          <action>
+            <block />
+          </action>
+        </entry>
+      </lists>
+      <packet-capture>disable</packet-capture>
+    </botnet-domains>
+  </entry>
+</spyware>
