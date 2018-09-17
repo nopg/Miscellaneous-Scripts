@@ -121,7 +121,7 @@ def find_profile_objects(destination_folder, profile_type, xpath):
         else:
             print(f"Error exporting {profile_type} object.")
             print(
-                "(Sometimes this just means no object found, set DEBUG=True if needed)"
+                "(Normally this just means no object found, set DEBUG=True if needed)"
             )
 
 
