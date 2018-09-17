@@ -1,8 +1,51 @@
+"""
+Docstring stolen from Devin Callaway
+
+Discription: 
+    Import/Export Security Profile objects using the Palo Alto API
+    Export - Exports chosen objects to appropriate files
+    Import - Imports from root_folder all chosen objects
+
+Requires:
+    requests
+    xmltodict
+        to install try: pip3 install xmltodict requests 
+
+Author:
+    Ryan Gillespie rgillespie@compunet.biz
+
+Tested:
+    Tested on macos 10.12.3
+    Python: 3.6.2
+    PA VM100
+
+Example usage:
+        $ python3 dh-security-profiles-export.py <destination folder> <PA mgmt IP> <username>
+        Password: 
+
+Cautions:
+    - Will export ONLY COMMITTED CHANGES.
+        To export candidate configuration change action="show" to action="get" (not recommended)
+    - When no objects are found, sometimes the PA returns an error, sometimes it returns 'success' with 'node not found'. 
+    - Will NOT commit any changes, this must be done manually.
+    - Set DEBUG=True if errors occur and you would like detailed information.
+
+Legal:
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+"""
+
 import getpass
 import sys
 import os
 import xml.etree.ElementTree as etree
 
+import xmltodict
 import rest_api_lib_pa as pa
 
 
@@ -25,9 +68,8 @@ DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 # fmt: on
 
 # Create file for each profile type
-def write_etree_output(profile, filename):
+def write_etree_output(data, filename):
 
-    data = etree.tostring(profile[0][0]).decode()
     with open(filename, "w") as fout:
         fout.write(data)
 
@@ -35,22 +77,18 @@ def write_etree_output(profile, filename):
 # Grab profile from Palo Alto API based on profile type
 def find_profile_objects(destination_folder, profile_type, xpath):
 
+    f_profile_type = profile_type.replace("threats/", "")
+
     # Rename 'virus' folder to 'antivirus' (just makes more sense)
     if profile_type == "virus":
         new_destination = destination_folder + "/antivirus"
         filename = new_destination + "/antivirus-profiles.xml"
     else:
-
         new_destination = destination_folder + "/" + profile_type
 
         # remove 'threats/' out of filename for custom objects
         if "threats" in profile_type:
-            filename = (
-                new_destination
-                + "/"
-                + profile_type.replace("threats", "")
-                + "-profiles.xml"
-            )
+            filename = new_destination + "/" + f_profile_type + "-profiles.xml"
         else:
             filename = new_destination + "/" + profile_type + "-profiles.xml"
 
@@ -58,26 +96,33 @@ def find_profile_objects(destination_folder, profile_type, xpath):
     os.makedirs(new_destination, exist_ok=True)
 
     # Export xml via Palo Alto API
-    profile_objects = obj.get_request_pa(call_type="config", action="show", xpath=xpath)
+    response = obj.get_request_pa(call_type="config", action="show", xpath=xpath)
 
     # Print out result
-    result = profile_objects.attrib
+    result = xmltodict.parse(response)
 
-    if result["status"] == "success":
-        print(f"\nExported {profile_type} object.")
+    if result["response"]["@status"] == "success":
+        entries = result["response"]["result"][f_profile_type]
+        if not entries:
+            print(f"No objects found for {profile_type}.")
+        else:
+            # Create file
+            # Because XML: remove <response/><result/> and <?xml> tags
+            output = result["response"]["result"]
+            output = xmltodict.unparse(output)
+            output = output.replace('<?xml version="1.0" encoding="utf-8"?>', "")
+
+            write_etree_output(output, filename)
+            print(f"\nExported {profile_type} object.")
     else:
-        # Extra logging when debugging
         if DEBUG:
             print(f"\nGET request sent: xpath={xpath}.\n")
-            string_response = etree.tostring(profile_objects).decode()
-            print(string_response)
+            print(response)
         else:
+            print(f"Error exporting {profile_type} object.")
             print(
-                f"\nError exporting {profile_type} object, check {filename} for response."
+                "(Sometimes this just means no object found, set DEBUG=True if needed)"
             )
-
-    # Create file
-    write_etree_output(profile_objects, filename)
 
 
 def main(profile_list, destination_folder):
@@ -130,7 +175,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
         print(
-            "\tpython3 dh-security-profiles.py <destination folder> <PA mgmt IP> <username>\n\n"
+            "\tpython3 security-profiles-export.py <destination folder> <PA mgmt IP> <username>\n\n"
         )
         sys.exit(0)
 

@@ -1,3 +1,42 @@
+"""
+Docstring stolen from Devin Callaway
+
+Discription: 
+    REST API Library to be used with the Palo Alto API
+
+Requires:
+    requests
+    xmltodict
+        to install try: pip3 install xmltodict requests 
+
+Author:
+    Ryan Gillespie rgillespie@compunet.biz
+
+Tested:
+    Tested on macos 10.12.3
+    Python: 3.6.2
+    PA VM100
+
+Example usage:
+        import rest_api_lib_pa as pa
+        # export example:
+        obj = pa.get_request_pa(call_type="config",action="show",xpath="")
+        # import example:
+        obj = pa.get_request_pa(call_type="config",action="set",xpath="..",element="<../>")
+
+Cautions:
+    Future abilities will be added, currently ONLY supported for export/import operations
+
+Legal:
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+"""
+
 import requests
 import sys
 import xml.etree.ElementTree as etree
@@ -19,9 +58,8 @@ class rest_api_lib_pa:
         self.key = 0
         self.login(self.pa_ip, username, password)
 
-    # Called from init, login to the Palo Alto
+    # Called from init(), login to the Palo Alto
     def login(self, pa_ip, username, password):
-        """ Called from init, login to the Palo Alto"""
 
         # Create URL's
         base_url_str = "https://{}/".format(pa_ip)  # Base URL
@@ -53,8 +91,6 @@ class rest_api_lib_pa:
     def get_request_pa(
         self, call_type="config", action="show", xpath=None, element=None
     ):
-        """ GET request for Palo Alto API """
-
         # If no element is sent, should be a 'show' or 'get' action, do not send &element=<element>
         if not element:
             url = f"https://{self.pa_ip}:443/api?type={call_type}&action={action}&xpath={xpath}&key={self.key}"
@@ -71,6 +107,5 @@ class rest_api_lib_pa:
                 f"\nGET request sent: type={call_type}, action={action}, \n  xpath={xpath}.\n"
             )
 
-        # Turn into ElementTree (XML) and return
-        data = etree.fromstring(response.text)
-        return data
+        # Return string (XML)
+        return response.text

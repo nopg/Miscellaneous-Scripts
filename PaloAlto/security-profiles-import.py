@@ -1,14 +1,55 @@
+"""
+Docstring stolen from Devin Callaway
+
+Discription: 
+    Import/Export Security Profile objects using the Palo Alto API
+    Export - Exports chosen objects to appropriate files
+    Import - Imports from root_folder all chosen objects
+
+Requires:
+    requests
+    xmltodict
+        to install try: pip3 install xmltodict requests 
+
+Author:
+    Ryan Gillespie rgillespie@compunet.biz
+
+Tested:
+    Tested on macos 10.12.3
+    Python: 3.6.2
+    PA VM100
+
+Example usage:
+        $ python3 dh-security-profiles-export.py <destination folder> <PA mgmt IP> <username>
+        Password: 
+
+Cautions:
+    Will export ONLY COMMITTED CHANGES.
+    To export candidate configuration change $action to equal "get" (not recommended)
+    Will NOT commit any changes, this must be done manually.
+
+Legal:
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+"""
+
 import getpass
 import sys
 import os
 import xml.etree.ElementTree as etree
 
+import xmltodict
 import rest_api_lib_pa as pa
 
 # fmt: off
 # Global Variables, debug & xpath location for each profile type
 # ENTRY = + "/entry[@name='alert-only']"
-DEBUG = False
+DEBUG = True
 ANTIVIRUS =     "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
 SPYWARESIG =    "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/spyware"
@@ -65,16 +106,15 @@ def import_profile_objects(root_folder, profile_type, xpath):
         )
 
         # Print out result
-        result = response.attrib
+        result = xmltodict.parse(response)
 
-        if result["status"] == "success":
+        if result["response"]["@status"] == "success":
             print(f"\nImported {profile_type} object.")
         else:
             # Extra logging when debugging
             if DEBUG:
                 print(f"\nGET request sent: xpath={xpath}.\n element={entry_element}\n")
-                string_response = etree.tostring(response).decode()
-                print(string_response)
+                print(response)
             else:
                 print(f"\nError importing {profile_type} object.")
 
@@ -127,7 +167,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
         print(
-            "\tpython3 dh-security-profiles.py <root folder for profiles> <PA mgmt IP> <username>\n\n"
+            "\tpython3 security-profiles-import.py <root folder for profiles> <PA mgmt IP> <username>\n\n"
         )
         sys.exit(0)
 
