@@ -1,7 +1,5 @@
 """
-Docstring stolen from Devin Callaway
-
-Discription: 
+Description: 
     REST API Library to be used with the Palo Alto API
 
 Requires:
@@ -11,6 +9,7 @@ Requires:
 
 Author:
     Ryan Gillespie rgillespie@compunet.biz
+    Docstring stolen from Devin Callaway
 
 Tested:
     Tested on macos 10.12.3
@@ -25,7 +24,8 @@ Example usage:
         obj = pa.get_request_pa(call_type="config",action="set",xpath="..",element="<../>")
 
 Cautions:
-    Future abilities will be added, currently ONLY supported for export/import operations
+    Future abilities will be added when use-cases warrant,
+     currently ONLY supported for export/import operations (type=config,action=show, get, or set)
 
 Legal:
     THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
@@ -39,7 +39,6 @@ Legal:
 
 import requests
 import sys
-import xml.etree.ElementTree as etree
 
 import xmltodict
 
@@ -62,11 +61,9 @@ class rest_api_lib_pa:
     def login(self, pa_ip, username, password):
 
         # Create URL's
-        base_url_str = "https://{}/".format(pa_ip)  # Base URL
+        base_url_str = f"https://{pa_ip}/"  # Base URL
         login_action = "/api?type=keygen"  # Get API Key
-        login_data = "&user={}&password={}".format(
-            username, password
-        )  # Format data for login
+        login_data = f"&user={username}&password={password}"  # Format data for login
         login_url = (
             base_url_str + login_action + login_data
         )  # URL for posting login data

@@ -1,7 +1,5 @@
 """
-Docstring stolen from Devin Callaway
-
-Discription: 
+Description: 
     Import/Export Security Profile objects using the Palo Alto API
     Export - Exports chosen objects to appropriate files
     Import - Imports from root_folder all chosen objects
@@ -13,6 +11,7 @@ Requires:
 
 Author:
     Ryan Gillespie rgillespie@compunet.biz
+    Docstring template stolen from Devin Callaway
 
 Tested:
     Tested on macos 10.12.3
@@ -69,15 +68,12 @@ DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 
 # Create file for each profile type
 def write_etree_output(data, filename):
-
     with open(filename, "w") as fout:
         fout.write(data)
 
 
 # Grab profile from Palo Alto API based on profile type
 def find_profile_objects(destination_folder, profile_type, xpath):
-
-    f_profile_type = profile_type.replace("threats/", "")
 
     # Rename 'virus' folder to 'antivirus' (just makes more sense)
     if profile_type == "virus":
@@ -87,10 +83,8 @@ def find_profile_objects(destination_folder, profile_type, xpath):
         new_destination = destination_folder + "/" + profile_type
 
         # remove 'threats/' out of filename for custom objects
-        if "threats" in profile_type:
-            filename = new_destination + "/" + f_profile_type + "-profiles.xml"
-        else:
-            filename = new_destination + "/" + profile_type + "-profiles.xml"
+        formatted_profile_type = profile_type.replace("threats/", "")
+        filename = new_destination + "/" + formatted_profile_type + "-profiles.xml"
 
     # Create the folder under root folder if it doesn't exist
     os.makedirs(new_destination, exist_ok=True)
@@ -102,7 +96,7 @@ def find_profile_objects(destination_folder, profile_type, xpath):
     result = xmltodict.parse(response)
 
     if result["response"]["@status"] == "success":
-        entries = result["response"]["result"][f_profile_type]
+        entries = result["response"]["result"][formatted_profile_type]
         if not entries:
             print(f"No objects found for {profile_type}.")
         else:
@@ -125,6 +119,7 @@ def find_profile_objects(destination_folder, profile_type, xpath):
             )
 
 
+# Main Program
 def main(profile_list, destination_folder):
 
     # Organize user input
@@ -140,7 +135,6 @@ def main(profile_list, destination_folder):
 
     # Loop through user provided input, import each profile
     for profile in profile_list:
-
         if profile == "2":
             find_profile_objects(destination_folder, "virus", ANTIVIRUS)
         elif profile == "3":
