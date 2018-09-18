@@ -99,8 +99,8 @@ def import_profile_objects(root_folder, profile_type, xpath):
 
     # Because: xml.
     # Create root tags (i.e. <virus>, </spyware>, etc)
-    # Remove 'threats/' if found
-    formatted_profile_type = profile_type.replace("threats/", "")
+    # Remove 'custom/' for custom objects
+    formatted_profile_type = profile_type.replace("custom/", "")
     root_tag = f"<{formatted_profile_type}>"
     root_tag_end = f"</{formatted_profile_type}>"
 
@@ -131,8 +131,8 @@ def import_profile_objects(root_folder, profile_type, xpath):
 # Grab profile from Palo Alto API based on profile type
 def export_profile_objects(destination_folder, profile_type, xpath):
 
-    # remove 'threats/' out of filename for custom objects
-    formatted_profile_type = profile_type.replace("threats/", "")
+    # remove 'custom/' out of filename for custom objects
+    formatted_profile_type = profile_type.replace("custom/", "")
 
     # Rename 'virus' folder to 'antivirus' (just makes more sense)
     if profile_type == "virus":
@@ -199,20 +199,20 @@ def main(profile_list, root_folder, selection):
         if profile == "2":
             wrapper_call(root_folder, "virus", ANTIVIRUS)
         elif profile == "3":
-            wrapper_call(root_folder, "threats/spyware", SPYWARESIG)
+            wrapper_call(root_folder, "custom/spyware", SPYWARESIG)
             wrapper_call(root_folder, "spyware", SPYWARE)
         elif profile == "4":
-            wrapper_call(root_folder, "threats/vulnerability", VULNERABLESIG)
+            wrapper_call(root_folder, "custom/vulnerability", VULNERABLESIG)
             wrapper_call(root_folder, "vulnerability", VULNERABILITY)
         elif profile == "5":
-            wrapper_call(root_folder, "custom-url-category", URLCATEGORY)
+            wrapper_call(root_folder, "custom/custom-url-category", URLCATEGORY)
             wrapper_call(root_folder, "url-filtering", URLFILTERING)
         elif profile == "6":
             wrapper_call(root_folder, "file-blocking", FILEBLOCKING)
         elif profile == "7":
             wrapper_call(root_folder, "wildfire-analysis", WILDFIRE)
         elif profile == "8":
-            wrapper_call(root_folder, "data-objects", DATAPATTERN)
+            wrapper_call(root_folder, "custom/data-objects", DATAPATTERN)
             wrapper_call(root_folder, "data-filtering", DATAFILTERING)
         elif profile == "9":
             wrapper_call(root_folder, "dos-protection", DDOS)
