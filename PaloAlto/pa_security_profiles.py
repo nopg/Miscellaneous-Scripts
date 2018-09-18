@@ -79,6 +79,13 @@ def grab_files_read(folder_name):
 # Create file for each profile type
 def write_data_output(temp, filename):
 
+    # Pull folder name from string
+    end = filename.rfind("/")
+    folder = filename[0:end]
+
+    # Create the root folder and subfolder if it doesn't already exist
+    os.makedirs(folder, exist_ok=True)
+
     # Because XML: remove <response/><result/> and <?xml> tags
     # Using get().get() won't cause exception on KeyError
     data = temp.get("response").get("result")
@@ -146,11 +153,9 @@ def export_profile_objects(destination_folder, profile_type, xpath):
 
     # Rename 'virus' folder to 'antivirus' (just makes more sense)
     if profile_type == "virus":
-        new_destination = f"{destination_folder}/antivirus"
-        filename = f"{new_destination}/antivirus-profiles.xml"
+        filename = f"{destination_folder}/antivirus/antivirus-profiles.xml"
     else:
-        new_destination = f"{destination_folder}/{profile_type}"
-        filename = f"{new_destination}/{formatted_profile_type}-profiles.xml"
+        filename = f"{destination_folder}/{profile_type}/{formatted_profile_type}-profiles.xml"
 
     # Export xml via Palo Alto API
     response = obj.get_request_pa(call_type="config", action="show", xpath=xpath)
@@ -160,8 +165,6 @@ def export_profile_objects(destination_folder, profile_type, xpath):
     if result["response"]["@status"] == "success":
         entries = result["response"]["result"][formatted_profile_type]
         if entries:
-            # Create the root folder and subfolder if it doesn't exist
-            os.makedirs(new_destination, exist_ok=True)
             # Create file
             write_data_output(result, filename)
             print(f"\nExported {profile_type} object.")
@@ -172,8 +175,6 @@ def export_profile_objects(destination_folder, profile_type, xpath):
         if DEBUG:
             print(f"\nGET request sent: xpath={xpath}.\n")
             print(f"\nResponse: \n{response}")
-            # Create the root folder and subfolder if it doesn't exist
-            os.makedirs(new_destination, exist_ok=True)
             write_data_output(result,filename)
             print(f"Output also written to {filename}")
         else:
