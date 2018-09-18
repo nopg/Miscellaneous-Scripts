@@ -77,7 +77,17 @@ def grab_files_read(folder_name):
 
 
 # Create file for each profile type
-def write_data_output(data, filename):
+def write_data_output(temp, filename):
+
+    # Because XML: remove <response/><result/> and <?xml> tags
+    # Using get().get() won't cause exception on KeyError
+    data = temp.get("response").get("result")
+    if data:
+        data = xmltodict.unparse(data)
+    else:
+        data = xmltodict.unparse(temp)
+    data = data.replace('<?xml version="1.0" encoding="utf-8"?>', "")
+
     with open(filename, "w") as fout:
         fout.write(data)
 
@@ -154,11 +164,7 @@ def export_profile_objects(destination_folder, profile_type, xpath):
         entries = result["response"]["result"][formatted_profile_type]
         if entries:
             # Create file
-            # Because XML: remove <response/><result/> and <?xml> tags
-            output = result["response"]["result"]
-            output = xmltodict.unparse(output)
-            output = output.replace('<?xml version="1.0" encoding="utf-8"?>', "")
-            write_data_output(output, filename)
+            write_data_output(result, filename)
             print(f"\nExported {profile_type} object.")
         else:
             print(f"No objects found for {profile_type}.")
@@ -167,6 +173,8 @@ def export_profile_objects(destination_folder, profile_type, xpath):
         if DEBUG:
             print(f"\nGET request sent: xpath={xpath}.\n")
             print(f"\nResponse: \n{response}")
+            write_data_output(result,filename)
+            print(f"Output also written to {filename}")
         else:
             print(f"\nError exporting {profile_type} object.")
             print(
@@ -247,8 +255,8 @@ if __name__ == "__main__":
         export_or_import = input(
             """\nWhat would you like to do?
 
-        1) EXPORT security-profile objects (From Palo Alto into files)
-        2) IMPORT security-profile objects (From files into Palo Alto)
+        1) EXPORT security-profile objects (From PA into xml)
+        2) IMPORT security-profile objects (From xml into PA)
 
         Enter 1 or 2: """
         )
