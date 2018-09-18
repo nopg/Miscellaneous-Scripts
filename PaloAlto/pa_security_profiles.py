@@ -64,7 +64,7 @@ DATAPATTERN =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/dos-protection"
 # fmt: on
 
-# Read all files found in folder_name, return list containing all the output
+# Read all .xml files found in folder_name, return list containing all the output
 def grab_files_read(folder_name):
     profile_objects = []
     for root, dirs, files in os.walk(folder_name):
@@ -87,9 +87,9 @@ def import_profile_objects(root_folder, profile_type, xpath):
 
     # Rename 'virus' folder to 'antivirus' (just makes more sense)
     if profile_type == "virus":
-        new_root = root_folder + "/antivirus"
+        new_root = f"{root_folder}/antivirus"
     else:
-        new_root = root_folder + "/" + profile_type
+        new_root = f"{root_folder}/{profile_type}"
 
     # Gather all files, returns string containing xml
     files = grab_files_read(new_root)
@@ -100,12 +100,13 @@ def import_profile_objects(root_folder, profile_type, xpath):
     # Because: xml.
     # Create root tags (i.e. <virus>, </spyware>, etc)
     # Remove 'threats/' if found
-    root_tag = "<" + profile_type.replace("threats/", "") + ">"
-    root_tag_end = "</" + profile_type.replace("threats/", "") + ">"
+    formatted_profile_type = profile_type.replace("threats/", "")
+    root_tag = f"<{formatted_profile_type}>"
+    root_tag_end = f"</{formatted_profile_type}>"
 
     for xml in files:
-        # because: xml.
-        # remove root tag (i.e. <virus>, </spyware>, etc)
+        # Because: xml.
+        # Remove root tag (i.e. <virus>, </spyware>, etc)
         entry_element = xml.replace(root_tag, "")
         entry_element = entry_element.replace(root_tag_end, "")
 
@@ -122,7 +123,7 @@ def import_profile_objects(root_folder, profile_type, xpath):
             # Extra logging when debugging
             if DEBUG:
                 print(f"\nGET request sent: xpath={xpath}.\n element={entry_element}\n")
-                print(response)
+                print(f"\nResponse: \n{response}")
             else:
                 print(f"\nError importing {profile_type} object.")
 
@@ -135,13 +136,13 @@ def export_profile_objects(destination_folder, profile_type, xpath):
 
     # Rename 'virus' folder to 'antivirus' (just makes more sense)
     if profile_type == "virus":
-        new_destination = destination_folder + "/antivirus"
-        filename = new_destination + "/antivirus-profiles.xml"
+        new_destination = f"{destination_folder}/antivirus"
+        filename = f"{new_destination}/antivirus-profiles.xml"
     else:
-        new_destination = destination_folder + "/" + profile_type
-        filename = new_destination + "/" + formatted_profile_type + "-profiles.xml"
+        new_destination = f"{destination_folder}/{profile_type}"
+        filename = f"{new_destination}/{formatted_profile_type}-profiles.xml"
 
-    # Create the folder under root folder if it doesn't exist
+    # Create the root folder and subfolder if it doesn't exist
     os.makedirs(new_destination, exist_ok=True)
 
     # Export xml via Palo Alto API
@@ -165,7 +166,7 @@ def export_profile_objects(destination_folder, profile_type, xpath):
         # Extra logging when debugging
         if DEBUG:
             print(f"\nGET request sent: xpath={xpath}.\n")
-            print(response)
+            print(f"\nResponse: \n{response}")
         else:
             print(f"\nError exporting {profile_type} object.")
             print(
