@@ -152,9 +152,6 @@ def export_profile_objects(destination_folder, profile_type, xpath):
         new_destination = f"{destination_folder}/{profile_type}"
         filename = f"{new_destination}/{formatted_profile_type}-profiles.xml"
 
-    # Create the root folder and subfolder if it doesn't exist
-    os.makedirs(new_destination, exist_ok=True)
-
     # Export xml via Palo Alto API
     response = obj.get_request_pa(call_type="config", action="show", xpath=xpath)
 
@@ -163,6 +160,8 @@ def export_profile_objects(destination_folder, profile_type, xpath):
     if result["response"]["@status"] == "success":
         entries = result["response"]["result"][formatted_profile_type]
         if entries:
+            # Create the root folder and subfolder if it doesn't exist
+            os.makedirs(new_destination, exist_ok=True)
             # Create file
             write_data_output(result, filename)
             print(f"\nExported {profile_type} object.")
@@ -173,6 +172,8 @@ def export_profile_objects(destination_folder, profile_type, xpath):
         if DEBUG:
             print(f"\nGET request sent: xpath={xpath}.\n")
             print(f"\nResponse: \n{response}")
+            # Create the root folder and subfolder if it doesn't exist
+            os.makedirs(new_destination, exist_ok=True)
             write_data_output(result,filename)
             print(f"Output also written to {filename}")
         else:
