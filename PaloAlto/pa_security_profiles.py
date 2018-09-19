@@ -7,7 +7,8 @@ Description:
 Requires:
     requests
     xmltodict
-        to install try: pip3 install xmltodict requests 
+    lxml
+        to install try: pip3 install xmltodict requests lxml
 
 Author:
     Ryan Gillespie rgillespie@compunet.biz
@@ -53,7 +54,7 @@ import rest_api_lib_pa as pa
 # fmt: off
 # Global Variables, debug & xpath location for each profile type
 # ENTRY = + "/entry[@name='alert-only']"
-DEBUG = True
+DEBUG = False
 ANTIVIRUS =     "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
 SPYWARESIG =    "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/spyware"
@@ -118,9 +119,8 @@ def import_profile_objects(root_folder, profile_type, xpath):
 
     # Gather all files, returns string containing xml
     files = grab_files_read(new_root)
-
     if not files:
-        print(f"\nNo {profile_type} objects were found in {new_root}!")
+        print(f"\nNo {profile_type} object files were found in {new_root}!")
         return
 
     # Because: xml.
@@ -132,43 +132,37 @@ def import_profile_objects(root_folder, profile_type, xpath):
     root_tag = f"<{api_profile_type}>"
     root_tag_end = f"</{api_profile_type}>"
 
-    found = False
+    # Check xpath to see if we are searching for a specific object name
+    index = xpath.rfind("/")    # Find last section of xpath
+    entry_or_profile = xpath[index:]
+    entry_found = entry_or_profile.find("/entry[@name='") 
+    # Find the actual entry name
+    if entry_found != -1:
+        entry_name = entry_or_profile.replace("/entry[@name='","")
+        entry_name = entry_name.replace("']","")
+
+    everfound = False
     for xml in files:
-
-        # Check xpath to see if we are searching for a specific object name
-        index = xpath.rfind("/")    # Find last section of xpath
-        entry_or_profile = xpath[index:]
-        entry_found = entry_or_profile.find("/entry[@name='")    
-
+        iterfound = False
+        # Search for specific entry, if -1 we are grabbing all entries
         if entry_found == -1: 
             # Not Found, continue as normal and grab all objects
-            entry_element = xml
-            found = True
-            pass
+            # Remove root tag (i.e. <virus>, </spyware>, etc)
+            entry_element = xml.replace(root_tag, "")
+            entry_element = entry_element.replace(root_tag_end, "")
+            everfound = True
         else:
-            # Only grab entries matching name specified
-            entry_name = entry_or_profile.replace("/entry[@name='","")
-            entry_name = entry_name.replace("']","")
-
-            # Brute force XMLFu to find only the right entry
-            # There is definitely a better way
+            # LXML to loop through each main <entry>, find the one with "name" matching entry_name and then
+            # Assigning the correct string to entry_element. This removes the root <entry> tag by using entry[0]  
+            # API expects the /entry[@name='']> in the xpath, but NOT in the actual import url (xml &element=<../>)
             xmltree = etree.parse(StringIO(xml))
             for entry in xmltree.getroot():
                 if entry.attrib["name"] == entry_name:
-                    found = True
-                    entry_element = etree.tostring(entry).decode()
-                    temp = xmltodict.parse(entry_element)
-                    temp = temp["entry"]
-                    temp.pop("@name")
-                    entry_element = xmltodict.unparse(temp)
-                    entry_element = entry_element.replace('<?xml version="1.0" encoding="utf-8"?>', "")
-            if not found:
+                    everfound = iterfound = True
+                    entry_element = etree.tostring(entry[0]).decode()
+            if not iterfound:
+                # Move to next xml file
                 continue
-
-        # Because: xml.
-        # Remove root tag (i.e. <virus>, </spyware>, etc)
-        entry_element = entry_element.replace(root_tag, "")
-        entry_element = entry_element.replace(root_tag_end, "")
 
         # Import xml via Palo Alto API
         response = obj.get_request_pa(
@@ -178,7 +172,11 @@ def import_profile_objects(root_folder, profile_type, xpath):
         # Print out result
         result = xmltodict.parse(response)
         if result["response"]["@status"] == "success":
-            print(f"\nImported {profile_type} object.")
+            if DEBUG:
+                print(f"\nGET request sent: xpath={xpath}.\n Element={entry_element}\n")
+                print(f"\nResponse: \n{response}")
+            else:   
+                print(f"\nImported {profile_type} object.")
         else:
             # Extra logging when debugging
             if DEBUG:
@@ -187,7 +185,8 @@ def import_profile_objects(root_folder, profile_type, xpath):
             else:
                 print(f"\nError importing {profile_type} object.")
 
-    if not found:
+    # Done looping through files, check if anything was found.
+    if not everfound:
         print(f"Object {entry_name} not found in {new_root}!")
         
 

@@ -1,0 +1,2 @@
+
+<profile-group><entry name="gSecurityProfileGroup"><virus><member>default</member></virus><spyware><member>default</member></spyware><vulnerability><member>default</member></vulnerability><file-blocking><member>basic file blocking</member></file-blocking><wildfire-analysis><member>default</member></wildfire-analysis><url-filtering><member>gURL Filter</member></url-filtering></entry></profile-group>

@@ -1,0 +1,2 @@
+
+<wildfire-analysis><entry name="wildfire-1"><rules><entry name="default"><application><member>any</member></application><file-type><member>any</member></file-type><direction>both</direction><analysis>public-cloud</analysis></entry></rules></entry></wildfire-analysis>
