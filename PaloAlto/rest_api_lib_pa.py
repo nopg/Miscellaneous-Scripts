@@ -46,7 +46,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-DEBUG = False
+DEBUG = True
 
 # REST API Class for use with Palo Alto API
 class rest_api_lib_pa:
