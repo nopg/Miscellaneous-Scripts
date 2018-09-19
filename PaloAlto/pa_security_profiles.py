@@ -27,6 +27,7 @@ Cautions:
     - Will export ONLY COMMITTED CHANGES.
         To export candidate configuration change action="show" to action="get" (not recommended)
     - Will NOT commit any imported objects, this must be done manually.
+    
 
 Legal:
     THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
@@ -41,6 +42,7 @@ Legal:
 import getpass
 import sys
 import os
+import lxml.etree
 
 import xmltodict
 import rest_api_lib_pa as pa
@@ -49,7 +51,7 @@ import rest_api_lib_pa as pa
 # fmt: off
 # Global Variables, debug & xpath location for each profile type
 # ENTRY = + "/entry[@name='alert-only']"
-DEBUG = False
+DEBUG = True
 ANTIVIRUS =     "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
 SPYWARE =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
 SPYWARESIG =    "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/spyware"
@@ -62,6 +64,7 @@ WILDFIRE =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 DATAFILTERING = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-filtering"
 DATAPATTERN =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-objects"
 DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/dos-protection"
+PROFILEGROUP =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profile-group"
 # fmt: on
 
 # Read all .xml files found in folder_name, return list containing all the output
@@ -88,9 +91,14 @@ def write_data_output(temp, filename):
 
     # Because XML: remove <response/><result/> and <?xml> tags
     # Using get().get() won't cause exception on KeyError
-    data = temp.get("response").get("result")
+    # Check for various response type and ensure xml is written consistently
+    data = temp.get("response")
     if data:
-        data = xmltodict.unparse(data)
+        data = temp.get("response").get("result")
+        if data:
+            data = xmltodict.unparse(data)
+        else:
+            data = xmltodict.unparse(temp)    
     else:
         data = xmltodict.unparse(temp)
     data = data.replace('<?xml version="1.0" encoding="utf-8"?>', "")
@@ -102,22 +110,41 @@ def write_data_output(temp, filename):
 # Imports profiles into Palo Alto API based on profile type
 def import_profile_objects(root_folder, profile_type, xpath):
 
-    # Rename 'virus' folder to 'antivirus' (just makes more sense)
-    if profile_type == "virus":
-        new_root = f"{root_folder}/antivirus"
+    # Add subfolder to path
+    new_root = f"{root_folder}/{profile_type}"
+
+    # Stupid stuff
+    index = xpath.rfind("/")
+    entry_or_profile = xpath[index:]
+    bindex = entry_or_profile.find("/entry[@name='")
+
+    if bindex == -1:
+        pass
     else:
-        new_root = f"{root_folder}/{profile_type}"
+        # Only grab files with entry name
+        entry = entry_or_profile.replace("/entry[@name='","")
+        entry = entry.replace("']","")
+
+        print("\nImport does not yet support individual entries.\n")
+        sys.exit(0)
+        
+        # TODO:
+        # find only that filename.xml?
+        # search through all xml for /entry[@name='' ?]
 
     # Gather all files, returns string containing xml
     files = grab_files_read(new_root)
 
     if not files:
         print(f"\nNo {profile_type} objects were found!")
+        return
 
     # Because: xml.
     # Create root tags (i.e. <virus>, </spyware>, etc)
     # Remove 'custom/' for custom objects
+    # API uses 'virus' instead of 'antivirus'
     formatted_profile_type = profile_type.replace("custom/", "")
+    formatted_profile_type = profile_type.replace("antivirus", "virus")
     root_tag = f"<{formatted_profile_type}>"
     root_tag_end = f"</{formatted_profile_type}>"
 
@@ -151,11 +178,10 @@ def export_profile_objects(destination_folder, profile_type, xpath):
     # remove 'custom/' out of filename for custom objects
     formatted_profile_type = profile_type.replace("custom/", "")
 
-    # Rename 'virus' folder to 'antivirus' (just makes more sense)
-    if profile_type == "virus":
-        filename = f"{destination_folder}/antivirus/antivirus-profiles.xml"
-    else:
-        filename = f"{destination_folder}/{profile_type}/{formatted_profile_type}-profiles.xml"
+    # Set filename & api string (I renamed 'virus' to antivirus for files & clarity)
+    filename = f"{destination_folder}/{profile_type}/{formatted_profile_type}-profiles.xml"
+    # API uses 'virus', antivirus just makes more sense. This switches it back for the API)
+    api_profile_type = formatted_profile_type.replace("antivirus","virus")
 
     # Export xml via Palo Alto API
     response = obj.get_request_pa(call_type="config", action="show", xpath=xpath)
@@ -163,8 +189,23 @@ def export_profile_objects(destination_folder, profile_type, xpath):
     # Print out result
     result = xmltodict.parse(response)
     if result["response"]["@status"] == "success":
-        entries = result["response"]["result"][formatted_profile_type]
-        if entries:
+        
+        # Check if one specific was searched or the entire list
+        entry = result.get("response").get("result").get("entry")
+        entries = result.get("response").get("result").get(api_profile_type)
+
+        if entry:
+            # Set filename to entry name
+            object_name = result["response"]["result"]["entry"]["@name"]
+            filename = f"{destination_folder}/{profile_type}/{object_name}.xml"
+            # Add root tags (i.e. <spyware>), for clarity.
+            # API doesn't return these tags on entry-specific requests
+            temp = result["response"]["result"]
+            data = {api_profile_type:temp}
+            # Create file
+            write_data_output(data, filename)
+            print(f"\nExported {profile_type} object.")
+        elif entries:
             # Create file
             write_data_output(result, filename)
             print(f"\nExported {profile_type} object.")
@@ -185,7 +226,7 @@ def export_profile_objects(destination_folder, profile_type, xpath):
 
 
 # Main Program
-def main(profile_list, root_folder, selection):
+def main(profile_list, root_folder, selection, entry):
 
     # Organize user input
     # Expand '1' to '2,3,4,5,6,7,8,9'
@@ -204,28 +245,36 @@ def main(profile_list, root_folder, selection):
     else:
         wrapper_call = import_profile_objects
 
+    # Check if a specific object was requested
+    if entry:
+        entry = f"/entry[@name='{entry}']"
+    else:
+        entry = ""  # Ensure nothing gets added to xpath
+
     # Loop through user provided input, import each profile
     for profile in profile_list:
         if profile == "2":
-            wrapper_call(root_folder, "virus", ANTIVIRUS)
+            wrapper_call(root_folder, "antivirus", ANTIVIRUS + entry)
         elif profile == "3":
-            wrapper_call(root_folder, "custom/spyware", SPYWARESIG)
-            wrapper_call(root_folder, "spyware", SPYWARE)
+            wrapper_call(root_folder, "custom/spyware", SPYWARESIG + entry)
+            wrapper_call(root_folder, "spyware", SPYWARE + entry)
         elif profile == "4":
-            wrapper_call(root_folder, "custom/vulnerability", VULNERABLESIG)
-            wrapper_call(root_folder, "vulnerability", VULNERABILITY)
+            wrapper_call(root_folder, "custom/vulnerability", VULNERABLESIG + entry)
+            wrapper_call(root_folder, "vulnerability", VULNERABILITY + entry)
         elif profile == "5":
-            wrapper_call(root_folder, "custom/custom-url-category", URLCATEGORY)
-            wrapper_call(root_folder, "url-filtering", URLFILTERING)
+            wrapper_call(root_folder, "custom/custom-url-category", URLCATEGORY + entry)
+            wrapper_call(root_folder, "url-filtering", URLFILTERING + entry)
         elif profile == "6":
-            wrapper_call(root_folder, "file-blocking", FILEBLOCKING)
+            wrapper_call(root_folder, "file-blocking", FILEBLOCKING + entry)
         elif profile == "7":
-            wrapper_call(root_folder, "wildfire-analysis", WILDFIRE)
+            wrapper_call(root_folder, "wildfire-analysis", WILDFIRE + entry)
         elif profile == "8":
-            wrapper_call(root_folder, "custom/data-objects", DATAPATTERN)
-            wrapper_call(root_folder, "data-filtering", DATAFILTERING)
+            wrapper_call(root_folder, "custom/data-objects", DATAPATTERN + entry)
+            wrapper_call(root_folder, "data-filtering", DATAFILTERING + entry)
         elif profile == "9":
-            wrapper_call(root_folder, "dos-protection", DDOS)
+            wrapper_call(root_folder, "dos-protection", DDOS + entry)
+        elif profile == "A" or profile == "a":
+            wrapper_call(root_folder, "profile-group", PROFILEGROUP + entry)
         else:
             print("\nHuh?. You entered {}\n".format(profile))
             continue
@@ -276,16 +325,27 @@ if __name__ == "__main__":
         8) Data Filtering
         9) DoS Protection
 
+        A) Profile Object Groups
+
         For multiple enter: ('1' or 2-4' or '2,5,7')
 
         Enter Selection: """
     )
 
+    if len(selection) == 1 and selection != '1':
+        entry = input(
+            """\n
+            (Blank line for all)
+            Enter a specific object name: """
+        )
+    else:
+        entry = ""
+
     # Turn input into list, remove commas
     profile_list = list(selection.replace(",", ""))
 
     # Run program
-    main(profile_list, root_folder, export_or_import)
+    main(profile_list, root_folder, export_or_import, entry)
 
     # Done!
     print("\n\nComplete!\n")
