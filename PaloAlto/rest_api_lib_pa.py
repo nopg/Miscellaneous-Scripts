@@ -82,7 +82,10 @@ class rest_api_lib_pa:
         # Set successful session and key
         self.session[pa_ip] = sess
         temp = xmltodict.parse(login_response.text)
-        self.key = temp["response"]["result"]["key"]
+        self.key = temp.get("response").get("result").get("key")
+        if not self.key:
+            print(f"Login Failed: Response=\n{temp}")
+            sys.exit(0)
 
     # GET request for Palo Alto API
     def get_request_pa(

@@ -132,6 +132,7 @@ def import_profile_objects(root_folder, profile_type, xpath):
     root_tag = f"<{api_profile_type}>"
     root_tag_end = f"</{api_profile_type}>"
 
+    found = False
     for xml in files:
 
         # Check xpath to see if we are searching for a specific object name
@@ -141,37 +142,32 @@ def import_profile_objects(root_folder, profile_type, xpath):
 
         if entry_found == -1: 
             # Not Found, continue as normal and grab all objects
+            entry_element = xml
+            found = True
             pass
         else:
-            print("Imports not yet supported for specific objects")
-            sys.exit(0)
             # Only grab entries matching name specified
             entry_name = entry_or_profile.replace("/entry[@name='","")
             entry_name = entry_name.replace("']","")
 
-            # XMLFu to find only the right entry
+            # Brute force XMLFu to find only the right entry
+            # There is definitely a better way
             xmltree = etree.parse(StringIO(xml))
-            found = False
             for entry in xmltree.getroot():
                 if entry.attrib["name"] == entry_name:
                     found = True
                     entry_element = etree.tostring(entry).decode()
-
                     temp = xmltodict.parse(entry_element)
                     temp = temp["entry"]
-                    #temp = {api_profile_type:temp}
-                    print(temp)
+                    temp.pop("@name")
                     entry_element = xmltodict.unparse(temp)
                     entry_element = entry_element.replace('<?xml version="1.0" encoding="utf-8"?>', "")
-                    print(entry_element)
-                print(entry.attrib)
             if not found:
-                print(f"Object {entry_name} not found in {new_root}!")
                 continue
 
         # Because: xml.
         # Remove root tag (i.e. <virus>, </spyware>, etc)
-        entry_element = xml.replace(root_tag, "")
+        entry_element = entry_element.replace(root_tag, "")
         entry_element = entry_element.replace(root_tag_end, "")
 
         # Import xml via Palo Alto API
@@ -191,6 +187,9 @@ def import_profile_objects(root_folder, profile_type, xpath):
             else:
                 print(f"\nError importing {profile_type} object.")
 
+    if not found:
+        print(f"Object {entry_name} not found in {new_root}!")
+        
 
 # Grab profile from Palo Alto API based on profile type
 def export_profile_objects(destination_folder, profile_type, xpath):
