@@ -15,7 +15,7 @@ Author:
     Docstring stolen from Devin Callaway
 
 Tested:
-    Tested on macos 10.12.3
+    Tested on macos 10.12.3, Windows 10
     Python: 3.6.2
     PA VM100
 
@@ -44,9 +44,9 @@ import getpass
 import sys
 import os
 from io import StringIO
-from lxml import etree
 import json
 
+from lxml import etree
 import xmltodict
 import rest_api_lib_pa as pa
 
