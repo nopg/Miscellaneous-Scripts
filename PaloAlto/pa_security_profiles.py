@@ -42,7 +42,9 @@ Legal:
 import getpass
 import sys
 import os
-import lxml.etree
+from io import StringIO
+from lxml import etree
+import json
 
 import xmltodict
 import rest_api_lib_pa as pa
@@ -66,6 +68,7 @@ DATAPATTERN =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry
 DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/dos-protection"
 PROFILEGROUP =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profile-group"
 # fmt: on
+
 
 # Read all .xml files found in folder_name, return list containing all the output
 def grab_files_read(folder_name):
@@ -113,30 +116,11 @@ def import_profile_objects(root_folder, profile_type, xpath):
     # Add subfolder to path
     new_root = f"{root_folder}/{profile_type}"
 
-    # Stupid stuff
-    index = xpath.rfind("/")
-    entry_or_profile = xpath[index:]
-    bindex = entry_or_profile.find("/entry[@name='")
-
-    if bindex == -1:
-        pass
-    else:
-        # Only grab files with entry name
-        entry = entry_or_profile.replace("/entry[@name='","")
-        entry = entry.replace("']","")
-
-        print("\nImport does not yet support individual entries.\n")
-        sys.exit(0)
-        
-        # TODO:
-        # find only that filename.xml?
-        # search through all xml for /entry[@name='' ?]
-
     # Gather all files, returns string containing xml
     files = grab_files_read(new_root)
 
     if not files:
-        print(f"\nNo {profile_type} objects were found!")
+        print(f"\nNo {profile_type} objects were found in {new_root}!")
         return
 
     # Because: xml.
@@ -144,11 +128,47 @@ def import_profile_objects(root_folder, profile_type, xpath):
     # Remove 'custom/' for custom objects
     # API uses 'virus' instead of 'antivirus'
     formatted_profile_type = profile_type.replace("custom/", "")
-    formatted_profile_type = profile_type.replace("antivirus", "virus")
-    root_tag = f"<{formatted_profile_type}>"
-    root_tag_end = f"</{formatted_profile_type}>"
+    api_profile_type = formatted_profile_type.replace("antivirus", "virus")
+    root_tag = f"<{api_profile_type}>"
+    root_tag_end = f"</{api_profile_type}>"
 
     for xml in files:
+
+        # Check xpath to see if we are searching for a specific object name
+        index = xpath.rfind("/")    # Find last section of xpath
+        entry_or_profile = xpath[index:]
+        entry_found = entry_or_profile.find("/entry[@name='")    
+
+        if entry_found == -1: 
+            # Not Found, continue as normal and grab all objects
+            pass
+        else:
+            print("Imports not yet supported for specific objects")
+            sys.exit(0)
+            # Only grab entries matching name specified
+            entry_name = entry_or_profile.replace("/entry[@name='","")
+            entry_name = entry_name.replace("']","")
+
+            # XMLFu to find only the right entry
+            xmltree = etree.parse(StringIO(xml))
+            found = False
+            for entry in xmltree.getroot():
+                if entry.attrib["name"] == entry_name:
+                    found = True
+                    entry_element = etree.tostring(entry).decode()
+
+                    temp = xmltodict.parse(entry_element)
+                    temp = temp["entry"]
+                    #temp = {api_profile_type:temp}
+                    print(temp)
+                    entry_element = xmltodict.unparse(temp)
+                    entry_element = entry_element.replace('<?xml version="1.0" encoding="utf-8"?>', "")
+                    print(entry_element)
+                print(entry.attrib)
+            if not found:
+                print(f"Object {entry_name} not found in {new_root}!")
+                continue
+
         # Because: xml.
         # Remove root tag (i.e. <virus>, </spyware>, etc)
         entry_element = xml.replace(root_tag, "")
@@ -166,7 +186,7 @@ def import_profile_objects(root_folder, profile_type, xpath):
         else:
             # Extra logging when debugging
             if DEBUG:
-                print(f"\nGET request sent: xpath={xpath}.\n element={entry_element}\n")
+                print(f"\nGET request sent: xpath={xpath}.\n Element={entry_element}\n")
                 print(f"\nResponse: \n{response}")
             else:
                 print(f"\nError importing {profile_type} object.")
@@ -229,9 +249,10 @@ def export_profile_objects(destination_folder, profile_type, xpath):
 def main(profile_list, root_folder, selection, entry):
 
     # Organize user input
-    # Expand '1' to '2,3,4,5,6,7,8,9'
+    # Expand '1' to '2,3,4,5,6,7,8,9,A'
     if "1" in profile_list:
         profile_list = [str(x) for x in range(2, 10)]
+        profile_list.append('A')
     # Expand '2-5' to '2,3,4,5'
     if "-" in profile_list:
         start = int(profile_list[0])
