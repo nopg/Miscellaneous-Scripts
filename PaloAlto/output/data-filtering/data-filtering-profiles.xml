@@ -1,2 +1,0 @@
-
-<data-filtering><entry name="test-filter"><rules><entry name="rule0"><application><member>any</member></application><file-type><member>any</member></file-type><direction>both</direction><alert-threshold>0</alert-threshold><block-threshold>0</block-threshold><data-object>test-pattern</data-object><log-severity>informational</log-severity></entry></rules><data-capture>yes</data-capture></entry></data-filtering>
