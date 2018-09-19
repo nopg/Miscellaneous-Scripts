@@ -158,6 +158,9 @@ def import_profile_objects(root_folder, profile_type, xpath):
             xmltree = etree.parse(StringIO(xml))
             for entry in xmltree.getroot():
                 if entry.attrib["name"] == entry_name:
+                    if everfound == True:
+                        print(f"Error: multiple objects found with the name {entry_name}.")
+                        sys.exit(0)
                     everfound = iterfound = True
                     entry_element = etree.tostring(entry[0]).decode()
             if not iterfound:
