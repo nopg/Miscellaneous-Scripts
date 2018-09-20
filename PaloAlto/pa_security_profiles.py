@@ -43,7 +43,6 @@ Legal:
 import getpass
 import sys
 import os
-from io import StringIO
 import json
 
 from lxml import etree
@@ -155,7 +154,7 @@ def import_profile_objects(root_folder, profile_type, xpath):
             # LXML to loop through each main <entry>, find the one with "name" matching entry_name and then
             # Assigning the correct string to entry_element. This removes the root <entry> tag by using entry[0]  
             # API expects the /entry[@name='']> in the xpath, but NOT in the actual import url (xml &element=<../>)
-            xmltree = etree.parse(StringIO(xml))
+            xmltree = etree.XML(xml)
             for entry in xmltree.getroot():
                 if entry.attrib["name"] == entry_name:
                     if everfound == True:
