@@ -270,8 +270,6 @@ def main(profile_list, root_folder, selection, entry):
     # Check if a specific object was requested
     if entry:
         entry = f"/entry[@name='{entry}']"
-    else:
-        entry = ""  # Ensure nothing gets added to xpath
 
     # Loop through user provided input, import each profile
     for profile in profile_list:
@@ -334,37 +332,44 @@ if __name__ == "__main__":
         Enter 1 or 2: """
         )
 
-    selection = input(
-        """\nWhat type of security profiles to import?
+    allowed = list("123456789a") # Allowed user input
+    incorrect_input = True
+    while(incorrect_input):
+        incorrect_input = False
+        selection = input(
+            """\nWhat type of security profiles to import?
 
-        1) ALL Profiles
-        2) Antivirus
-        3) Anti-Spyware
-        4) Vulnerability Protection
-        5) URL Filtering
-        6) File Blocking
-        7) Wildfire Analysis
-        8) Data Filtering
-        9) DoS Protection
+            1) ALL Profiles
+            2) Antivirus
+            3) Anti-Spyware
+            4) Vulnerability Protection
+            5) URL Filtering
+            6) File Blocking
+            7) Wildfire Analysis
+            8) Data Filtering
+            9) DoS Protection
 
-        A) Profile Object Groups
+            A) Profile Object Groups
 
-        For multiple enter: ('1' or 2-4' or '2,5,7')
+            For multiple enter: ('1' or 2-4' or '2,5,7')
 
-        Enter Selection: """
-    )
+            Enter Selection: """
+        )
+        # Turn input into list, remove commas
+        profile_list = list(selection.replace(",", ""))
 
-    if len(selection) == 1 and selection != '1':
+        for value in selection:
+            if value not in allowed:
+                incorrect_input = True
+
+    if len(profile_list) == 1 and profile_list != ['1']:
         entry = input(
             """\n
-            (Blank line for all)
+            (Blank line for all objects)
             Enter a specific object name: """
         )
     else:
         entry = ""
-
-    # Turn input into list, remove commas
-    profile_list = list(selection.replace(",", ""))
 
     # Run program
     main(profile_list, root_folder, export_or_import, entry)
