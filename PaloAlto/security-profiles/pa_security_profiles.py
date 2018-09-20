@@ -101,7 +101,7 @@ def write_data_output(temp, filename):
         if data:
             data = xmltodict.unparse(data)
         else:
-            data = xmltodict.unparse(temp)    
+            data = xmltodict.unparse(temp)
     else:
         data = xmltodict.unparse(temp)
     data = data.replace('<?xml version="1.0" encoding="utf-8"?>', "")
@@ -132,19 +132,19 @@ def import_profile_objects(root_folder, profile_type, xpath):
     root_tag_end = f"</{api_profile_type}>"
 
     # Check xpath to see if we are searching for a specific object name
-    index = xpath.rfind("/")    # Find last section of xpath
+    index = xpath.rfind("/")  # Find last section of xpath
     entry_or_profile = xpath[index:]
-    entry_found = entry_or_profile.find("/entry[@name='") 
+    entry_found = entry_or_profile.find("/entry[@name='")
     # Find the actual entry name
     if entry_found != -1:
-        entry_name = entry_or_profile.replace("/entry[@name='","")
-        entry_name = entry_name.replace("']","")
+        entry_name = entry_or_profile.replace("/entry[@name='", "")
+        entry_name = entry_name.replace("']", "")
 
     everfound = False
     for xml in files:
         iterfound = False
         # Search for specific entry, if -1 we are grabbing all entries
-        if entry_found == -1: 
+        if entry_found == -1:
             # Not Found, continue as normal and grab all objects
             # Remove root tag (i.e. <virus>, </spyware>, etc)
             entry_element = xml.replace(root_tag, "")
@@ -152,13 +152,15 @@ def import_profile_objects(root_folder, profile_type, xpath):
             everfound = True
         else:
             # LXML to loop through each main <entry>, find the one with "name" matching entry_name and then
-            # Assigning the correct string to entry_element. This removes the root <entry> tag by using entry[0]  
+            # Assigning the correct string to entry_element. This removes the root <entry> tag by using entry[0]
             # API expects the /entry[@name='']> in the xpath, but NOT in the actual import url (xml &element=<../>)
             xmltree = etree.XML(xml)
             for entry in xmltree.getroot():
                 if entry.attrib["name"] == entry_name:
                     if everfound == True:
-                        print(f"Error: multiple objects found with the name {entry_name}.")
+                        print(
+                            f"Error: multiple objects found with the name {entry_name}."
+                        )
                         sys.exit(0)
                     everfound = iterfound = True
                     entry_element = etree.tostring(entry[0]).decode()
@@ -177,7 +179,7 @@ def import_profile_objects(root_folder, profile_type, xpath):
             if DEBUG:
                 print(f"\nGET request sent: xpath={xpath}.\n Element={entry_element}\n")
                 print(f"\nResponse: \n{response}")
-            else:   
+            else:
                 print(f"\nImported {profile_type} object.")
         else:
             # Extra logging when debugging
@@ -190,7 +192,7 @@ def import_profile_objects(root_folder, profile_type, xpath):
     # Done looping through files, check if anything was found.
     if not everfound:
         print(f"Object {entry_name} not found in {new_root}!")
-        
+
 
 # Grab profile from Palo Alto API based on profile type
 def export_profile_objects(destination_folder, profile_type, xpath):
@@ -199,9 +201,11 @@ def export_profile_objects(destination_folder, profile_type, xpath):
     formatted_profile_type = profile_type.replace("custom/", "")
 
     # Set filename & api string (I renamed 'virus' to antivirus for files & clarity)
-    filename = f"{destination_folder}/{profile_type}/{formatted_profile_type}-profiles.xml"
+    filename = (
+        f"{destination_folder}/{profile_type}/{formatted_profile_type}-profiles.xml"
+    )
     # API uses 'virus', antivirus just makes more sense. This switches it back for the API)
-    api_profile_type = formatted_profile_type.replace("antivirus","virus")
+    api_profile_type = formatted_profile_type.replace("antivirus", "virus")
 
     # Export xml via Palo Alto API
     response = obj.get_request_pa(call_type="config", action="show", xpath=xpath)
@@ -209,7 +213,7 @@ def export_profile_objects(destination_folder, profile_type, xpath):
     # Print out result
     result = xmltodict.parse(response)
     if result["response"]["@status"] == "success":
-        
+
         # Check if one specific was searched or the entire list
         entry = result.get("response").get("result").get("entry")
         entries = result.get("response").get("result").get(api_profile_type)
@@ -221,7 +225,7 @@ def export_profile_objects(destination_folder, profile_type, xpath):
             # Add root tags (i.e. <spyware>), for clarity.
             # API doesn't return these tags on entry-specific requests
             temp = result["response"]["result"]
-            data = {api_profile_type:temp}
+            data = {api_profile_type: temp}
             # Create file
             write_data_output(data, filename)
             print(f"\nExported {profile_type} object.")
@@ -236,7 +240,7 @@ def export_profile_objects(destination_folder, profile_type, xpath):
         if DEBUG:
             print(f"\nGET request sent: xpath={xpath}.\n")
             print(f"\nResponse: \n{response}")
-            write_data_output(result,filename)
+            write_data_output(result, filename)
             print(f"Output also written to {filename}")
         else:
             print(f"\nError exporting {profile_type} object.")
@@ -252,24 +256,24 @@ def main(profile_list, root_folder, selection, entry):
     # Expand '1' to '2,3,4,5,6,7,8,9,A'
     if "1" in profile_list:
         profile_list = [str(x) for x in range(2, 10)]
-        profile_list.append('A')
+        profile_list.append("A")
     # Expand '2-5,8-9' to '2,3,4,5,8,9'
     if "-" in profile_list:
-        dashes = [index for index,value in enumerate(profile_list) if value == '-']
+        dashes = [index for index, value in enumerate(profile_list) if value == "-"]
         remaining = profile_list
         final = []
 
         for dash in dashes:
-            predash = remaining.index("-") - 1 
-            postdash = remaining.index("-") + 1 
+            predash = remaining.index("-") - 1
+            postdash = remaining.index("-") + 1
 
             up_to_predash = [x for x in remaining[:predash]]
             final = final + up_to_predash
 
-            expanded = range( int(remaining[predash]), int(remaining[postdash]) + 1)
+            expanded = range(int(remaining[predash]), int(remaining[postdash]) + 1)
             final = final + [str(num) for num in expanded]
-            
-            remaining = remaining[postdash + 1:]
+
+            remaining = remaining[postdash + 1 :]
 
         if remaining:
             profile_list = final + remaining
@@ -343,9 +347,9 @@ if __name__ == "__main__":
         Enter 1 or 2: """
         )
 
-    allowed = list("123456789aA-") # Allowed user input
+    allowed = list("123456789aA-")  # Allowed user input
     incorrect_input = True
-    while(incorrect_input):
+    while incorrect_input:
         selection = input(
             """\nWhat type of security profiles to import?
 
@@ -372,13 +376,12 @@ if __name__ == "__main__":
                 break
             else:
                 incorrect_input = False
-        
-        temp = ''.join(selection)
-        if temp.endswith('-') or temp.startswith('-'):
+
+        temp = "".join(selection)
+        if temp.endswith("-") or temp.startswith("-"):
             incorrect_input = True
 
-
-    if len(selection) == 1 and selection != '1':
+    if len(selection) == 1 and selection != "1":
         entry = input(
             """\n
             (Blank line for all objects)
