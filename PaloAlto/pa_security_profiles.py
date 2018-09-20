@@ -282,10 +282,6 @@ def main(profile_list, root_folder, selection, entry):
     else:
         wrapper_call = import_profile_objects
 
-    # Check if a specific object was requested
-    if entry:
-        entry = f"/entry[@name='{entry}']"
-
     # Loop through user provided input, import each profile
     for profile in profile_list:
         if profile == "2":
@@ -371,28 +367,31 @@ if __name__ == "__main__":
         )
 
         for value in selection:
-            if value in allowed:
-                incorrect_input = False
-            else:
+            if value not in allowed:
                 incorrect_input = True
                 break
+            else:
+                incorrect_input = False
         
         temp = ''.join(selection)
         if temp.endswith('-') or temp.startswith('-'):
             incorrect_input = True
 
 
-    # Turn input into list, remove commas
-    profile_list = list(selection.replace(",", ""))
-
-    if len(profile_list) == 1 and profile_list != ['1']:
+    if len(selection) == 1 and selection != '1':
         entry = input(
             """\n
             (Blank line for all objects)
             Enter a specific object name: """
         )
+        # Check if a specific object was requested
+        if entry:
+            entry = f"/entry[@name='{entry}']"
     else:
         entry = ""
+
+    # Turn input into list, remove commas
+    profile_list = list(selection.replace(",", ""))
 
     # Run program
     main(profile_list, root_folder, export_or_import, entry)
