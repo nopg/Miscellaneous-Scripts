@@ -332,7 +332,7 @@ if __name__ == "__main__":
         Enter 1 or 2: """
         )
 
-    allowed = list("123456789a") # Allowed user input
+    allowed = list("123456789aA") # Allowed user input
     incorrect_input = True
     while(incorrect_input):
         incorrect_input = False
