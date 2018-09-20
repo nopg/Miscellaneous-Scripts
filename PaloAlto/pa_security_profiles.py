@@ -254,12 +254,29 @@ def main(profile_list, root_folder, selection, entry):
     if "1" in profile_list:
         profile_list = [str(x) for x in range(2, 10)]
         profile_list.append('A')
-    # Expand '2-5' to '2,3,4,5'
+    # Expand '2-5,8-9' to '2,3,4,5,8,9'
     if "-" in profile_list:
-        start = int(profile_list[0])
-        end = profile_list[-1:]
-        end = int(end[0]) + 1
-        profile_list = [str(x) for x in range(start, end)]
+        dashes = [index for index,value in enumerate(profile_list) if value == '-']
+        remaining = profile_list
+        final = []
+
+        for dash in dashes:
+            predash = remaining.index("-") - 1 
+            postdash = remaining.index("-") + 1 
+
+            up_to_predash = [x for x in remaining[:predash]]
+            final = final + up_to_predash
+
+            expanded = range( int(remaining[predash]), int(remaining[postdash]) + 1)
+            for num in expanded:
+                final = final + list(str(num))
+            
+            remaining = remaining[postdash + 1:]
+
+        if remaining:
+            profile_list = final + remaining
+        else:
+            profile_list = final
 
     # 1 = Export, 2 = Import
     if selection == "1":
@@ -332,10 +349,9 @@ if __name__ == "__main__":
         Enter 1 or 2: """
         )
 
-    allowed = list("123456789aA") # Allowed user input
+    allowed = list("123456789aA-") # Allowed user input
     incorrect_input = True
     while(incorrect_input):
-        incorrect_input = False
         selection = input(
             """\nWhat type of security profiles to import?
 
@@ -355,12 +371,21 @@ if __name__ == "__main__":
 
             Enter Selection: """
         )
-        # Turn input into list, remove commas
-        profile_list = list(selection.replace(",", ""))
 
         for value in selection:
-            if value not in allowed:
+            if value in allowed:
+                incorrect_input = False
+            else:
                 incorrect_input = True
+                break
+        
+        temp = ''.join(selection)
+        if temp.endswith('-') or temp.startswith('-'):
+            incorrect_input = True
+
+
+    # Turn input into list, remove commas
+    profile_list = list(selection.replace(",", ""))
 
     if len(profile_list) == 1 and profile_list != ['1']:
         entry = input(
