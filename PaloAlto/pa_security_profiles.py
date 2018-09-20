@@ -268,8 +268,7 @@ def main(profile_list, root_folder, selection, entry):
             final = final + up_to_predash
 
             expanded = range( int(remaining[predash]), int(remaining[postdash]) + 1)
-            for num in expanded:
-                final = final + list(str(num))
+            final = final + [str(num) for num in expanded]
             
             remaining = remaining[postdash + 1:]
 
