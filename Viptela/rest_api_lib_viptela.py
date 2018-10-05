@@ -1,4 +1,11 @@
-class rest_api_lib:
+import requests
+import sys
+import json
+
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+class rest_api_lib_viptela:
     def __init__(self, vmanage_ip, username, password):
         self.vmanage_ip = vmanage_ip
         self.session = {}
