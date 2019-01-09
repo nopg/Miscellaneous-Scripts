@@ -135,7 +135,7 @@ def main_export_device_template(obj, root_folder, template_name):
 
 def main_import_all_templates(obj, root_folder):
 
-    # GRAB DEVICE TEMPLATES, creates list containing output of each file #
+    # GRAB FEATURE TEMPLATES, creates list containing output of each file #
     feature_templates = grab_files_read(root_folder + "/feature/")
 
     for template in feature_templates:
@@ -145,6 +145,7 @@ def main_import_all_templates(obj, root_folder):
         new_id = json.loads(response)["templateId"]
         print("Imported feature template: {}".format(data["templateName"]))
 
+    # GRAB DEVICE TEMPLATES, creates list containing output of each file #
     device_templates = grab_files_read(root_folder + "/device/")
     for template in device_templates:
         data = json.loads(template)
@@ -204,11 +205,13 @@ def main_import_device_template(obj, root_folder,entry):
 
 # Main Program
 def main(selection, root_folder, entry, obj):
+    # EXPORT
     if selection == "1":
         if entry:
             main_export_device_template(obj, root_folder, entry)
         else:
             main_export_all_templates(obj, root_folder)
+    # IMPORT
     else:
         if entry:
             main_import_device_template(obj, root_folder, entry)
