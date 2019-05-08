@@ -1,4 +1,4 @@
-Value Key PORT (([a-zA-Z])\w+/\d+|mgmt\d+|Po\d+|Lo\d+|Vlan\d+|([a-zA-Z])\w+/\d+/\d+)
+Value Key PORT (\w+/\d+|([a-zA-Z])\w+/\d+/\d+)
 Value DESCRIPTION (\S+((\s\S+)+)?|\S+)
 Value STATUS (err-disabled|disabled|connected|notconnect|inactive)
 Value VLAN (\w+)

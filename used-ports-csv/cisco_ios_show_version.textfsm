@@ -1,0 +1,20 @@
+Value HOSTNAME (\S+)
+Value List PLATFORM (\S+\d\S+)
+Value VERSION (.+?)
+Value BOOT_IMAGE (\S+)
+Value List SERIAL (\S+)
+Value UPTIME (.+)
+
+Start
+  ^.*Software\s.+\),\sVersion\s${VERSION},*\s+RELEASE.*
+  ^\s*${HOSTNAME}\s+uptime\s+is\s+${UPTIME}
+  ^[sS]ystem\s+image\s+file\s+is\s+"(.*?):${BOOT_IMAGE}"
+  ^[Pp]rocessor\s+board\s+ID\s+${SERIAL}
+  ^[Cc]isco\s+${PLATFORM}.+
+  ^Switch Port -> Stack
+
+
+Stack
+  ^[Ss]ystem [Ss]erial [Nn]umber\s+:\s+${SERIAL}
+  ^[Mm]odel\s+[Nn]umber\s+:\s+${PLATFORM}\s*
+
