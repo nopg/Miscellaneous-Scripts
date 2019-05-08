@@ -60,7 +60,7 @@ def build_csv(output, filename):
     :param output: existing dictionary to be written
     :return:
     """
-    filename = configpath + "/" + filename + ".csv"
+    filename = filename + ".csv"
     print(f"Building {filename} ...",end='')
 
     headers = list(output[0].keys())
@@ -153,11 +153,11 @@ def main(fin,configpath,username,password,outputBox=None,root=None):
         # Create CSV Fields with values
         used_ports = {'Device Name': hostname, 'Model': model, 'IP Address': ip, 'Total Ports': len(int_status_formatted), 'Ports in Use/Connected': connected_ports,
                      'Disabled Ports': disabled_ports, 'Err-Disabled Ports': errdisabled_ports, "Not connected Ports": notconnect_ports, "Inactive Ports": inactive_ports,
-                      "100M Port Count": fasteth_ports, "Gigabit Port Count": gig_ports, "TenGig Port Count": tengig_ports, "t25G Ports": t25gig_ports}
+                      "100M Port Count": fasteth_ports, "Gigabit Port Count": gig_ports, "TenGig Port Count": tengig_ports, "25G Ports": t25gig_ports}
 
         # Build individual switch port status CSV, update global CSV with individual values.
         if len(int_status_formatted) > 0:
-            build_csv(int_status_formatted, used_ports["Device Name"] + '-' + str(datetime.now().microsecond) + '.log')
+            build_csv(int_status_formatted, configpath + "/" + used_ports["Device Name"] + '-' + str(datetime.now().microsecond) + '.log')
             output_csv.append(used_ports)
         else:
             print(f"Unable to find interfaces for device {hostname}")
@@ -205,10 +205,13 @@ def main(fin,configpath,username,password,outputBox=None,root=None):
         output = await gather_used_port_output(ios, ip, output_csv)
         present_output(output)
 
-
+    # Start of MAIN function
     # BUILD DEVICE LIST TO SEND INTO run_loop() #
     device_list = []
     output_csv = []
+
+    # Create the root folder and subfolder if it doesn't already exist
+    os.makedirs(configpath, exist_ok=True)
 
     for type in devices:
         if devices[type]:
@@ -229,7 +232,7 @@ def main(fin,configpath,username,password,outputBox=None,root=None):
     loop.run_until_complete(asyncio.wait(tasks))
 
     if len(successes) > 0:
-        build_csv(output_csv, "Used-Port-Inventory" )
+        build_csv(output_csv, configpath + "/Used-Port-Inventory" )
     else:
         present_output("\n*********************************\n\n")
         print("\nNot able to connect to any devices. No output has been created.\n")
@@ -273,8 +276,5 @@ if __name__ == "__main__":
     username = sys.argv[3]
 
     password = getpass.getpass("Type the password: ")
-
-    # Create the root folder and subfolder if it doesn't already exist
-    os.makedirs(configpath, exist_ok=True)
 
     main(device_file, configpath, username, password)
