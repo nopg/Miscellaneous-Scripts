@@ -1,0 +1,53 @@
+PORT,DESCRIPTION,STATUS,VLAN,DUPLEX,SPEED,TYPE
+Fa1/0/1,gESX NIC 1,connected,trunk,a-full,a-100,10/100BaseTX
+Fa1/0/2,gESX NIC 2,connected,trunk,a-full,a-100,10/100BaseTX
+Fa1/0/3,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/4,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/5,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/6,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/7,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/8,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/9,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/10,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/11,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/12,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/13,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/14,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/15,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/16,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/17,Dell iDRAC,connected,10,a-full,a-100,10/100BaseTX
+Fa1/0/18,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/19,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/20,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/21,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/22,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/23,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/24,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/25,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/26,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/27,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/28,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/29,cEdge-Branch1 g0/0,connected,211,a-full,a-100,10/100BaseTX
+Fa1/0/30,cEdge-Branch1 g0/0,connected,10,a-full,a-100,10/100BaseTX
+Fa1/0/31,cEdge-Branch2 g0/1,connected,trunk,a-full,a-100,10/100BaseTX
+Fa1/0/32,cEdge-Branch2 g0/0,connected,10,a-full,a-100,10/100BaseTX
+Fa1/0/33,,connected,10,a-full,a-100,10/100BaseTX
+Fa1/0/34,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/35,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/36,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/37,,notconnect,10,auto,auto,10/100BaseTX
+Fa1/0/38,,notconnect,10,auto,auto,10/100BaseTX
+Fa1/0/39,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/40,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/41,,notconnect,10,auto,auto,10/100BaseTX
+Fa1/0/42,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/43,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/44,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/45,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/46,,notconnect,1,auto,auto,10/100BaseTX
+Fa1/0/47,Airport Extreme LA,connected,3,a-full,a-100,10/100BaseTX
+Fa1/0/48,xfinity-modem,connected,999,a-full,a-100,10/100BaseTX
+Gi1/0/1,,notconnect,1,auto,auto,Not Present
+Gi1/0/2,,notconnect,1,auto,auto,Not Present
+Gi1/0/3,,notconnect,1,auto,auto,Not Present
+Gi1/0/4,,notconnect,1,auto,auto,Not Present

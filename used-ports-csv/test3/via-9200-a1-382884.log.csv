@@ -1,0 +1,56 @@
+PORT,DESCRIPTION,STATUS,VLAN,DUPLEX,SPEED,TYPE
+Gi1/0/1,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/2,[< ASA-AIT-5510-NE,connected,199,a-full,a-100,10/100/1000BaseTX
+Gi1/0/3,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/4,[< NimbleStorage,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/5,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/6,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/7,[< VIAFTSYN01 10.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/8,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/9,[< AS400 10.2.20.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/10,[< AS400 10.2.20.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/11,[< Synology NAS Li,connected,101,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/12,[< Synology NAS Li,connected,101,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/13,[< VIAFTSYN02 10.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/14,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/15,[< UCS FI-A Manage,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/16,[< UCS FI-B Manage,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/17,[< EMC VNX Managem,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/18,[< EMC VNX Managem,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/19,[< ASA 5555 WEB Et,connected,2,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/20,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/21,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/22,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/23,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/24,,disabled,1,auto,auto,10/100/1000BaseTX
+Te1/1/1,[< via-9500-a1 - T,connected,trunk,full,10G,SFP-10GBase-CX1
+Te1/1/2,[< via-9500-a2 - T,connected,trunk,full,10G,SFP-10GBase-CX1
+Te1/1/3,,disabled,1,auto,auto,unknown
+Te1/1/4,,disabled,1,auto,auto,unknown
+Gi2/0/1,[Thow TEMP],notconnect,20,auto,auto,10/100/1000BaseTX
+Gi2/0/2,[< AS400 10.2.20.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/3,[< C3750-AIT-DMZ.,connected,101,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/4,[< NimbleStorage,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/5,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/6,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/7,[< VIAFTSYN01 10.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/8,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/9,[< AS400 10.2.20.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/10,[< AS400 10.2.20.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/11,[< Synology NAS Li,connected,101,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/12,[< Synology NAS Li,connected,101,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/13,[< VIAFTSYN02 10.2,connected,20,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/14,[< C3750-Via-MGT 1,connected,trunk,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/15,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/17,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/18,[< NimbleStorage-O,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/19,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/20,[< PureStorage,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/21,[< PureStorage,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/22,[< PureStorage,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/23,[< PureStorage,connected,120,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/24,[< NimbleStorage-O,connected,120,a-full,a-1000,10/100/1000BaseTX
+Te2/1/1,[< via-9500-a1 - T,connected,trunk,full,10G,SFP-10GBase-CX1
+Te2/1/2,[< via-9500-a2 - T,connected,trunk,full,10G,SFP-10GBase-CX1
+Te2/1/3,,notconnect,1,auto,auto,unknown
+Te2/1/4,,notconnect,1,auto,auto,unknown

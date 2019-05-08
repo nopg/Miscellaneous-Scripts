@@ -1,0 +1,57 @@
+PORT,DESCRIPTION,STATUS,VLAN,DUPLEX,SPEED,TYPE
+Gi1/0/1,[< switch3925-1_G0,connected,299,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/2,[< ASR-DMVPN-G0_0_,connected,299,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/3,[< asa5555-switch-,connected,299,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/4,[<asa5515-switch-v,connected,299,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/5,TEMP REMOVE ME,notconnect,220,auto,auto,10/100/1000BaseTX
+Gi1/0/6,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/7,[< SWITCH-C3560-48,connected,220,a-full,a-100,10/100/1000BaseTX
+Gi1/0/8,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/9,[< NIMBLE,connected,220,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/10,[< NIMBLE-OUT-OF-B,connected,220,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/11,[< Synology NA Lin,connected,221,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/12,[< Synology NA Lin,connected,221,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/13,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/14,[< SWITCH-FI6296-1,connected,220,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/15,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/16,[< SWITCH-FI6296-1,connected,220,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/17,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/18,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/19,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/20,[< SYNOLOGY SWITCH,connected,220,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/21,[< CUBE-1,connected,210,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/22,[< CUBE-2,connected,210,a-full,a-1000,10/100/1000BaseTX
+Gi1/0/23,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi1/0/24,[< NAP07-FastFax,connected,210,a-full,a-100,10/100/1000BaseTX
+Te1/1/1,[< switch-9500-a1,connected,trunk,full,10G,SFP-10GBase-CX1
+Te1/1/2,[< switch-9500-a2,connected,trunk,full,10G,SFP-10GBase-CX1
+Te1/1/3,,disabled,1,auto,auto,unknown
+Te1/1/4,,disabled,1,auto,auto,unknown
+Gi2/0/1,[< CDK-4331-G_0_0-,connected,299,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/2,[< switch3925-2_G0,connected,299,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/3,,notconnect,220,auto,auto,10/100/1000BaseTX
+Gi2/0/4,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/5,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/6,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/7,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/8,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/9,[< NIMBLE,connected,220,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/10,[< NIMBLE-OUT-OF-B,connected,220,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/11,[< Synology NA Lin,connected,221,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/12,[< Synology NA Lin,connected,221,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/13,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/14,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/15,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/16,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/17,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/18,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/19,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/20,[< SYNOLOGY SWITCH,connected,220,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/21,[< CUBE-1,connected,210,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/22,[< CUBE-2,connected,210,a-full,a-1000,10/100/1000BaseTX
+Gi2/0/23,,disabled,1,auto,auto,10/100/1000BaseTX
+Gi2/0/24,,disabled,1,auto,auto,10/100/1000BaseTX
+Te2/1/1,[< switch-9500-a1,connected,trunk,full,10G,SFP-10GBase-CX1
+Te2/1/2,[< switch-9500-a2,connected,trunk,full,10G,SFP-10GBase-CX1
+Te2/1/3,,disabled,1,auto,auto,unknown
+Te2/1/4,,disabled,1,auto,auto,unknown

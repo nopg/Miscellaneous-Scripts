@@ -1,0 +1,9 @@
+---
+# List device ip/fqdn's in each section, only need to specify the types in use #
+# Defaults to SSH unless using the TELNET section #
+IOS:
+  - 10.15.1.1 # EASTGATE
+  - 10.2.120.1 # via-9500-a1
+  - 10.2.120.18 # via-9200-a1
+  - 10.2.220.17 # switch-9500-a1
+  - 10.2.220.18 # switch-9200-a1

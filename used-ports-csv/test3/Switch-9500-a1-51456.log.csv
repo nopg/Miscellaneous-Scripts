@@ -1,0 +1,105 @@
+PORT,DESCRIPTION,STATUS,VLAN,DUPLEX,SPEED,TYPE
+Twe1/0/1,[< via-9500-a1 - T,notconnect,1,auto,auto,unknown
+Twe1/0/2,[< Zayo-10Gb-Dark-,connected,trunk,full,10G,SFP-10GBase-ER
+Twe1/0/3,[< Arville Rebuild,connected,routed,full,1000,1000BaseLX SFP
+Twe1/0/4,[< Masergy[PRI]-CI,connected,routed,full,1000,1000BaseLX SFP
+Twe1/0/5,[< switch-9200-a1,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe1/0/6,[< switch-9200-a2,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe1/0/7,[< SWITCH-MDS-A mg,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/8,[< SWITCH-PURE-MGM,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/9,[< WindstreamVeloC,connected,107,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/10,[< WindstreamVeloC,connected,107,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/11,,disabled,routed,auto,auto,unknown
+Twe1/0/12,,disabled,routed,auto,auto,unknown
+Twe1/0/13,,disabled,routed,auto,auto,unknown
+Twe1/0/14,,disabled,routed,auto,auto,unknown
+Twe1/0/15,,disabled,220,auto,auto,
+Twe1/0/16,,disabled,routed,auto,auto,unknown
+Twe1/0/17,[< ASR-DMVPN-G0_0_,connected,routed,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/18,[< ASA5555-Interne,connected,routed,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/19,[< ASA5515-VPN-ins,connected,routed,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/20,,disabled,routed,auto,auto,unknown
+Twe1/0/21,[< 3850 Uplink REM,notconnect,1,auto,auto,
+Twe1/0/22,,disabled,routed,auto,auto,unknown
+Twe1/0/23,,disabled,routed,auto,auto,unknown
+Twe1/0/24,,disabled,routed,auto,auto,unknown
+Twe1/0/25,[< CDK Transit,connected,routed,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/26,,disabled,routed,auto,auto,unknown
+Twe1/0/27,[< ForcePoint Serv,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/28,[< ForcePoint Serv,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/29,[< EMC DataDomain,connected,221,full,10G,SFP-10GBase-AOC5M
+Twe1/0/30,[< EMC Avamar 3.26,connected,221,full,10G,SFP-10GBase-CU5M
+Twe1/0/31,[< SWITCH-FI6296-1,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe1/0/32,[< SWITCH-FI6296-1,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe1/0/33,,disabled,routed,auto,auto,unknown
+Twe1/0/34,,disabled,routed,auto,auto,unknown
+Twe1/0/35,,disabled,routed,auto,auto,unknown
+Twe1/0/36,,disabled,routed,auto,auto,unknown
+Twe1/0/37,,disabled,routed,auto,auto,unknown
+Twe1/0/38,,disabled,routed,auto,auto,unknown
+Twe1/0/39,,disabled,routed,auto,auto,unknown
+Twe1/0/40,,disabled,routed,auto,auto,unknown
+Twe1/0/41,,disabled,routed,auto,auto,unknown
+Twe1/0/42,,disabled,routed,auto,auto,unknown
+Twe1/0/43,,disabled,routed,auto,auto,unknown
+Twe1/0/44,,disabled,routed,auto,auto,unknown
+Twe1/0/45,[< switch-9500-a2,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/46,[< switch-9200-a1,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/47,,notconnect,routed,full,10G,
+Twe1/0/48,,notconnect,routed,auto,auto,unknown
+Hu1/0/49,,connected,4094,full,40G,QSFP 40G SR BD SFP
+Hu1/0/50,,connected,4094,full,40G,QSFP 40G SR BD SFP
+Hu1/0/51,[< via-9500-a1 - H,connected,trunk,full,40G,QSFP 40G LR4 SFP
+Hu1/0/52,,disabled,routed,auto,auto,unknown
+Twe2/0/1,,disabled,routed,auto,auto,unknown
+Twe2/0/2,[< Cox-Lightwave-3,connected,trunk,full,10G,SFP-10GBase-LR
+Twe2/0/3,,disabled,routed,auto,auto,unknown
+Twe2/0/4,[< Masergy[SEC]-CI,connected,routed,full,1000,1000BaseLX SFP
+Twe2/0/5,[< switch-9200-a1,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe2/0/6,[< switch-9200-a2,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe2/0/7,[< SWITCH-MDS-B mg,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/8,[< SWITCH-PURE-MGM,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/9,[< WindstreamVeloC,connected,107,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/10,[< WindstreamVeloC,notconnect,107,auto,auto,10/100/1000BaseTX SFP
+Twe2/0/11,,disabled,routed,auto,auto,unknown
+Twe2/0/12,,disabled,routed,auto,auto,unknown
+Twe2/0/13,,disabled,routed,auto,auto,unknown
+Twe2/0/14,,disabled,routed,auto,auto,unknown
+Twe2/0/15,,disabled,routed,auto,auto,unknown
+Twe2/0/16,,disabled,routed,auto,auto,unknown
+Twe2/0/17,[< ASR-DMVPN-G0_0_,connected,routed,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/18,[< asa5555-DMZ-G0_,connected,198,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/19,,disabled,routed,auto,auto,
+Twe2/0/20,,disabled,routed,auto,auto,unknown
+Twe2/0/21,[< 3850 Uplink REM,notconnect,1,auto,auto,
+Twe2/0/22,,disabled,routed,auto,auto,unknown
+Twe2/0/23,,disabled,routed,auto,auto,unknown
+Twe2/0/24,,disabled,routed,auto,auto,unknown
+Twe2/0/25,[< MRN-Zayo-1Gb-Da,connected,trunk,full,1000,1000BaseZX SFP
+Twe2/0/26,,disabled,routed,auto,auto,unknown
+Twe2/0/27,[< ForcePoint Serv,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/28,[< ForcePoint Serv,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/29,[< EMC DataDomain,connected,221,full,10G,SFP-10GBase-AOC5M
+Twe2/0/30,[< EMC Avamar 3.26,connected,221,full,10G,SFP-10GBase-CU5M
+Twe2/0/31,[< SWITCH-FI6296-1,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe2/0/32,[< SWITCH-FI6296-1,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe2/0/33,,disabled,routed,auto,auto,unknown
+Twe2/0/34,,disabled,routed,auto,auto,unknown
+Twe2/0/35,,disabled,routed,auto,auto,unknown
+Twe2/0/36,,disabled,routed,auto,auto,unknown
+Twe2/0/37,,disabled,routed,auto,auto,unknown
+Twe2/0/38,,disabled,routed,auto,auto,unknown
+Twe2/0/39,,disabled,routed,auto,auto,unknown
+Twe2/0/40,,disabled,routed,auto,auto,unknown
+Twe2/0/41,,disabled,routed,auto,auto,unknown
+Twe2/0/42,,disabled,routed,auto,auto,unknown
+Twe2/0/43,,disabled,routed,auto,auto,unknown
+Twe2/0/44,,disabled,routed,auto,auto,unknown
+Twe2/0/45,[< switch-9500-a1,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/46,[< switch-9200-a2,connected,220,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/47,,notconnect,routed,full,10G,
+Twe2/0/48,,notconnect,routed,auto,auto,unknown
+Hu2/0/49,,connected,4094,full,40G,QSFP 40G SR BD SFP
+Hu2/0/50,,connected,4094,full,40G,QSFP 40G SR BD SFP
+Hu2/0/51,,notconnect,routed,auto,auto,unknown
+Hu2/0/52,,notconnect,routed,auto,auto,unknown

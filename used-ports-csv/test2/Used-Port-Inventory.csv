@@ -1,0 +1,3 @@
+Device Name,Model,IP Address,Total Ports,Ports in Use/Connected,Disabled Ports,Err-Disabled Ports,Not connected Ports,Inactive Ports,100M Port Count,Gigabit Port Count,TenGig Port Count
+g-3750sw,['WS-C3750-48TS'],192.168.77.1,52,10,0,0,42,0,10,0,0
+g-3750sw,['WS-C3750-48TS'],192.168.78.1,52,10,0,0,42,0,10,0,0

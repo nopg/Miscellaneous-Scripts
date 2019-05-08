@@ -1,0 +1,101 @@
+PORT,DESCRIPTION,STATUS,VLAN,DUPLEX,SPEED,TYPE
+Twe1/0/1,[< switch-9500-a1,notconnect,1,auto,auto,unknown
+Twe1/0/2,[< ViaWestAIT-Mine,connected,trunk,full,10G,SFP-10GBase-ER
+Twe1/0/3,[< ViaWestAIT-Mine,connected,trunk,full,10G,SFP-10GBase-ER
+Twe1/0/4,,disabled,routed,auto,auto,unknown
+Twe1/0/7,,disabled,routed,auto,auto,unknown
+Twe1/0/8,,disabled,routed,auto,auto,unknown
+Twe1/0/9,,disabled,routed,auto,auto,unknown
+Twe1/0/10,,disabled,routed,auto,auto,unknown
+Twe1/0/11,,disabled,routed,auto,auto,unknown
+Twe1/0/12,,disabled,routed,auto,auto,unknown
+Twe1/0/13,,disabled,routed,auto,auto,unknown
+Twe1/0/14,,disabled,routed,auto,auto,unknown
+Twe1/0/15,,disabled,routed,auto,auto,unknown
+Twe1/0/16,[< ASA-AIT-5510-NE,connected,routed,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/17,[> EMC DataDomain,connected,101,full,10G,SFP-10GBase-CU5M
+Twe1/0/18,[< EMC Avamar 3.26,connected,101,full,10G,SFP-10GBase-CU5M
+Twe1/0/19,,disabled,routed,auto,auto,unknown
+Twe1/0/20,,disabled,routed,auto,auto,unknown
+Twe1/0/21,,disabled,routed,auto,auto,unknown
+Twe1/0/22,,disabled,routed,auto,auto,unknown
+Twe1/0/23,,disabled,routed,auto,auto,unknown
+Twe1/0/24,,disabled,routed,auto,auto,unknown
+Twe1/0/25,,disabled,routed,auto,auto,unknown
+Twe1/0/26,,disabled,routed,auto,auto,unknown
+Twe1/0/27,[< C3750E-24TS-AIT,notconnect,1,auto,auto,10/100/1000BaseTX SFP
+Twe1/0/28,[< C3750E-24TS-AIT,notconnect,1,auto,auto,10/100/1000BaseTX SFP
+Twe1/0/29,[< C3750E-24TS-AIT,notconnect,1,auto,auto,10/100/1000BaseTX SFP
+Twe1/0/30,[< C3750E-24TS-AIT,notconnect,1,auto,auto,10/100/1000BaseTX SFP
+Twe1/0/31,[< VIAWEST-FI6296-,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe1/0/32,[< VIAWEST-FI6296-,connected,trunk,full,10G,SFP-10GBase-CU3M
+Twe1/0/33,,disabled,routed,auto,auto,unknown
+Twe1/0/34,,disabled,routed,auto,auto,unknown
+Twe1/0/35,,disabled,routed,auto,auto,unknown
+Twe1/0/36,,disabled,routed,auto,auto,unknown
+Twe1/0/37,,disabled,routed,auto,auto,unknown
+Twe1/0/38,,disabled,routed,auto,auto,unknown
+Twe1/0/39,,disabled,routed,auto,auto,unknown
+Twe1/0/40,,disabled,routed,auto,auto,unknown
+Twe1/0/41,,disabled,routed,auto,auto,unknown
+Twe1/0/42,,disabled,routed,auto,auto,unknown
+Twe1/0/43,,disabled,routed,auto,auto,unknown
+Twe1/0/44,,disabled,routed,auto,auto,unknown
+Twe1/0/45,[< via-9500-a2 - m,connected,120,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/46,[< via-9200-a1 - m,connected,120,a-full,a-1000,10/100/1000BaseTX SFP
+Twe1/0/47,,notconnect,routed,auto,auto,unknown
+Twe1/0/48,,notconnect,routed,auto,auto,unknown
+Hu1/0/49,,connected,4094,full,40G,QSFP 40G SR BD SFP
+Hu1/0/50,,connected,4094,full,40G,QSFP 40G SR BD SFP
+Hu1/0/51,[< switch-9500-a1,connected,trunk,full,40G,QSFP 40G LR4 SFP
+Hu1/0/52,,disabled,routed,auto,auto,unknown
+Twe2/0/1,,disabled,routed,auto,auto,unknown
+Twe2/0/2,,disabled,routed,auto,auto,unknown
+Twe2/0/3,,disabled,routed,auto,auto,unknown
+Twe2/0/4,,disabled,routed,auto,auto,unknown
+Twe2/0/7,,disabled,routed,auto,auto,unknown
+Twe2/0/8,,disabled,routed,auto,auto,unknown
+Twe2/0/9,,disabled,routed,auto,auto,unknown
+Twe2/0/10,,disabled,routed,auto,auto,unknown
+Twe2/0/11,,disabled,routed,auto,auto,unknown
+Twe2/0/12,,disabled,routed,auto,auto,unknown
+Twe2/0/13,,disabled,routed,auto,auto,unknown
+Twe2/0/14,,disabled,routed,auto,auto,unknown
+Twe2/0/15,,disabled,routed,auto,auto,unknown
+Twe2/0/16,,disabled,routed,auto,auto,unknown
+Twe2/0/17,[> EMC DataDomain,connected,101,full,10G,SFP-10GBase-CU5M
+Twe2/0/18,[> EMC Avamar 3.26,connected,101,full,10G,SFP-10GBase-CU5M
+Twe2/0/19,,disabled,routed,auto,auto,unknown
+Twe2/0/20,,disabled,routed,auto,auto,unknown
+Twe2/0/21,,disabled,routed,auto,auto,unknown
+Twe2/0/22,,disabled,routed,auto,auto,unknown
+Twe2/0/23,,disabled,routed,auto,auto,unknown
+Twe2/0/24,,disabled,routed,auto,auto,unknown
+Twe2/0/25,,disabled,routed,auto,auto,unknown
+Twe2/0/26,,disabled,routed,auto,auto,unknown
+Twe2/0/27,[< C3750E-24TS-AIT,notconnect,1,auto,auto,10/100/1000BaseTX SFP
+Twe2/0/28,[< C3750E-24TS-AIT,notconnect,1,auto,auto,10/100/1000BaseTX SFP
+Twe2/0/29,[< C3750E-24TS-AIT,notconnect,1,auto,auto,10/100/1000BaseTX SFP
+Twe2/0/30,[< C3750E-24TS-AIT,notconnect,1,auto,auto,10/100/1000BaseTX SFP
+Twe2/0/31,[< VIAWEST-FI6296-,connected,trunk,full,10G,SFP-10GBase-CU1M
+Twe2/0/32,[< VIAWEST-FI6296-,connected,trunk,full,10G,SFP-10GBase-CU5M
+Twe2/0/33,,disabled,routed,auto,auto,unknown
+Twe2/0/34,,disabled,routed,auto,auto,unknown
+Twe2/0/35,,disabled,routed,auto,auto,unknown
+Twe2/0/36,,disabled,routed,auto,auto,unknown
+Twe2/0/37,,disabled,routed,auto,auto,unknown
+Twe2/0/38,,disabled,routed,auto,auto,unknown
+Twe2/0/39,,disabled,routed,auto,auto,unknown
+Twe2/0/40,,disabled,routed,auto,auto,unknown
+Twe2/0/41,,disabled,routed,auto,auto,unknown
+Twe2/0/42,,disabled,routed,auto,auto,unknown
+Twe2/0/43,,disabled,routed,auto,auto,unknown
+Twe2/0/44,,disabled,routed,auto,auto,unknown
+Twe2/0/45,[< via-9500-a1 - m,connected,120,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/46,[< via-9200-a2 - m,connected,120,a-full,a-1000,10/100/1000BaseTX SFP
+Twe2/0/47,,notconnect,routed,auto,auto,unknown
+Twe2/0/48,,notconnect,routed,full,10G,unknown
+Hu2/0/49,,connected,4094,full,40G,QSFP 40G SR BD SFP
+Hu2/0/50,,connected,4094,full,40G,QSFP 40G SR BD SFP
+Hu2/0/51,,disabled,routed,auto,auto,unknown
+Hu2/0/52,,disabled,routed,auto,auto,unknown

@@ -1,4 +1,6 @@
+# Catalyst IOS based switches only. No support for NX-OS, or Routers.
 import sys
+import os
 import asyncio
 import yaml
 import getpass
@@ -10,7 +12,6 @@ from datetime import datetime
 
 import netdev
 
-PYTHONASYNCIODEBUG = 1
 DEBUG = 1
 
 #netdev_logger = netdev.logger
@@ -114,7 +115,9 @@ def main(fin,configpath,username,password,outputBox=None,root=None):
         fasteth_ports_list = []
         gig_ports_list = []
         tengig_ports_list = []
+        t25gig_ports_list = []
 
+        # Create port counts
         for port in int_status_formatted:
             if port['STATUS'] == 'connected':
                 connected_ports_list.append(port)
@@ -132,9 +135,10 @@ def main(fin,configpath,username,password,outputBox=None,root=None):
                 fasteth_ports_list.append(port) 
             if port['PORT'].startswith("G"):
                 gig_ports_list.append(port)
-            if port['PORT'].startswith("Ten"):
+            if port['PORT'].startswith("Twe"):
+                t25gig_ports_list.append(port)
+            if port['PORT'].startswith("T"):
                 tengig_ports_list.append(port)
-                
 
         connected_ports = len(connected_ports_list)
         disabled_ports = len(disabled_ports_list)
@@ -144,13 +148,19 @@ def main(fin,configpath,username,password,outputBox=None,root=None):
         fasteth_ports = len(fasteth_ports_list)
         gig_ports = len(gig_ports_list)
         tengig_ports = len(tengig_ports_list)
+        t25gig_ports = len(t25gig_ports_list)
 
+        # Create CSV Fields with values
         used_ports = {'Device Name': hostname, 'Model': model, 'IP Address': ip, 'Total Ports': len(int_status_formatted), 'Ports in Use/Connected': connected_ports,
                      'Disabled Ports': disabled_ports, 'Err-Disabled Ports': errdisabled_ports, "Not connected Ports": notconnect_ports, "Inactive Ports": inactive_ports,
-                      "100M Port Count": fasteth_ports, "Gigabit Port Count": gig_ports, "TenGig Port Count": tengig_ports}
+                      "100M Port Count": fasteth_ports, "Gigabit Port Count": gig_ports, "TenGig Port Count": tengig_ports, "t25G Ports": t25gig_ports}
 
-        build_csv(int_status_formatted, used_ports["Device Name"] + '-' + str(datetime.now().microsecond) + '.log')
-        output_csv.append(used_ports)
+        # Build individual switch port status CSV, update global CSV with individual values.
+        if len(int_status_formatted) > 0:
+            build_csv(int_status_formatted, used_ports["Device Name"] + '-' + str(datetime.now().microsecond) + '.log')
+            output_csv.append(used_ports)
+        else:
+            print(f"Unable to find interfaces for device {hostname}")
 
         return f"Finished with host: {ip}\n"
 
@@ -162,19 +172,19 @@ def main(fin,configpath,username,password,outputBox=None,root=None):
             await ios.connect()
         except netdev.exceptions.TimeoutError as e:
             timeouts.append(device['host'])
-            present_output("\nERROR =  {}".format(e))
+            present_output("\nERROR =  {}\n".format(e))
             return
         except netdev.exceptions.DisconnectError as e:
             authfailed.append(device['host'])
-            present_output("\nERROR = {}".format(e))
+            present_output("\nERROR = {}\n".format(e))
             return
         except netdev.exceptions.CommitError as e:
             unknownerror.append(device['host'])
-            present_output("\nERROR = {}".format(e))
+            present_output("\nERROR = {}\n".format(e))
             return
         except Exception as e:
             unknownerror.append(device['host'])
-            present_output("\nERROR = {}".format(e))
+            present_output("\nERROR = {}\n".format(e))
             return
 
         filename = ios.base_prompt
@@ -218,7 +228,12 @@ def main(fin,configpath,username,password,outputBox=None,root=None):
     tasks = [connect_and_run(device, configpath, output_csv) for device in device_list]
     loop.run_until_complete(asyncio.wait(tasks))
 
-    build_csv(output_csv, "Used-Port-Inventory" )
+    if len(successes) > 0:
+        build_csv(output_csv, "Used-Port-Inventory" )
+    else:
+        present_output("\n*********************************\n\n")
+        print("\nNot able to connect to any devices. No output has been created.\n")
+        present_output("\n*********************************\n\n")
 
     present_output("\n------------------------------\n\n")
     present_output("\n\nStats from last run:")
@@ -258,5 +273,8 @@ if __name__ == "__main__":
     username = sys.argv[3]
 
     password = getpass.getpass("Type the password: ")
+
+    # Create the root folder and subfolder if it doesn't already exist
+    os.makedirs(configpath, exist_ok=True)
 
     main(device_file, configpath, username, password)
