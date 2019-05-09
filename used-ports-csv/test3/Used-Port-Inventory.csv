@@ -1,6 +1,0 @@
-Device Name,Model,IP Address,Total Ports,Ports in Use/Connected,Disabled Ports,Err-Disabled Ports,Not connected Ports,Inactive Ports,100M Port Count,Gigabit Port Count,TenGig Port Count,25G Ports
-8350-MDF-01,"['C9300-24T', 'C9300-24T']",10.15.1.1,64,11,46,1,6,0,0,0,11,0
-Switch-9200-a1,"['C9200L-24T-4X', 'C9200L-24T-4X']",10.2.220.18,56,28,26,0,2,0,0,24,4,0
-via-9200-a1,"['C9200L-24T-4X', 'C9200L-24T-4X']",10.2.120.18,55,33,19,0,3,0,0,29,4,0
-Switch-9500-a1,['C9500-48Y4C'],10.2.220.17,104,44,50,0,10,0,0,0,39,39
-via-9500-a1,['C9500-48Y4C'],10.2.120.1,100,20,67,0,13,0,0,0,15,15

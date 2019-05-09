@@ -1,0 +1,10 @@
+Value PORT ((Eth\d+/\d+)|(Eth\d+/\d+/\d+))
+Value DESCRIPTION (\S+((\s+\S+)+)?|\S+)
+Value STATUS (\w+?)
+Value VLAN (\w+|\d+?)
+Value DUPLEX (full|auto|half)
+Value SPEED (.*?)
+Value TYPE (.*?)
+
+Start
+  ^${PORT}\s+${DESCRIPTION}\s+${STATUS}\s+${VLAN}\s+${DUPLEX}\s+${SPEED}\s+${TYPE}$$ -> Record

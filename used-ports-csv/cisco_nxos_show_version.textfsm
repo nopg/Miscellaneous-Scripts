@@ -1,0 +1,14 @@
+Value HOSTNAME (\S+)
+Value PLATFORM ((\d+)|(\d+\w+))
+Value VERSION (\d+.\d+(.+)?)
+Value BOOT_IMAGE (.*)
+Value SERIAL (\S+)
+Value UPTIME ((\d+\s\w+.s.,?\s?){4})
+
+Start
+  ^\s+(NXOS: version|system:\s+version)\s${VERSION}
+  ^\s+(NXOS|kickstart) image file is:\s${BOOT_IMAGE}
+  ^\s+[Pp]rocessor\s+Board\s+ID\s+${SERIAL}
+  ^\s+Device name:\s+${HOSTNAME}
+  ^\s+cisco Nexus${PLATFORM}
+  ^Kernel uptime is\s${UPTIME}
