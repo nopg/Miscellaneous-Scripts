@@ -160,7 +160,7 @@ def main(device_type, ip, username, password, mac_table_command):
 
     # GRAB INTERFACE STATUS #
     int_status = ssh_connection.send_command("show interface status", delay_factor=2)
-    re_table = jtextfsm.TextFSM(open("cisco_ios_show_interfaces_status.textfsm"))
+    re_table = jtextfsm.TextFSM(open("cisco_ios_show_interfaces_status_physical_only.textfsm"))
     fsm_results = re_table.ParseText(int_status)
     int_status_formatted = format_fsm_output(re_table, fsm_results)
 
