@@ -1,6 +1,6 @@
 Value Key PORT (\w+/\d+|([a-zA-Z])\w+/\d+/\d+)
 Value DESCRIPTION (\S+((\s\S+)+)?|\S+)
-Value STATUS (err-disabled|disabled|connected|notconnect|inactive)
+Value STATUS (err-disabled|disabled|connected|notconnect|inactive|monitoring)
 Value VLAN (\w+)
 Value DUPLEX (full|a-full|auto|half)
 Value SPEED (auto|\d+\w+|\w+-\d+|\d+)
