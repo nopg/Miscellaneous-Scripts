@@ -13,7 +13,7 @@ class rest_api_lib_viptela:
 
     def login(self, vmanage_ip, username, password):
         """Login to vmanage"""
-        base_url_str = "https://{}/".format(vmanage_ip)
+        base_url_str = "https://{}".format(vmanage_ip)
 
         login_action = "/j_security_check"
 
@@ -29,7 +29,7 @@ class rest_api_lib_viptela:
 
         # If the vmanage has a certificate signed by a trusted authority change verify to True
         login_response = sess.post(url=login_url, data=login_data, verify=False)
-
+        print(f"url={login_url}\ndata={login_data}\nresponse={login_response.content}\n")
         if b"<html>" in login_response.content:
             print("Login Failed")
             sys.exit(0)

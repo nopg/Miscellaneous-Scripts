@@ -150,7 +150,7 @@ def main_import_all_templates(obj, root_folder):
     for template in device_templates:
         data = json.loads(template)
         data["policyId"] = ""  #   ATTACHED TO ROUTING POLICY?
-        data["factoryDefault"] = ""  #   NEVER A DEFAULT
+        data["factoryDefault"] = False  #   NEVER A DEFAULT
         if data["configType"] == "template":  #   NOT A CLI BASED TEMPLATE
             # UPDATE OLD FEATURE TEMPLATE ID'S #
             for feature_template in data["generalTemplates"]:
@@ -183,7 +183,7 @@ def main_import_device_template(obj, root_folder,entry):
             blah = data["templateName"]
             print(f"data{blah}, entry={entry}")
             data["policyId"] = ""  #   ATTACHED TO ROUTING POLICY?
-            data["factoryDefault"] = ""  #   NEVER A DEFAULT
+            data["factoryDefault"] = False  #   NEVER A DEFAULT
             if data["configType"] == "template":  #   NOT A CLI BASED TEMPLATE
                 # UPDATE OLD FEATURE TEMPLATE ID'S #
                 for feature_template in data["generalTemplates"]:
