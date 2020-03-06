@@ -2,7 +2,7 @@
 
 # Miscellaneous-Scripts
 Collection of small scripts not large enough to have their own repository
-All scripts should be considered very alpha code, and may not be in the best state for use depending on when they were last touched. Please contact me if you're interested in using a script and I can tweak it or explain the specific use-case for them.
+All scripts should be considered beta code. Although they should generally be safe for production usage, please contact me if you're interested and I can tweak code and/or explain the specific use-case for them as well as how they are used.
 
 
 ## Projects/Folder Summary
