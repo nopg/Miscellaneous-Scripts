@@ -23,8 +23,7 @@ class rest_api_lib_viptela:
         # Url for posting login data
         login_url = base_url_str + login_action
 
-        url = base_url_str + login_url
-
+        # Create session
         sess = requests.session()
 
         # If the vmanage has a certificate signed by a trusted authority change verify to True
