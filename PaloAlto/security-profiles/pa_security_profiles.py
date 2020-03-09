@@ -47,7 +47,7 @@ import json
 
 from lxml import etree
 import xmltodict
-import rest_api_lib_pa as pa
+import xml_api_lib_pa as pa
 
 
 # fmt: off
@@ -333,7 +333,7 @@ if __name__ == "__main__":
     password = getpass.getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj'
-    obj = pa.rest_api_lib_pa(pa_ip, username, password)
+    obj = pa.xml_api_lib_pa(pa_ip, username, password)
 
     # MENU
     export_or_import = ""

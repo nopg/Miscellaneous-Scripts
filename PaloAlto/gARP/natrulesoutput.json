@@ -1,0 +1,145 @@
+{
+    "@status": "success",
+    "@code": "19",
+    "result": {
+        "@total-count": "4",
+        "@count": "4",
+        "entry": [
+            {
+                "@name": "MacMini",
+                "@uuid": "01fde4aa-47a8-4e4f-9041-4eac7c5c1b6d",
+                "@location": "vsys",
+                "@vsys": "vsys1",
+                "to": {
+                    "member": [
+                        "untrusted"
+                    ]
+                },
+                "from": {
+                    "member": [
+                        "untrusted"
+                    ]
+                },
+                "source": {
+                    "member": [
+                        "any"
+                    ]
+                },
+                "destination": {
+                    "member": [
+                        "my-dns"
+                    ]
+                },
+                "service": "TCP-8031",
+                "disabled": "no",
+                "destination-translation": {
+                    "translated-address": "192.168.77.201"
+                }
+            },
+            {
+                "@name": "MacMini-VNC",
+                "@uuid": "c856b631-52d9-48d1-9826-a087831d4f1b",
+                "@location": "vsys",
+                "@vsys": "vsys1",
+                "to": {
+                    "member": [
+                        "untrusted"
+                    ]
+                },
+                "from": {
+                    "member": [
+                        "untrusted"
+                    ]
+                },
+                "source": {
+                    "member": [
+                        "any"
+                    ]
+                },
+                "destination": {
+                    "member": [
+                        "my-dns"
+                    ]
+                },
+                "service": "TCP-5900",
+                "disabled": "yes",
+                "destination-translation": {
+                    "translated-address": "192.168.77.58"
+                }
+            },
+            {
+                "@name": "PAT-Policy-VPN",
+                "@uuid": "416050c5-ab88-4a2b-9843-fd8cf073af42",
+                "@location": "vsys",
+                "@vsys": "vsys1",
+                "source-translation": {
+                    "dynamic-ip-and-port": {
+                        "interface-address": {
+                            "interface": "ethernet1/1"
+                        }
+                    }
+                },
+                "to": {
+                    "member": [
+                        "untrusted"
+                    ]
+                },
+                "from": {
+                    "member": [
+                        "gVPN"
+                    ]
+                },
+                "source": {
+                    "member": [
+                        "any"
+                    ]
+                },
+                "destination": {
+                    "member": [
+                        "any"
+                    ]
+                },
+                "service": "any",
+                "to-interface": "any",
+                "disabled": "yes"
+            },
+            {
+                "@name": "PAT-Policy",
+                "@uuid": "56700f34-956f-4a7e-a46e-4d51c9c621fc",
+                "@location": "vsys",
+                "@vsys": "vsys1",
+                "source-translation": {
+                    "dynamic-ip-and-port": {
+                        "interface-address": {
+                            "interface": "ethernet1/1"
+                        }
+                    }
+                },
+                "to": {
+                    "member": [
+                        "untrusted"
+                    ]
+                },
+                "from": {
+                    "member": [
+                        "gVPN",
+                        "trusted"
+                    ]
+                },
+                "source": {
+                    "member": [
+                        "any"
+                    ]
+                },
+                "destination": {
+                    "member": [
+                        "any"
+                    ]
+                },
+                "service": "any",
+                "to-interface": "any",
+                "disabled": "no"
+            }
+        ]
+    }
+}

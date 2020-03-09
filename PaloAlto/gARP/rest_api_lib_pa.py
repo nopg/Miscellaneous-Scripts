@@ -1,6 +1,6 @@
 """
 Description: 
-    REST API Library to be used with the Palo Alto API
+    XML API Library to be used with the Palo Alto API
 
 Requires:
     requests
@@ -17,7 +17,7 @@ Tested:
     PA VM100
 
 Example usage:
-        import rest_api_lib_pa as pa
+        import xml_api_lib_pa as pa
         # export example:
         obj = pa.get_request_pa(call_type="config",action="show",xpath="")
         # import example:
@@ -48,8 +48,8 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 DEBUG = False
 
-# REST API Class for use with Palo Alto API
-class rest_api_lib_pa:
+# XML API Class for use with Palo Alto API
+class xml_api_lib_pa:
     # Upon creation:
     def __init__(self, pa_ip, username, password):
         self.pa_ip = pa_ip
