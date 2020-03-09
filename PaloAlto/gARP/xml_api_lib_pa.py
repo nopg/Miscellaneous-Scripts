@@ -106,21 +106,23 @@ class xml_api_lib_pa:
             print(
                 f"\nGET request sent: type={call_type}, action={action}, \n  xpath={xpath}.\n"
             )
+            print(f"\nResponse Status Code = {response.status_code}")
+            print(f"\nResponse = {response.text}")
 
         # Return string (XML)
         return response.text
 
     # GET request for Palo Alto API
     def get_rest_request_pa(
-        self, call=None, element=None
+        self, restcall=None, element=None
     ):
         headers={"X-PAN-KEY": self.key}
 
         # If no element is sent, should be a 'show' or 'get' action, do not send &element=<element>
         if not element:
-            url = f"https://{self.pa_ip}:443{call}"
+            url = f"https://{self.pa_ip}:443{restcall}"
         else:
-            url = f"https://{self.pa_ip}:443{call}&element={element}"
+            url = f"https://{self.pa_ip}:443{restcall}&element={element}"
 
         # Make the API call
         response = self.session[self.pa_ip].get(url, headers=headers, verify=False)
@@ -129,8 +131,10 @@ class xml_api_lib_pa:
         if DEBUG:
             print(f"URL = {url}")
             print(
-                f"\nGET request sent: type={call_type}, action={action}, \n  xpath={xpath}.\n"
+                f"\nGET request sent: restcall={restcall}.\n"
             )
+            print(f"\nResponse Status Code = {response.status_code}")
+            print(f"\nResponse = {response.text}")
 
         # Return string (XML)
         return response.text

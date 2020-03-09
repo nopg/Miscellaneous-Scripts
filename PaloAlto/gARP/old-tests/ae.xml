@@ -1,0 +1,128 @@
+<response status="success" code="19">
+<result total-count="1" count="1">
+<aggregate-ethernet src="tpl">
+<entry name="ae1" src="tpl">
+<layer3 src="tpl">
+<untagged-sub-interface src="tpl">no</untagged-sub-interface>
+<ip src="tpl">
+<entry name="209.170.196.66/26" src="tpl"/>
+<entry name="209.170.211.4/27" src="tpl"/>
+<entry name="66.205.186.168/27" src="tpl"/>
+<entry name="209.170.207.68/26" src="tpl"/>
+</ip>
+<ipv6 src="tpl">
+<neighbor-discovery src="tpl">
+<router-advertisement src="tpl">
+<enable src="tpl">no</enable>
+</router-advertisement>
+</neighbor-discovery>
+</ipv6>
+<lacp src="tpl">
+<high-availability src="tpl">
+<passive-pre-negotiation src="tpl">yes</passive-pre-negotiation>
+</high-availability>
+<transmission-rate src="tpl">slow</transmission-rate>
+<enable src="tpl">yes</enable>
+<mode src="tpl">active</mode>
+</lacp>
+<ndp-proxy src="tpl">
+<enabled src="tpl">no</enabled>
+</ndp-proxy>
+<lldp src="tpl">
+<enable src="tpl">no</enable>
+</lldp>
+<interface-management-profile src="tpl">Allow_Ping</interface-management-profile>
+</layer3>
+</entry>
+<entry name="ae2" src="tpl">
+<layer3 src="tpl">
+<units src="tpl">
+<entry name="ae2.199" src="tpl">
+<tag src="tpl">199</tag>
+<ip src="tpl">
+<entry name="10.2.199.1/24" src="tpl"/>
+</ip>
+<ipv6 src="tpl">
+<neighbor-discovery src="tpl">
+<router-advertisement src="tpl">
+<enable src="tpl">no</enable>
+</router-advertisement>
+</neighbor-discovery>
+</ipv6>
+<ndp-proxy src="tpl">
+<enabled src="tpl">no</enabled>
+</ndp-proxy>
+<adjust-tcp-mss src="tpl">
+<enable src="tpl">no</enable>
+</adjust-tcp-mss>
+<interface-management-profile src="tpl">Allow_Ping</interface-management-profile>
+</entry>
+<entry name="ae2.106" src="tpl">
+<ipv6 src="tpl">
+<neighbor-discovery src="tpl">
+<router-advertisement src="tpl">
+<enable src="tpl">no</enable>
+</router-advertisement>
+</neighbor-discovery>
+</ipv6>
+<ndp-proxy src="tpl">
+<enabled src="tpl">no</enabled>
+</ndp-proxy>
+<adjust-tcp-mss src="tpl">
+<enable src="tpl">no</enable>
+</adjust-tcp-mss>
+<ip src="tpl">
+<entry name="10.0.100.18/30" src="tpl"/>
+</ip>
+<interface-management-profile src="tpl">Response</interface-management-profile>
+<tag src="tpl">106</tag>
+<comment src="tpl">Routed interface to 9500</comment>
+</entry>
+<entry name="ae2.711" src="tpl">
+<ipv6 src="tpl">
+<neighbor-discovery src="tpl">
+<router-advertisement src="tpl">
+<enable src="tpl">no</enable>
+</router-advertisement>
+</neighbor-discovery>
+</ipv6>
+<ndp-proxy src="tpl">
+<enabled src="tpl">no</enabled>
+</ndp-proxy>
+<adjust-tcp-mss src="tpl">
+<enable src="tpl">no</enable>
+</adjust-tcp-mss>
+<ip src="tpl">
+<entry name="10.50.11.1/24" src="tpl"/>
+</ip>
+<interface-management-profile src="tpl">Allow_Ping</interface-management-profile>
+<tag src="tpl">711</tag>
+<comment src="tpl">DC vlan</comment>
+</entry>
+</units>
+<ipv6 src="tpl">
+<neighbor-discovery src="tpl">
+<router-advertisement src="tpl">
+<enable src="tpl">no</enable>
+</router-advertisement>
+</neighbor-discovery>
+</ipv6>
+<lacp src="tpl">
+<high-availability src="tpl">
+<passive-pre-negotiation src="tpl">yes</passive-pre-negotiation>
+</high-availability>
+<mode src="tpl">active</mode>
+<transmission-rate src="tpl">slow</transmission-rate>
+<enable src="tpl">yes</enable>
+</lacp>
+<ndp-proxy src="tpl">
+<enabled src="tpl">no</enabled>
+</ndp-proxy>
+<lldp src="tpl">
+<enable src="tpl">no</enable>
+</lldp>
+</layer3>
+</entry>
+</aggregate-ethernet>
+</result>
+</response>
