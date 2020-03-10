@@ -48,7 +48,8 @@ import json
 from lxml import etree
 import xmltodict
 import xml_api_lib_pa as xmlpa
-#import rest_api_lib_pa as restpa
+
+# import rest_api_lib_pa as restpa
 
 
 # fmt: off
@@ -93,7 +94,7 @@ def create_xml_files(temp, filename):
     # Check for various response type and ensure xml is written consistently
     data = temp.get("response")
     if data:
-        #data = temp.get("response").get("result")
+        # data = temp.get("response").get("result")
         data = {"root": data}
         if data:
             data = xmltodict.unparse(data)
@@ -106,6 +107,7 @@ def create_xml_files(temp, filename):
     with open(filename, "w") as fout:
         fout.write(data)
 
+
 def create_json_files(data, filename):
     """
     CREATE OUTPUT FILES 
@@ -117,24 +119,29 @@ def create_json_files(data, filename):
     fout = open(filename, "w")
     fout.write(json.dumps(data))
     fout.close()
-        
+
     print("\tCreated: {}\n".format(filename))
 
+
 def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested):
-     # Grab PA/Panorama API Output
+    # Grab PA/Panorama API Output
     success = False
     if xml_or_rest == "xml":
         filename = f"{root_folder}/{outputrequested}.xml"
-        response = obj.get_xml_request_pa(call_type="config", action="get", xpath=xpath_or_restcall)
+        response = obj.get_xml_request_pa(
+            call_type="config", action="get", xpath=xpath_or_restcall
+        )
         xml_response = xmltodict.parse(response)
         if xml_response["response"]["@status"] == "success":
             success = True
         create_xml_files(xml_response, filename)
         if not xml_response["response"]["result"]:
-            print("Nothing found on PA, are you connecting to the right device? Check output for XML API reply")
+            print(
+                "Nothing found on PA, are you connecting to the right device? Check output for XML API reply"
+            )
             print("More error checking needed here.")
             sys.exit(0)
-        
+
     elif xml_or_rest == "rest":
         filename = f"{root_folder}/{outputrequested}.json"
         response = obj.get_rest_request_pa(restcall=xpath_or_restcall)
@@ -143,7 +150,9 @@ def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested
             success = True
         create_json_files(response, filename)
         if not json_response["result"]:
-            print("Nothing found on PA, are you connecting to the right device? Check output for REST API reply")
+            print(
+                "Nothing found on PA, are you connecting to the right device? Check output for REST API reply"
+            )
             print("More error checking needed here.")
             sys.exit(0)
 
@@ -164,20 +173,23 @@ def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested
     else:
         return json_response
 
+
 def garp_logic(api_output, xml_or_rest, outputrequested):
-    
+
     # INTERFACES
     if outputrequested == "interfaces":
         # Not properly error checking, not (yet) checking aggregate-ethernet
-        entries = api_output.get("response").get("result").get("interface").get("ethernet")
+        entries = (
+            api_output.get("response").get("result").get("interface").get("ethernet")
+        )
 
         if entries:
             # FIND INTERFACE TYPES AND SEARCH
-            for entry in entries['entry']:
-                if "ip" in entry['layer3']:
-                    print(f"{entry['layer3']['ip']}") 
-                if "dhcp-client" in entry['layer3']:
-                    print(f"{entry['layer3']['dhcp-client']}") 
+            for entry in entries["entry"]:
+                if "ip" in entry["layer3"]:
+                    print(f"{entry['layer3']['ip']}")
+                if "dhcp-client" in entry["layer3"]:
+                    print(f"{entry['layer3']['dhcp-client']}")
         else:
             print(f"No objects found for 'interfaces")
 
@@ -190,7 +202,7 @@ def garp_logic(api_output, xml_or_rest, outputrequested):
                 print()
                 print(f"name = {entry['@name']}")
                 print(f"oSrczone = {entry['from']['member']}")
-                print(f"oDstzone = {entry['to']['member']}") 
+                print(f"oDstzone = {entry['to']['member']}")
                 print(f"destination = {entry['destination']}")
                 if "disabled" in entry:
                     print(f"disabled = {entry['disabled']}")
@@ -236,13 +248,12 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
         else:
             output_list = final
 
-
     ######
     ### Begin the real work.
     ######
     # Loop through user provided input, import each profile
     for output in output_list:
-        if output == "1":   # INTERFACES, --XML ONLY--
+        if output == "1":  # INTERFACES, --XML ONLY--
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = XML_INTERFACES
             xml_or_rest = "xml"
@@ -251,10 +262,12 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
 
             if pa_or_pan == "panorama":
                 # Needs Template Name
-                template_name = input("\nEnter the Template Name (CORRECTLY!): " )
-                XPATH_OR_RESTCALL = PAN_XML_INTERFACES.replace('TEMPLATE_NAME', template_name)
+                template_name = input("\nEnter the Template Name (CORRECTLY!): ")
+                XPATH_OR_RESTCALL = PAN_XML_INTERFACES.replace(
+                    "TEMPLATE_NAME", template_name
+                )
 
-        elif output == "2": # NAT RULES, REST for now
+        elif output == "2":  # NAT RULES, REST for now
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = REST_NATRULES
             xml_or_rest = "rest"
@@ -264,17 +277,22 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
             if pa_or_pan == "panorama":
                 # Needs Device Group
                 device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
-                XPATH_OR_RESTCALL = PAN_REST_POSTNATRULES.replace('DEVICE_GROUP', device_group)
+                XPATH_OR_RESTCALL = PAN_REST_POSTNATRULES.replace(
+                    "DEVICE_GROUP", device_group
+                )
 
         else:
             print("\nHuh?. You entered {}\n".format(profile))
             continue
 
         # Grab Output (XML or REST, convert to dict.)
-        api_output = grab_api_output(root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested)
+        api_output = grab_api_output(
+            root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested
+        )
 
         # gARP Logic
         garp_logic(api_output, xml_or_rest, outputrequested)
+
 
 # If run from the command line
 if __name__ == "__main__":
@@ -282,9 +300,7 @@ if __name__ == "__main__":
     # Guidance on how to use the script
     if len(sys.argv) != 4:
         print("\nplease provide the following arguments:")
-        print(
-            "\tpython3 garp.py <output folder location> <PA mgmt IP> <username>\n\n"
-        )
+        print("\tpython3 garp.py <output folder location> <PA mgmt IP> <username>\n\n")
         sys.exit(0)
 
     # Gather input
@@ -308,7 +324,7 @@ if __name__ == "__main__":
 
     #     Enter 1 or 2: """
     #     )
-    
+
     # UNUSED PLACEHOLDER FOR NOW
     xml_or_rest = "xml"
 
@@ -323,7 +339,7 @@ if __name__ == "__main__":
 
         Enter 1 or 2: """
         )
-        
+
         for value in pa_or_pan:
             if value not in allowed:
                 incorrect_input = True
@@ -334,7 +350,7 @@ if __name__ == "__main__":
     if pa_or_pan == "1":
         pa_or_pan = "pa"
     else:
-        pa_or_pan = "panorama" 
+        pa_or_pan = "panorama"
 
     allowed = list("12,-")  # Allowed user input
     incorrect_input = True

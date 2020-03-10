@@ -113,10 +113,8 @@ class xml_api_lib_pa:
         return response.text
 
     # GET request for Palo Alto API
-    def get_rest_request_pa(
-        self, restcall=None, element=None
-    ):
-        headers={"X-PAN-KEY": self.key}
+    def get_rest_request_pa(self, restcall=None, element=None):
+        headers = {"X-PAN-KEY": self.key}
 
         # If no element is sent, should be a 'show' or 'get' action, do not send &element=<element>
         if not element:
@@ -130,9 +128,7 @@ class xml_api_lib_pa:
         # Extra logging if debugging
         if DEBUG:
             print(f"URL = {url}")
-            print(
-                f"\nGET request sent: restcall={restcall}.\n"
-            )
+            print(f"\nGET request sent: restcall={restcall}.\n")
             print(f"\nResponse Status Code = {response.status_code}")
             print(f"\nResponse = {response.text}")
 
