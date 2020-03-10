@@ -19,9 +19,9 @@ Tested:
 Example usage:
         import xml_api_lib_pa as pa
         # export example:
-        obj = pa.get_request_pa(call_type="config",action="show",xpath="")
+        obj = pa.get_xml_request_pa(call_type="config",action="show",xpath="")
         # import example:
-        obj = pa.get_request_pa(call_type="config",action="set",xpath="..",element="<../>")
+        obj = pa.get_xml_request_pa(call_type="config",action="set",xpath="..",element="<../>")
 
 Cautions:
     Future abilities will be added when use-cases warrant,
@@ -88,7 +88,7 @@ class xml_api_lib_pa:
             sys.exit(0)
 
     # GET request for Palo Alto API
-    def get_request_pa(
+    def get_xml_request_pa(
         self, call_type="config", action="show", xpath=None, element=None
     ):
         # If no element is sent, should be a 'show' or 'get' action, do not send &element=<element>

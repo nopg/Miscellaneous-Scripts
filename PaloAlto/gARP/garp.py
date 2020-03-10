@@ -48,26 +48,14 @@ import json
 from lxml import etree
 import xmltodict
 import xml_api_lib_pa as xmlpa
-import rest_api_lib_pa as restpa
+#import rest_api_lib_pa as restpa
 
 
 # fmt: off
 # Global Variables, debug & xpath location for each profile type
 # ENTRY = + "/entry[@name='alert-only']"
 DEBUG = False
-# ANTIVIRUS =     "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/virus"
-# SPYWARE =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/spyware"
-# SPYWARESIG =    "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/spyware"
-# VULNERABILITY = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/vulnerability"
-# VULNERABLESIG = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/threats/vulnerability"
-# URLFILTERING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/url-filtering"
-# URLCATEGORY =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category"
-# FILEBLOCKING =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/file-blocking"
-# WILDFIRE =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/wildfire-analysis"
-# DATAFILTERING = "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-filtering"
-# DATAPATTERN =   "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/data-objects"
-# DDOS =          "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/dos-protection"
-# PROFILEGROUP =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profile-group"
+
 XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/network/interface"
 XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules"
 REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
@@ -132,16 +120,15 @@ def create_json_files(data, filename):
         
     print("\tCreated: {}\n".format(filename))
 
-# Grab interfaces from Palo Alto API
-def pan_get_objects(destination_folder, rest_or_xml, xpath_or_call, outputrequested):
+def pa_get_objects(destination_folder, xml_or_rest, xpath_or_restcall, outputrequested):
 
     REST = False
     XML = False
 
-    if rest_or_xml == "rest":
+    if xml_or_rest == "rest":
         ext = "json"
         REST = True
-    elif rest_or_xml == "xml":
+    elif xml_or_rest == "xml":
         ext = "xml"
         XML = True
 
@@ -151,28 +138,25 @@ def pan_get_objects(destination_folder, rest_or_xml, xpath_or_call, outputreques
     # Export xml via Palo Alto API
     success = False
     if XML: 
-        response = obj.get_request_pa(call_type="config", action="get", xpath=xpath_or_call)
+        response = obj.get_xml_request_pa(call_type="config", action="get", xpath=xpath_or_restcall)
         result = xmltodict.parse(response)
         if result["response"]["@status"] == "success":
             success = True
-        write_data_output(result, filename)
-        if not result["response"]["result"]:
-            print("Nothing found on Panorama, are you connecting to the right device? Check output for XML API reply")
-            sys.exit(0)
-
+            write_data_output(result, filename)
+            if not result["response"]["result"]:
+                print("Nothing found on PA, are you connecting to the right device? Check output for XML API reply")
+                sys.exit(0)
     elif REST:
-        response = obj.get_rest_request_pa(restcall=xpath_or_call)
+        response = obj.get_rest_request_pa(restcall=xpath_or_restcall)
         json_response = json.loads(response)
         if json_response["@status"] == "success":
             success = True
         create_json_files(response, filename)
         if not json_response["result"]:
-            print("Nothing found on Panorama, are you connecting to the right device? Check output for REST API reply")
+            print("Nothing found on PA, are you connecting to the right device? Check output for REST API reply")
             sys.exit(0)
-
     if success:
         pass
-    
     else:
         # Extra logging when debugging
         if DEBUG:
@@ -188,7 +172,6 @@ def pan_get_objects(destination_folder, rest_or_xml, xpath_or_call, outputreques
     # Print out result
     if outputrequested == "interfaces":
     # INTERFACES
-        print(f"result = {result}")
         ###################### MUST BE UPDATED ###############
         entries = result.get("response").get("result").get("interface").get("ethernet")
 
@@ -215,95 +198,6 @@ def pan_get_objects(destination_folder, rest_or_xml, xpath_or_call, outputreques
                 print(f"destination = {entry['destination']}")
                 if "disabled" in entry:
                     print(f"disabled = {entry['disabled']}")
-                if "destination-translation" in entry:
-                    print(f"dnat = {entry['destination-translation']}")
-                if "source-translation" in entry:
-                    print(f"snat = {entry['source-translation']}")
-                if "to-interface" in entry:
-                    print(f"to-interface = {entry['to-interface']}")
-
-                print()
-        else:
-            print(f"No objects found for 'natrules")
-
-
-def pa_get_objects(destination_folder, rest_or_xml, xpath_or_call, outputrequested):
-
-    REST = False
-    XML = False
-
-    if rest_or_xml == "rest":
-        ext = "json"
-        REST = True
-    elif rest_or_xml == "xml":
-        ext = "xml"
-        XML = True
-
-    # Set filename
-    filename = f"{destination_folder}/{outputrequested}.{ext}"
-
-    # Export xml via Palo Alto API
-    success = False
-    if XML: 
-        response = obj.get_request_pa(call_type="config", action="get", xpath=xpath_or_call)
-        result = xmltodict.parse(response)
-        if result["response"]["@status"] == "success":
-            success = True
-            write_data_output(result, filename)
-            if not result["response"]["result"]:
-                print("Nothing found on PA, are you connecting to the right device? Check output for XML API reply")
-                sys.exit(0)
-    if REST:
-        response = obj.get_rest_request_pa(restcall=xpath_or_call)
-        json_response = json.loads(response)
-        if json_response["@status"] == "success":
-            success = True
-            create_json_files(response, filename)
-            if not json_response["response"]["result"]:
-                print("Nothing found on PA, are you connecting to the right device? Check output for REST API reply")
-                sys.exit(0)
-    if success:
-        pass
-    else:
-        # Extra logging when debugging
-        if DEBUG:
-            print(f"\nGET request sent: xpath={xpath}.\n")
-            print(f"\nResponse: \n{response}")
-            write_data_output(result, filename)
-            print(f"Output also written to {filename}")
-        else:
-            print(f"\nError exporting 'interfaces' object.")
-            print(
-                "(Normally this just means no object found, set DEBUG=True if needed)"
-            )
-    # Print out result
-    if outputrequested == "interfaces":
-    # INTERFACES
-        ###################### MUST BE UPDATED ###############
-        entries = result.get("response").get("result").get("interface").get("ethernet")
-
-        if entries:
-            # FIND INTERFACE TYPES AND SEARCH
-            for entry in result["response"]["result"]['interface']['ethernet']['entry']:
-                if "ip" in entry['layer3']:
-                    print(f"{entry['layer3']['ip']}") 
-                if "dhcp-client" in entry['layer3']:
-                    print(f"{entry['layer3']['dhcp-client']}") 
-        else:
-            print(f"No objects found for 'interfaces")
-
-    elif outputrequested == "natrules":
-        entries = json_response.get("result").get("entry")
-
-        if entries:
-            # go
-            for entry in entries:
-                print()
-                print(f"name = {entry['@name']}")
-                print(f"oSrczone = {entry['from']['member']}")
-                print(f"oDstzone = {entry['to']['member']}") 
-                print(f"destination = {entry['destination']}")
-                print(f"disabled = {entry['disabled']}")
                 if "destination-translation" in entry:
                     print(f"dnat = {entry['destination-translation']}")
                 if "source-translation" in entry:
@@ -347,37 +241,36 @@ def main(output_list, root_folder, selection, entry, pa_or_pan):
         else:
             output_list = final
 
-    # 1 = PA, 2 = PAN
-    if pa_or_pan == "1":
-        wrapper_call = pa_get_objects
-    else:
-        wrapper_call = pan_get_objects
-
-
     # Loop through user provided input, import each profile
     for output in output_list:
-        if output == "1":
-            if pa_or_pan == "2":
+        if output == "1":   # INTERFACES, XML ONLY
+            # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
+            XPATH_OR_RESTCALL = XML_INTERFACES
+            xml_or_rest = "xml"
+            outputrequested = "interfaces"
+
+            if pa_or_pan == "panorama":
+                # Needs Template Name
                 template_name = input("\nEnter the Template Name (CORRECTLY!): " )
-                XPATH = PAN_XML_INTERFACES.replace('TEMPLATE_NAME', template_name)
-            else:
-                XPATH = XML_INTERFACES
+                XPATH_OR_RESTCALL = PAN_XML_INTERFACES.replace('TEMPLATE_NAME', template_name)
 
-            wrapper_call(root_folder, "xml", XPATH, "interfaces")
+        elif output == "2": # NAT RULES, REST for now
+            # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
+            XPATH_OR_RESTCALL = REST_NATRULES
+            xml_or_rest = "rest"
+            outputrequested = "natrules"
 
-        elif output == "2":
-            if pa_or_pan == "2":
+            if pa_or_pan == "panorama":
+                # Needs Device Group
                 device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
-                XPATH = PAN_REST_POSTNATRULES.replace('DEVICE_GROUP', device_group)
-            else:
-                XPATH = REST_NATRULES
-
-            wrapper_call(root_folder, "rest", XPATH, "natrules")
+                XPATH_OR_RESTCALL = PAN_REST_POSTNATRULES.replace('DEVICE_GROUP', device_group)
 
         else:
             print("\nHuh?. You entered {}\n".format(profile))
             continue
 
+        # Begin the real work.
+        pa_get_objects(root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested)
 
 # If run from the command line
 if __name__ == "__main__":
@@ -400,18 +293,18 @@ if __name__ == "__main__":
     obj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
 
     # MENU
-    rest_or_xml = "1"
+    # xml_or_rest = "1"
 
-    while rest_or_xml != "1" and rest_or_xml != "2":
-        rest_or_xml = input(
-            """\nREST or XML??
+    # while xml_or_rest != "1" and xml_or_rest != "2":
+    #     xml_or_rest = input(
+    #         """\nREST or XML??
 
-        1) REST (9.0+)
-        2) XML (8.1-)
+    #     1) XML  (8.1-)
+    #     2) REST (9.0+)
 
-        Enter 1 or 2: """
-        )
-        rest_or_xml = "1"
+    #     Enter 1 or 2: """
+    #     )
+    xml_or_rest = "xml"
 
     allowed = list("12")  # Allowed user input
     incorrect_input = True
@@ -432,6 +325,10 @@ if __name__ == "__main__":
             else:
                 incorrect_input = False
 
+    if pa_or_pan == "1":
+        pa_or_pan = "pa"
+    else:
+        pa_or_pan = "panorama" 
 
     allowed = list("12,-")  # Allowed user input
     incorrect_input = True
@@ -464,7 +361,7 @@ if __name__ == "__main__":
     output_list = list(selection.replace(",", ""))
 
     # Run program
-    main(output_list, root_folder, rest_or_xml, entry, pa_or_pan)
+    main(output_list, root_folder, xml_or_rest, entry, pa_or_pan)
 
     # Done!
     print("\n\nComplete!\n")
