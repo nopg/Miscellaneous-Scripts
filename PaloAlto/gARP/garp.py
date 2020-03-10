@@ -79,7 +79,7 @@ PAN_REST_POSTNATRULES = "/restapi/9.0/Policies/NATPostRules?location=device-grou
 
 
 # Create file for each profile type
-def write_data_output(temp, filename):
+def create_xml_files(temp, filename):
 
     # Pull folder name from string
     end = filename.rfind("/")
@@ -120,33 +120,23 @@ def create_json_files(data, filename):
         
     print("\tCreated: {}\n".format(filename))
 
-def pa_get_objects(destination_folder, xml_or_rest, xpath_or_restcall, outputrequested):
-
-    REST = False
-    XML = False
-
-    if xml_or_rest == "rest":
-        ext = "json"
-        REST = True
-    elif xml_or_rest == "xml":
-        ext = "xml"
-        XML = True
-
-    # Set filename
-    filename = f"{destination_folder}/{outputrequested}.{ext}"
-
-    # Export xml via Palo Alto API
+def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested):
+     # Grab PA/Panorama API Output
     success = False
-    if XML: 
+    if xml_or_rest == "xml":
+        filename = f"{root_folder}/{outputrequested}.xml"
         response = obj.get_xml_request_pa(call_type="config", action="get", xpath=xpath_or_restcall)
-        result = xmltodict.parse(response)
-        if result["response"]["@status"] == "success":
+        xml_response = xmltodict.parse(response)
+        if xml_response["response"]["@status"] == "success":
             success = True
-            write_data_output(result, filename)
-            if not result["response"]["result"]:
-                print("Nothing found on PA, are you connecting to the right device? Check output for XML API reply")
-                sys.exit(0)
-    elif REST:
+        create_xml_files(xml_response, filename)
+        if not xml_response["response"]["result"]:
+            print("Nothing found on PA, are you connecting to the right device? Check output for XML API reply")
+            print("More error checking needed here.")
+            sys.exit(0)
+        
+    elif xml_or_rest == "rest":
+        filename = f"{root_folder}/{outputrequested}.json"
         response = obj.get_rest_request_pa(restcall=xpath_or_restcall)
         json_response = json.loads(response)
         if json_response["@status"] == "success":
@@ -154,26 +144,32 @@ def pa_get_objects(destination_folder, xml_or_rest, xpath_or_restcall, outputreq
         create_json_files(response, filename)
         if not json_response["result"]:
             print("Nothing found on PA, are you connecting to the right device? Check output for REST API reply")
+            print("More error checking needed here.")
             sys.exit(0)
-    if success:
-        pass
-    else:
+
+    if not success:
         # Extra logging when debugging
         if DEBUG:
             print(f"\nGET request sent: xpath={xpath}.\n")
             print(f"\nResponse: \n{response}")
-            write_data_output(result, filename)
+            create_xml_files(result, filename)
             print(f"Output also written to {filename}")
         else:
             print(f"\nError exporting 'interfaces' object.")
             print(
                 "(Normally this just means no object found, set DEBUG=True if needed)"
             )
-    # Print out result
-    if outputrequested == "interfaces":
+    if xml_or_rest == "xml":
+        return xml_response
+    else:
+        return json_response
+
+def garp_logic(api_output, xml_or_rest, outputrequested):
+    
     # INTERFACES
-        ###################### MUST BE UPDATED ###############
-        entries = result.get("response").get("result").get("interface").get("ethernet")
+    if outputrequested == "interfaces":
+        # Not properly error checking, not (yet) checking aggregate-ethernet
+        entries = api_output.get("response").get("result").get("interface").get("ethernet")
 
         if entries:
             # FIND INTERFACE TYPES AND SEARCH
@@ -186,7 +182,7 @@ def pa_get_objects(destination_folder, xml_or_rest, xpath_or_restcall, outputreq
             print(f"No objects found for 'interfaces")
 
     elif outputrequested == "natrules":
-        entries = json_response.get("result").get("entry")
+        entries = api_output.get("result").get("entry")
 
         if entries:
             # go
@@ -210,9 +206,8 @@ def pa_get_objects(destination_folder, xml_or_rest, xpath_or_restcall, outputreq
             print(f"No objects found for 'natrules")
 
 
-
 # Main Program
-def main(output_list, root_folder, selection, entry, pa_or_pan):
+def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
 
     # Organize user input
     # Expand '1' to '2,3,4,5,6,7,8,9,A'
@@ -241,12 +236,17 @@ def main(output_list, root_folder, selection, entry, pa_or_pan):
         else:
             output_list = final
 
+
+    ######
+    ### Begin the real work.
+    ######
     # Loop through user provided input, import each profile
     for output in output_list:
-        if output == "1":   # INTERFACES, XML ONLY
+        if output == "1":   # INTERFACES, --XML ONLY--
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = XML_INTERFACES
             xml_or_rest = "xml"
+            ext = "xml"
             outputrequested = "interfaces"
 
             if pa_or_pan == "panorama":
@@ -258,6 +258,7 @@ def main(output_list, root_folder, selection, entry, pa_or_pan):
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = REST_NATRULES
             xml_or_rest = "rest"
+            ext = "json"
             outputrequested = "natrules"
 
             if pa_or_pan == "panorama":
@@ -269,8 +270,11 @@ def main(output_list, root_folder, selection, entry, pa_or_pan):
             print("\nHuh?. You entered {}\n".format(profile))
             continue
 
-        # Begin the real work.
-        pa_get_objects(root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested)
+        # Grab Output (XML or REST, convert to dict.)
+        api_output = grab_api_output(root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested)
+
+        # gARP Logic
+        garp_logic(api_output, xml_or_rest, outputrequested)
 
 # If run from the command line
 if __name__ == "__main__":
@@ -304,6 +308,8 @@ if __name__ == "__main__":
 
     #     Enter 1 or 2: """
     #     )
+    
+    # UNUSED PLACEHOLDER FOR NOW
     xml_or_rest = "xml"
 
     allowed = list("12")  # Allowed user input
