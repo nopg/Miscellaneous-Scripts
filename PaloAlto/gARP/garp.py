@@ -182,16 +182,31 @@ def garp_logic(api_output, xml_or_rest, outputrequested):
         entries = (
             api_output.get("response").get("result").get("interface").get("ethernet")
         )
+        garp_commands = []
 
         if entries:
             # FIND INTERFACE TYPES AND SEARCH
             for entry in entries["entry"]:
-                if "ip" in entry["layer3"]:
-                    print(f"{entry['layer3']['ip']}")
-                if "dhcp-client" in entry["layer3"]:
-                    print(f"{entry['layer3']['dhcp-client']}")
+                # print(f"name = {entry['@name']}")
+                # if "ip" in entry["layer3"]:
+                #     print(f"{entry['layer3']['ip']}")
+                # if "dhcp-client" in entry["layer3"]:
+                #     print(f"{entry['layer3']['dhcp-client']}")
+                garp_command = "test arp gratuitous ip IPADDRESS interface IFNAME"
+
+                if "layer3" in entry:
+                    if "ip" in entry["layer3"]:
+                        ip = entry['layer3']['ip']['entry']['@name']
+                        temp = garp_command.replace('IPADDRESS', ip)
+                        ifname = entry['@name']
+                        temp = temp.replace('IFNAME', ifname)
+                else:
+                    temp = f"Bad entry, {entry['@name']}"
+                garp_commands.append(temp)
         else:
             print(f"No objects found for 'interfaces")
+
+        print(garp_commands)
 
     elif outputrequested == "natrules":
         entries = api_output.get("result").get("entry")
