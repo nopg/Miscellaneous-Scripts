@@ -67,16 +67,16 @@ PAN_REST_POSTNATRULES = "/restapi/9.0/Policies/NATPostRules?location=device-grou
 # fmt: on
 
 
-# # Read all .xml files found in folder_name, return list containing all the output
-# def grab_files_read(folder_name):
-#     profile_objects = []
-#     for root, dirs, files in os.walk(folder_name):
-#         for file in files:
-#             if file.endswith(".xml"):
-#                 with open(root + "/" + file, "r") as fin:
-#                     data = fin.read()
-#                     profile_objects.append(data)
-#     return profile_objects
+# Read all .xml files found in folder_name, return list containing all the output
+def grab_xml_files(folder_name):
+    profile_objects = []
+    for root, dirs, files in os.walk(folder_name):
+        for file in files:
+            if file.endswith(".xml"):
+                with open(root + "/" + file, "r") as fin:
+                    data = fin.read()
+                    profile_objects.append(data)
+    return profile_objects
 
 
 # Create file for each profile type
@@ -178,20 +178,17 @@ def garp_logic(api_output, xml_or_rest, outputrequested):
 
     # INTERFACES
     if outputrequested == "interfaces":
-        # Not properly error checking, not (yet) checking aggregate-ethernet
-        entries = (
+        eth_entries = (
             api_output.get("response").get("result").get("interface").get("ethernet")
         )
+        ae_entries = (
+            api_output.get("response").get("result").get("interface").get("aggregate-ethernet")
+        )
 
-        if entries:
-            # FIND INTERFACE TYPES AND SEARCH
-            for entry in entries["entry"]:
-                if "ip" in entry["layer3"]:
-                    print(f"{entry['layer3']['ip']}")
-                if "dhcp-client" in entry["layer3"]:
-                    print(f"{entry['layer3']['dhcp-client']}")
-        else:
-            print(f"No objects found for 'interfaces")
+        eth_garp = garp_interfaces(eth_entries, "ethernet")
+        ae_garp = garp_interfaces(ae_entries, "aggregate-ethernet")
+
+        garp_commands_interfaces =  eth_garp + ae_garp
 
     elif outputrequested == "natrules":
         entries = api_output.get("result").get("entry")
@@ -216,6 +213,13 @@ def garp_logic(api_output, xml_or_rest, outputrequested):
                 print()
         else:
             print(f"No objects found for 'natrules")
+
+        garp_commands_natrules = garp_natrules()
+    
+    garp_commands_natrules = garp_natrules()
+    garp_commands = garp_commands_interfaces + garp_commands_natrules
+
+    return garp_commands
 
 
 # Main Program
@@ -293,6 +297,85 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
         # gARP Logic
         garp_logic(api_output, xml_or_rest, outputrequested)
 
+def garp_interfaces(entries, iftype):
+
+    garp_commands = []
+    if entries:
+        # SEARCH ENTRIES
+        print(f"\n\nSearching through {iftype} interfaces")
+        for entry in entries["entry"]:
+
+            ifname = entry['@name']
+            garp_command = "test arp gratuitous ip IPADDRESS interface IFNAME"
+            XIPS = False
+            SUBIF_XIP = False
+
+            if "layer3" in entry:
+                if "ip" in entry["layer3"]:
+                    if type(entry['layer3']['ip']['entry']) is list:
+                        XIPS = True
+                        for xip in entry['layer3']['ip']['entry']:
+                            ip = xip['@name']
+                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                            temp = temp.replace('IFNAME', ifname)
+                            garp_commands.append(temp)
+                    else: 
+                        ip = entry['layer3']['ip']['entry']['@name']
+                        temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                        temp = temp.replace('IFNAME', ifname)
+                        garp_commands.append(temp)
+                elif "units" in entry["layer3"]:
+                    # Sub Interfaces
+                    XIPS = True
+                    if entry['layer3']['units']['entry'].__len__() > 1:
+                        for subif in entry['layer3']['units']['entry']:
+                            ifname = subif['@name']
+                            if type(subif['ip']['entry']) is list:
+                                # Really, secondary addresses on subinterfaces?!
+                                SUBIF_XIP = True
+                                print(f"FOUND SUBIF WITH SECONDARY IP ADDRESS, {ifname}")
+                                for subif_xip in subif['ip']['entry']:
+                                    ip = subif_xip['@name']
+                                    temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                                    temp = temp.replace('IFNAME', ifname)
+                                    garp_commands.append(temp)
+                            else:
+                                ip = subif['ip']['entry']['@name']
+                                temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                                temp = temp.replace('IFNAME', ifname)
+                                garp_commands.append(temp)
+                            
+                            #Append Sub Interfaces
+                            # if not SUBIF_XIP:
+                            #     garp_commands.append(temp)
+
+                    else:
+                        print("ONLY ONE SUBIF")
+                else:
+                    temp = f"No IP address found (e1), {entry['@name']}"
+            else:
+                temp = f"No IP address found (e2), {entry['@name']}"
+    else:
+        print(f"\nNo interfaces found for '{iftype}' type interfaces\n")
+    
+    return garp_commands
+
+
+def xmltesting(temp):
+    xml = xmltodict.parse(temp)
+    
+    eth_entries = (
+        xml.get("response").get("result").get("interface").get("ethernet")
+    )
+    ae_entries = (
+        xml.get("response").get("result").get("interface").get("aggregate-ethernet")
+    )
+
+    eth_garp = garp_interfaces(eth_entries, "ethernet")
+    ae_garp = garp_interfaces(ae_entries, "aggregate-ethernet")
+
+    return eth_garp + ae_garp
+
 
 # If run from the command line
 if __name__ == "__main__":
@@ -307,7 +390,18 @@ if __name__ == "__main__":
     root_folder = sys.argv[1]
     pa_ip = sys.argv[2]
     username = sys.argv[3]
-    password = getpass.getpass("Enter Password: ")
+    password = 'pass'#getpass.getpass("Enter Password: ")
+
+    ###########
+    xml = grab_xml_files(root_folder)
+    print(f"\nFirst XML = \n")
+    output = xmltesting(xml[0])
+    print('\ndebug above^\n')
+    for line in output:
+        print(line)
+
+    sys.exit(0)
+    ###########
 
     # Create connection with the Palo Alto as 'obj'
     obj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
@@ -332,7 +426,7 @@ if __name__ == "__main__":
     incorrect_input = True
     while incorrect_input:
         pa_or_pan = input(
-            """\nConnect to PA or Panorama?
+            """\nIs this a PA Firewall or Panorama?
 
         1) PA (Firewall)
         2) Panorama (PAN)
