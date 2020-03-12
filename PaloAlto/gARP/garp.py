@@ -5,11 +5,12 @@ Description:
     Send Gratuitous ARP out, typically during the cutover of a new FW.
 
 Requires:
+    ipcalc
     requests
     xmltodict
     lxml
     json
-        to install try: pip3 install xmltodict requests lxml json
+        to install try: pip3 install xmltodict requests lxml json ipcalc
 
 Author:
     Ryan Gillespie rgillespie@compunet.biz
@@ -43,6 +44,7 @@ import getpass
 import sys
 import os
 import json
+import ipcalc
 
 from lxml import etree
 import xmltodict
@@ -54,13 +56,11 @@ import xml_api_lib_pa as xmlpa
 DEBUG = False
 
 XML_ADDRESS =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='ENTRY_NAME']"
-#XML_ADDRESSGROUP =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address-group/entry[@name='ENTRY_NAME']"
 XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/network/interface"
 XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules"
 REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
 
 PAN_XML_ADDRESS =       "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/address/entry[@name='ENTRY_NAME']"
-#PAN_XML_ADDRESSGROUP =  "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='lab-Branch1-dg']/address-group/entry[@name='ENTRY_NAME']"
 PAN_XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
 PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
 PAN_REST_POSTNATRULES = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
@@ -128,7 +128,55 @@ def create_json_files(data, filename):
     fout.write(data)
     fout.close()
 
-    print("\tCreated: {}\n".format(filename))
+    #print("\tCreated: {}\n".format(filename))
+
+
+# Used to find the translated addresses
+def iterdict(d, searchfor):
+    for k,v in d.items():
+        if searchfor in k:
+            return v
+        elif isinstance(v, dict):
+            if not v:
+                print(f"system error..\nk={k}\nv={v}")
+                sys.exit(0)
+            return iterdict(v, searchfor)
+        else:
+            pass
+
+
+def interface_lookup(ip):
+    for key, v in ip_to_eth_dict.items():
+        iprange = ipcalc.Network(key)
+        if ip in iprange:
+            return v
+
+
+def address_lookup(obj, pa_or_pan, device_group):
+
+    if pa_or_pan == "panorama":
+        XPATH = PAN_XML_ADDRESS.replace("DEVICE_GROUP", device_group)
+        XPATH = XPATH.replace("ENTRY_NAME", obj)
+    else:
+        XPATH = XML_ADDRESS.replace("ENTRY_NAME", obj)
+
+    output = grab_api_output(".", "xml", XPATH, "address")
+
+    # Need to check for no response, must be an IP not address
+    if "entry" in output["response"]["result"]:
+        ips = output["response"]["result"]["entry"]["ip-netmask"]
+    else:
+        # Must be an IP/Mask already
+        ips = obj
+    
+    if ips is list:
+        for ip in ips:
+            ips.append(ip)
+    else:
+        ips = [ips]
+    
+    return ips
+
 
 def garp_interfaces(entries, iftype):
 
@@ -154,19 +202,13 @@ def garp_interfaces(entries, iftype):
                             temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                             temp = temp.replace('IFNAME', ifname)
                             garp_commands.append(temp)
-                            print(f"ip={ip},ifname={ifname}")
-                            h = ip.split('/',1)[0]
-                            print(f"h={h}")
-                            ip_to_eth_dict.update({ip.split('/',1)[0]:ifname})
+                            ip_to_eth_dict.update({ip:ifname})
                     else: 
                         ip = entry['layer3']['ip']['entry']['@name']
                         temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                         temp = temp.replace('IFNAME', ifname)
                         garp_commands.append(temp)
-                        print(f"ip={ip},ifname={ifname}")
-                        h = ip.split('/',1)[0]
-                        print(f"h={h}")
-                        ip_to_eth_dict.update({h:ifname})
+                        ip_to_eth_dict.update({ip:ifname})
                 elif "units" in entry["layer3"]:
                     # Sub Interfaces
                     XIPS = True
@@ -182,132 +224,91 @@ def garp_interfaces(entries, iftype):
                                     temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                     temp = temp.replace('IFNAME', ifname)
                                     garp_commands.append(temp)
-                                    print(f"ip={ip},ifname={ifname}")
-                                    h = ip.split('/',1)[0]
-                                    print(f"h={h}")
-                                    ip_to_eth_dict.update({ip.split('/',1)[0]:ifname})
+                                    ip_to_eth_dict.update({ip:ifname})
                             else:
                                 ip = subif['ip']['entry']['@name']
                                 temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                 temp = temp.replace('IFNAME', ifname)
                                 garp_commands.append(temp)
-                                print(f"ip={ip},ifname={ifname}")
-                                h = ip.split('/',1)[0]
-                                print(f"h={h}")
-                                ip_to_eth_dict.update({ip.split('/',1)[0]:ifname})
-                            
-                            #Append Sub Interfaces
-                            # if not SUBIF_XIP:
-                            #     garp_commands.append(temp)
-
+                                ip_to_eth_dict.update({ip:ifname})
                     else:
                         print("ONLY ONE SUBIF")
                 else:
-                    temp = f"No IP address found (e1), {entry['@name']}"
+                    garp_commands.append(f"No IP address found (e1)(DHCP?), {entry['@name']}")
             else:
-                temp = f"No IP address found (e2), {entry['@name']}"
+                garp_commands.append(f"No IP address found (e2), {entry['@name']}")
     else:
         print(f"\nNo interfaces found for '{iftype}' type interfaces\n")
     
-    print(f"dict1 = {ip_to_eth_dict}")
     return garp_commands
 
-# Used to find the translated addresses
-def iterdict(d, searchfor):
-    for k,v in d.items():
-        if searchfor in k:
-            return v
-        elif isinstance(v, dict):
-            if not v:
-                print(f"system error..\nk={k}\nv={v}")
-                sys.exit(0)
-            return iterdict(v, searchfor)
-        else:
-            pass
 
-def address_lookup(obj):
-
-    XPATH = XML_ADDRESS.replace("ENTRY_NAME", obj)
-    print(XPATH)
-    output = grab_api_output(".", "xml", XPATH, "address")
-    #temp = grab_files("debtest2")[0]
-    #output = xmltodict.parse(temp)
-
-    ips = output["response"]["result"]["entry"]["ip-netmask"]
-    
-    print(f"ips = {ips}")
-    if ips is list:
-        for ip in ips:
-            ips.append(ip)
-    else:
-        ips = [ips]
-    
-    return ips
-
-
-def garp_natrules(entries, natrules):
+def garp_natrules(entries, natrules, pa_or_pan, device_group):
     garp_commands = []
     global ip_to_eth_dict
     if entries:
         # go
         for entry in entries:
-            print(f"\nName = {entry['@name']}")
             garp_command = "test arp gratuitous ip IPADDRESS interface IFNAME"
             ip = None
-
-            print(f"dict = {ip_to_eth_dict}")
 
             if "disabled" in entry:
                 if entry["disabled"] == "yes":
                     print(f"disabled = {entry['disabled']}")
             if "destination-translation" in entry:
-                print(f"dnat = {entry['destination-translation']}")
-                print("RYAN ADD CHECK FOR INTERFACE-ADDRESS----CATCH A USE CASE.")
+                #print(f"dnat = {entry['destination-translation']}")
+                #print("RYAN ADD CHECK FOR INTERFACE-ADDRESS----CATCH A USE CASE.")
                 garp_commands.append(f"DNAT, - Check NAT rule named: {entry['@name']} for details.")
                 #obj = iterdict(entry['destination-translation'])
             if "source-translation" in entry:
                 snat = entry['source-translation']
-                print(f"snat = {snat}")
                 
+                # Returns Address Object typically, could also be an IP
                 obj = iterdict(snat, "translated-address")
                 
+                # Usually 'translated-address' but check for 'interface-address'
                 if obj:
-                    
-                    print(f"Source NAT to obj = {obj}")
 
                     if isinstance(obj, dict):
-                        ips = []
-                        ifname = "iface-lookup"
-                        [ips.append(o) for o in obj["member"]]
+                        ipobjs = []
+                        [ipobjs.append(o) for o in obj["member"]]
 
-                        for ip in ips:
-                            ifname = "iface-lookup"
-                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                            temp = temp.replace('IFNAME', ifname)    
-                            garp_commands.append(temp)
+                        for ipobj in ipobjs:
 
-                    else:
-                        ips = address_lookup(obj)
-                        for ip in ips:
-                            if ip.split('/',1)[0] in ip_to_eth_dict:
-                                ifname = ip_to_eth_dict[ip.split('/',1)[0]]
-                                print(f"HECKYA, {ip} found. {ifname}")
+                            ips = address_lookup(ipobj, pa_or_pan, device_group)
+
+                            for ip in ips:
+                                ifname = interface_lookup(ip)
+                                if not ifname:
+                                    ifname = "INTERFACE NOT FOUND"
                                 temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                 temp = temp.replace('IFNAME', ifname)    
                                 garp_commands.append(temp)
+
+                    else:
+                        # Look up Address Object to get actual value
+                        ips = address_lookup(obj, pa_or_pan, device_group)
+
+                        for ip in ips:                         
+                            ifname = interface_lookup(ip)
+                            if not ifname:
+                                ifname = "INTERFACE NOT FOUND"
+                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                            temp = temp.replace('IFNAME', ifname)    
+                            garp_commands.append(temp)
                 else:
                     obj = iterdict(snat, "interface-address")
                     if obj:
                         ifname = snat["dynamic-ip-and-port"]["interface-address"]["interface"]
                         if "ip" in snat["dynamic-ip-and-port"]["interface-address"]:
                             ipobj = snat["dynamic-ip-and-port"]["interface-address"]["ip"]
-                            ips = address_lookup(ipobj)
-                            for ip in ips:
+                            ips = address_lookup(ipobj, pa_or_pan, device_group)
+                            for ip in ips: 
                                 temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                 temp = temp.replace('IFNAME', ifname)    
                                 garp_commands.append(temp)
                         else:
-                            ip = "NO IP FOUND, ARP should be taken care of via: "
+                            ip = "IP NOT FOUND, ARP should be taken care of via: "
                             temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                             temp = temp.replace('IFNAME', ifname)    
                             garp_commands.append(temp)
@@ -317,6 +318,7 @@ def garp_natrules(entries, natrules):
         print(f"No nat rules found for 'natrules")
 
     return garp_commands
+
 
 def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested):
     # Grab PA/Panorama API Output
@@ -369,7 +371,7 @@ def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested
         return json_response
 
 
-def garp_logic(api_output, xml_or_rest, outputrequested):
+def garp_logic(api_output, xml_or_rest, outputrequested, pa_or_pan, device_group):
 
     # INTERFACES
     if outputrequested == "interfaces":
@@ -390,7 +392,8 @@ def garp_logic(api_output, xml_or_rest, outputrequested):
             api_output.get("result").get("entry")
         )
 
-        garp_commands = garp_natrules(nat_entries, "natrules")
+        print("\nPlease wait..\n")
+        garp_commands = garp_natrules(nat_entries, "natrules", pa_or_pan, device_group)
 
     return garp_commands
 
@@ -432,6 +435,8 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
     ######
     # Loop through user provided input, import each profile
     for output in output_list:
+        device_group = None
+
         if output == "1":  # INTERFACES, --XML ONLY--
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = XML_INTERFACES
@@ -470,7 +475,7 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
         )
 
         # gARP Logic
-        output = garp_logic(api_output, xml_or_rest, outputrequested)
+        output = garp_logic(api_output, xml_or_rest, outputrequested, pa_or_pan, device_group)
         
         print(f"\ngARP {outputrequested} Test Commands:")
         print("-------------------------------------------------------------")
