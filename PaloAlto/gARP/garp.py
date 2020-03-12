@@ -292,10 +292,9 @@ def garp_natrules(entries, natrules):
                             if ip.split('/',1)[0] in ip_to_eth_dict:
                                 ifname = ip_to_eth_dict[ip.split('/',1)[0]]
                                 print(f"HECKYA, {ip} found. {ifname}")
-                            ifname = "iface-lookup"
-                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                            temp = temp.replace('IFNAME', ifname)    
-                            garp_commands.append(temp)
+                                temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                                temp = temp.replace('IFNAME', ifname)    
+                                garp_commands.append(temp)
                 else:
                     obj = iterdict(snat, "interface-address")
                     if obj:
