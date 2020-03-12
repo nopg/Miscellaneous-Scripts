@@ -1,33 +1,32 @@
 """
 Description: 
-    Import/Export Security Profile objects using the Palo Alto API
-    Export - Exports chosen objects to appropriate files
-    Import - Imports from root_folder all chosen objects
+    PA Gratuitous ARP Script
+    Connect to PA or Panorama and determine which IP Addresses and Interfaces should
+    Send Gratuitous ARP out, typically during the cutover of a new FW.
 
 Requires:
     requests
     xmltodict
     lxml
-        to install try: pip3 install xmltodict requests lxml
+    json
+        to install try: pip3 install xmltodict requests lxml json
 
 Author:
     Ryan Gillespie rgillespie@compunet.biz
     Docstring stolen from Devin Callaway
 
 Tested:
-    Tested on macos 10.12.3, Windows 10
+    Tested on macos 10.13.6
     Python: 3.6.2
-    PA VM100
+    PA VM100, Panorama, PA 5250
 
 Example usage:
-        $ python3 pa_security_profiles.py <destination folder> <PA mgmt IP> <username>
+        $ python3 garp.py <destination folder> <PA(N) mgmt IP> <username>
         Password: 
 
 Cautions:
     - Set DEBUG=True if errors occur and you would like detailed information.
-    - Will export ONLY COMMITTED CHANGES.
-        To export candidate configuration change action="show" to action="get" (not recommended)
-    - Will NOT commit any imported objects, this must be done manually.
+    - Not fully developed.
     
 
 Legal:
@@ -49,34 +48,35 @@ from lxml import etree
 import xmltodict
 import xml_api_lib_pa as xmlpa
 
-# import rest_api_lib_pa as restpa
-
-
 # fmt: off
 # Global Variables, debug & xpath location for each profile type
 # ENTRY = + "/entry[@name='alert-only']"
 DEBUG = False
 
+XML_ADDRESS =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='ENTRY_NAME']"
+#XML_ADDRESSGROUP =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address-group/entry[@name='ENTRY_NAME']"
 XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/network/interface"
 XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules"
 REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
 
-PAN_XML_INTERFACES = "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
-PAN_XML_NATRULES = "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
+PAN_XML_ADDRESS =       "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='lab-Branch1-dg']/address/entry[@name='ENTRY_NAME']"
+#PAN_XML_ADDRESSGROUP =  "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='lab-Branch1-dg']/address-group/entry[@name='ENTRY_NAME']"
+PAN_XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
+PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
 PAN_REST_POSTNATRULES = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
 # fmt: on
 
 
 # Read all .xml files found in folder_name, return list containing all the output
-def grab_xml_files(folder_name):
-    profile_objects = []
+def grab_files(folder_name):
+    file_list = []
     for root, dirs, files in os.walk(folder_name):
         for file in files:
-            if file.endswith(".xml"):
-                with open(root + "/" + file, "r") as fin:
-                    data = fin.read()
-                    profile_objects.append(data)
-    return profile_objects
+            #if file.endswith(".xml"):
+            with open(root + "/" + file, "r") as fin:
+                data = fin.read()
+                file_list.append(data)
+    return file_list
 
 
 # Create file for each profile type
@@ -116,15 +116,25 @@ def create_json_files(data, filename):
     :param template_type: 'feature' or 'device'
     :return: None, print output
     """
+    # Pull folder name from string
+    end = filename.rfind("/")
+    folder = filename[0:end]
+
+    # Create the root folder and subfolder if it doesn't already exist
+    os.makedirs(folder, exist_ok=True)
+    
+    # Write Data
     fout = open(filename, "w")
-    fout.write(json.dumps(data))
+    fout.write(data)
     fout.close()
 
     print("\tCreated: {}\n".format(filename))
 
 def garp_interfaces(entries, iftype):
 
+    global ip_to_eth_dict
     garp_commands = []
+
     if entries:
         # SEARCH ENTRIES
         print(f"\n\nSearching through {iftype} interfaces")
@@ -144,11 +154,14 @@ def garp_interfaces(entries, iftype):
                             temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                             temp = temp.replace('IFNAME', ifname)
                             garp_commands.append(temp)
+                            ip_to_eth_dict.update({ip:ifname})
                     else: 
                         ip = entry['layer3']['ip']['entry']['@name']
                         temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                         temp = temp.replace('IFNAME', ifname)
                         garp_commands.append(temp)
+                        print(f"ip={ip},ifname={ifname}")
+                        ip_to_eth_dict.update({ip:ifname})
                 elif "units" in entry["layer3"]:
                     # Sub Interfaces
                     XIPS = True
@@ -164,11 +177,13 @@ def garp_interfaces(entries, iftype):
                                     temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                     temp = temp.replace('IFNAME', ifname)
                                     garp_commands.append(temp)
+                                    ip_to_eth_dict.update({ip:ifname})
                             else:
                                 ip = subif['ip']['entry']['@name']
                                 temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                 temp = temp.replace('IFNAME', ifname)
                                 garp_commands.append(temp)
+                                ip_to_eth_dict.update({ip:ifname})
                             
                             #Append Sub Interfaces
                             # if not SUBIF_XIP:
@@ -183,30 +198,109 @@ def garp_interfaces(entries, iftype):
     else:
         print(f"\nNo interfaces found for '{iftype}' type interfaces\n")
     
+    print(f"dict1 = {ip_to_eth_dict}")
     return garp_commands
+
+# Used to find the translated addresses
+def iterdict(d, searchfor):
+    for k,v in d.items():
+        if searchfor in k:
+            return v
+        elif isinstance(v, dict):
+            if not v:
+                print(f"system error..\nk={k}\nv={v}")
+                sys.exit(0)
+            return iterdict(v, searchfor)
+        else:
+            pass
+
+def address_lookup(obj):
+
+    XPATH = PAN_XML_ADDRESS.replace("ENTRY_NAME", obj)
+    #output = grab_api_output(".", "xml", XPATH, "address")
+    temp = grab_files("debtest2")[0]
+    output = xmltodict.parse(temp)
+
+    ips = output["response"]["result"]["entry"]["ip-netmask"]
+    
+    if ips is list:
+        for ip in ips:
+            ips.append(ip)
+    else:
+        ips = [ips]
+    
+    return ips
 
 
 def garp_natrules(entries, natrules):
     garp_commands = []
-
+    global ip_to_eth_dict
     if entries:
         # go
         for entry in entries:
-            print()
-            print(f"name = {entry['@name']}")
-            print(f"oSrczone = {entry['from']['member']}")
-            print(f"oDstzone = {entry['to']['member']}")
-            print(f"destination = {entry['destination']}")
+            print(f"\nName = {entry['@name']}")
+            garp_command = "test arp gratuitous ip IPADDRESS interface IFNAME"
+            ip = None
+
+            print(f"dict = {ip_to_eth_dict}")
+
             if "disabled" in entry:
-                print(f"disabled = {entry['disabled']}")
+                if entry["disabled"] == "yes":
+                    print(f"disabled = {entry['disabled']}")
             if "destination-translation" in entry:
                 print(f"dnat = {entry['destination-translation']}")
+                print("RYAN ADD CHECK FOR INTERFACE-ADDRESS----CATCH A USE CASE.")
+                garp_commands.append(f"DNAT, - Check NAT rule named: {entry['@name']} for details.")
+                #obj = iterdict(entry['destination-translation'])
             if "source-translation" in entry:
-                print(f"snat = {entry['source-translation']}")
-            if "to-interface" in entry:
-                print(f"to-interface = {entry['to-interface']}")
+                snat = entry['source-translation']
+                print(f"snat = {snat}")
+                
+                obj = iterdict(snat, "translated-address")
+                
+                if obj:
+                    
+                    print(f"Source NAT to obj = {obj}")
 
-            print()
+                    if isinstance(obj, dict):
+                        ips = []
+                        ifname = "iface-lookup"
+                        [ips.append(o) for o in obj["member"]]
+
+                        for ip in ips:
+                            ifname = "iface-lookup"
+                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                            temp = temp.replace('IFNAME', ifname)    
+                            garp_commands.append(temp)
+
+                    else:
+                        ips = address_lookup(obj)
+                        for ip in ips:
+                            if "192.168.98.1/24" in ip_to_eth_dict:
+                                ifname = ip_to_eth_dict['192.168.98.1/24']
+                                print(f"HECKYA, {ifname}")
+                            ifname = "iface-lookup"
+                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                            temp = temp.replace('IFNAME', ifname)    
+                            garp_commands.append(temp)
+                else:
+                    obj = iterdict(snat, "interface-address")
+                    if obj:
+                        ifname = snat["dynamic-ip-and-port"]["interface-address"]["interface"]
+                        if "ip" in snat["dynamic-ip-and-port"]["interface-address"]:
+                            ipobj = snat["dynamic-ip-and-port"]["interface-address"]["ip"]
+                            ips = address_lookup(ipobj)
+                            for ip in ips:
+                                temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                                temp = temp.replace('IFNAME', ifname)    
+                                garp_commands.append(temp)
+                        else:
+                            ip = "NO IP FOUND, ARP should be taken care of via: "
+                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
+                            temp = temp.replace('IFNAME', ifname)    
+                            garp_commands.append(temp)
+                    else:
+                        garp_commands.append(f"Error, SNAT configured without a translated IP (e2), {snat}")  
     else:
         print(f"No nat rules found for 'natrules")
 
@@ -226,7 +320,7 @@ def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested
         create_xml_files(xml_response, filename)
         if not xml_response["response"]["result"]:
             print(
-                "Nothing found on PA, are you connecting to the right device? Check output for XML API reply"
+                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for XML API reply"
             )
             print("More error checking needed here.")
             sys.exit(0)
@@ -240,7 +334,7 @@ def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested
         create_json_files(response, filename)
         if not json_response["result"]:
             print(
-                "Nothing found on PA, are you connecting to the right device? Check output for REST API reply"
+                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for REST API reply"
             )
             print("More error checking needed here.")
             sys.exit(0)
@@ -290,6 +384,9 @@ def garp_logic(api_output, xml_or_rest, outputrequested):
 
 # Main Program
 def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
+
+    global ip_to_eth_dict
+    ip_to_eth_dict = {}
 
     # Organize user input
     # Expand '1' to '2,3,4,5,6,7,8,9,A'
@@ -375,10 +472,11 @@ if __name__ == "__main__":
 
     if sys.argv[1] == 'DEBUG':
         root_folder = 'debtest'
-        xml = grab_xml_files(root_folder)
-        parsedxml = xmltodict.parse(xml[0])
-        print(f"xml = {parsedxml}")
-        output = garp_logic(parsedxml, "xml", "interfaces")
+        fout = grab_files(root_folder)
+        for fin in fout:
+            parsedfile = json.loads(fin)
+            print(f"fin = {parsedfile}")
+            output = garp_logic(parsedfile, "rest", "natrules")
         print("===========DEBUG MODE===========")
         print("\ngARP DEBUG Test Commands:")
         print("-------------------------------------------------------------")
