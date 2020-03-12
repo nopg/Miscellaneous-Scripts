@@ -42,8 +42,8 @@ import sys
 
 import xmltodict
 
+# Who cares about SSL?
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 DEBUG = False

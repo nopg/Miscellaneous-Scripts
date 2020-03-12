@@ -55,68 +55,16 @@ import xml_api_lib_pa as xmlpa
 # ENTRY = + "/entry[@name='alert-only']"
 DEBUG = False
 
-XPATH_ADDRESS_OBJ =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='ENTRY_NAME']"
-XPATH_ADDRESS_OBJ_PAN = "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/address/entry[@name='ENTRY_NAME']"
-
-XPATH_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/network/interface"
-XPATH_INTERFACES_PAN =    "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
-
+XML_ADDRESS =       "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='ENTRY_NAME']"
+XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/network/interface"
+XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules"
 REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
-REST_NATRULES_PAN = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
 
-
-#PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
-
+PAN_XML_ADDRESS =       "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/address/entry[@name='ENTRY_NAME']"
+PAN_XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
+PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
+PAN_REST_POSTNATRULES = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
 # fmt: on
-
-
-def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested, obj):
-    # Grab PA/Panorama API Output
-    success = False
-    if xml_or_rest == "xml":
-        filename = f"{root_folder}/{outputrequested}.xml"
-        response = obj.get_xml_request_pa(
-            call_type="config", action="get", xpath=xpath_or_restcall
-        )
-        xml_response = xmltodict.parse(response)
-        if xml_response["response"]["@status"] == "success":
-            success = True
-        create_xml_files(xml_response, filename)
-        if not xml_response["response"]["result"]:
-            print(
-                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for XML API reply"
-            )
-            sys.exit(0)
-
-    elif xml_or_rest == "rest":
-        filename = f"{root_folder}/{outputrequested}.json"
-        response = obj.get_rest_request_pa(restcall=xpath_or_restcall)
-        json_response = json.loads(response)
-        if json_response["@status"] == "success":
-            success = True
-        create_json_files(response, filename)
-        if not json_response["result"]:
-            print(
-                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for REST API reply"
-            )
-
-    if not success:
-        # Extra logging when debugging
-        if DEBUG:
-            print(f"\nGET request sent: xpath={xpath_or_restcall}.\n")
-            print(f"\nResponse: \n{response}")
-            create_xml_files(result, filename)
-            print(f"Output also written to {filename}")
-        else:
-            print(f"\nError exporting '{outputrequested}' object.")
-            print(
-                "(Normally this just means no object found, set DEBUG=True if needed)"
-            )
-            
-    if xml_or_rest == "xml":
-        return xml_response
-    else:
-        return json_response
 
 
 # Read all .xml files found in folder_name, return list containing all the output
@@ -204,15 +152,15 @@ def interface_lookup(ip):
             return v
 
 
-def address_lookup(obj, pa_or_pan, device_group, fwconn):
-    
+def address_lookup(obj, pa_or_pan, device_group):
+
     if pa_or_pan == "panorama":
-        XPATH = XPATH_ADDRESS_OBJ_PAN.replace("DEVICE_GROUP", device_group)
+        XPATH = PAN_XML_ADDRESS.replace("DEVICE_GROUP", device_group)
         XPATH = XPATH.replace("ENTRY_NAME", obj)
     else:
-        XPATH = XPATH_ADDRESS_OBJ.replace("ENTRY_NAME", obj)
+        XPATH = XML_ADDRESS.replace("ENTRY_NAME", obj)
 
-    output = grab_api_output(".", "xml", XPATH, "address", fwconn)
+    output = grab_api_output(".", "xml", XPATH, "address")
 
     # Need to check for no response, must be an IP not address
     if "entry" in output["response"]["result"]:
@@ -291,11 +239,11 @@ def garp_interfaces(entries, iftype):
                 garp_commands.append(f"No IP address found (e2), {entry['@name']}")
     else:
         print(f"\nNo interfaces found for '{iftype}' type interfaces\n")
-
+    
     return garp_commands
 
 
-def garp_natrules(entries, natrules, pa_or_pan, fwconn, device_group=""):
+def garp_natrules(entries, natrules, pa_or_pan, device_group):
     garp_commands = []
     global ip_to_eth_dict
     if entries:
@@ -327,7 +275,7 @@ def garp_natrules(entries, natrules, pa_or_pan, fwconn, device_group=""):
 
                         for ipobj in ipobjs:
 
-                            ips = address_lookup(ipobj, pa_or_pan, device_group, fwconn)
+                            ips = address_lookup(ipobj, pa_or_pan, device_group)
 
                             for ip in ips:
                                 ifname = interface_lookup(ip)
@@ -339,7 +287,7 @@ def garp_natrules(entries, natrules, pa_or_pan, fwconn, device_group=""):
 
                     else:
                         # Look up Address Object to get actual value
-                        ips = address_lookup(obj, pa_or_pan, device_group, fwconn)
+                        ips = address_lookup(obj, pa_or_pan, device_group)
 
                         for ip in ips:                         
                             ifname = interface_lookup(ip)
@@ -354,7 +302,7 @@ def garp_natrules(entries, natrules, pa_or_pan, fwconn, device_group=""):
                         ifname = snat["dynamic-ip-and-port"]["interface-address"]["interface"]
                         if "ip" in snat["dynamic-ip-and-port"]["interface-address"]:
                             ipobj = snat["dynamic-ip-and-port"]["interface-address"]["ip"]
-                            ips = address_lookup(ipobj, pa_or_pan, device_group, fwconn)
+                            ips = address_lookup(ipobj, pa_or_pan, device_group)
                             for ip in ips: 
                                 temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                 temp = temp.replace('IFNAME', ifname)    
@@ -372,72 +320,82 @@ def garp_natrules(entries, natrules, pa_or_pan, fwconn, device_group=""):
     return garp_commands
 
 
-def garp_logic(pa_or_pan, fwconn, root_folder):
+def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested):
+    # Grab PA/Panorama API Output
+    success = False
+    if xml_or_rest == "xml":
+        filename = f"{root_folder}/{outputrequested}.xml"
+        response = obj.get_xml_request_pa(
+            call_type="config", action="get", xpath=xpath_or_restcall
+        )
+        xml_response = xmltodict.parse(response)
+        if xml_response["response"]["@status"] == "success":
+            success = True
+        create_xml_files(xml_response, filename)
+        if not xml_response["response"]["result"]:
+            print(
+                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for XML API reply"
+            )
+            print("More error checking needed here.")
+            sys.exit(0)
 
-    global XPATH_ADDRESS_OBJ 
-    global XPATH_ADDRESS_OBJ_PAN 
+    elif xml_or_rest == "rest":
+        filename = f"{root_folder}/{outputrequested}.json"
+        response = obj.get_rest_request_pa(restcall=xpath_or_restcall)
+        json_response = json.loads(response)
+        if json_response["@status"] == "success":
+            success = True
+        create_json_files(response, filename)
+        if not json_response["result"]:
+            print(
+                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for REST API reply"
+            )
+            print("More error checking needed here.")
+            sys.exit(0)
 
-    global XPATH_INTERFACES
-    global XPATH_INTERFACES_PAN
+    if not success:
+        # Extra logging when debugging
+        if DEBUG:
+            print(f"\nGET request sent: xpath={xpath}.\n")
+            print(f"\nResponse: \n{response}")
+            create_xml_files(result, filename)
+            print(f"Output also written to {filename}")
+        else:
+            print(f"\nError exporting 'interfaces' object.")
+            print(
+                "(Normally this just means no object found, set DEBUG=True if needed)"
+            )
+    if xml_or_rest == "xml":
+        return xml_response
+    else:
+        return json_response
 
-    global REST_NATRULES   
-    global REST_NATRULES_PAN
 
-
-    global ip_to_eth_dict
-    ip_to_eth_dict = {}
-
-    device_group = None
-
-    if pa_or_pan == "panorama":
-        # Needs Template Name & Device Group
-        template_name = input("\nEnter the Template Name (CORRECTLY!): ")
-        device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
-        
-        XPATH_INTERFACES = XPATH_INTERFACES_PAN
-        XPATH_INTERFACES = XPATH_INTERFACES.replace("TEMPLATE_NAME", template_name)
-        XPATH_INTERFACES = XPATH_INTERFACES.replace("DEVICE_GROUP", device_group)
-        REST_NATRULES = REST_NATRULES_PAN
-        REST_NATRULES = REST_NATRULES.replace("TEMPLATE_NAME", template_name)
-        REST_NATRULES = REST_NATRULES.replace("DEVICE_GROUP", device_group)
-
-    # Grab Interfaces (XML)
-    int_output = grab_api_output(
-        root_folder, "xml", XPATH_INTERFACES, "interfaces", fwconn
-    )
-
-    # Grab NAT Rules (REST)
-    nat_output = grab_api_output(
-        root_folder, "rest", REST_NATRULES, "natrules", fwconn
-    )
+def garp_logic(api_output, xml_or_rest, outputrequested, pa_or_pan, device_group):
 
     # INTERFACES
-    eth_entries = (
-        int_output.get("response").get("result").get("interface").get("ethernet")
-    )
-    ae_entries = (
-        int_output.get("response").get("result").get("interface").get("aggregate-ethernet")
-    )
+    if outputrequested == "interfaces":
+        eth_entries = (
+            api_output.get("response").get("result").get("interface").get("ethernet")
+        )
+        ae_entries = (
+            api_output.get("response").get("result").get("interface").get("aggregate-ethernet")
+        )
 
-    eth_garp = garp_interfaces(eth_entries, "ethernet")
-    ae_garp = garp_interfaces(ae_entries, "aggregate-ethernet")
-    
-    garp_commands =  eth_garp + ae_garp
+        eth_garp = garp_interfaces(eth_entries, "ethernet")
+        ae_garp = garp_interfaces(ae_entries, "aggregate-ethernet")
 
-    # Going through NAT rules
+        garp_commands =  eth_garp + ae_garp
 
-    print("\nPlease wait..\n")
+    elif outputrequested == "natrules":
+        nat_entries = (
+            api_output.get("result").get("entry")
+        )
 
-    nat_entries = (
-        nat_output.get("result").get("entry")
-    )
-    
-    if device_group:
-        nat_garp = garp_natrules(nat_entries, "natrules", pa_or_pan, fwconn, device_group)
-    else:
-        nat_garp = garp_natrules(nat_entries, "natrules", pa_or_pan, fwconn)
+        print("\nPlease wait..\n")
+        garp_commands = garp_natrules(nat_entries, "natrules", pa_or_pan, device_group)
 
-    return garp_commands + nat_garp
+    return garp_commands
 
 # Main Program
 def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
@@ -481,7 +439,7 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
 
         if output == "1":  # INTERFACES, --XML ONLY--
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
-            XPATH_OR_RESTCALL = ITEM1_XML
+            XPATH_OR_RESTCALL = XML_INTERFACES
             xml_or_rest = "xml"
             ext = "xml"
             outputrequested = "interfaces"
@@ -489,13 +447,13 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
             if pa_or_pan == "panorama":
                 # Needs Template Name
                 template_name = input("\nEnter the Template Name (CORRECTLY!): ")
-                XPATH_OR_RESTCALL = ITEM1_XML_PAN.replace(
+                XPATH_OR_RESTCALL = PAN_XML_INTERFACES.replace(
                     "TEMPLATE_NAME", template_name
                 )
 
         elif output == "2":  # NAT RULES, REST for now
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
-            XPATH_OR_RESTCALL = ITEM2_REST
+            XPATH_OR_RESTCALL = REST_NATRULES
             xml_or_rest = "rest"
             ext = "json"
             outputrequested = "natrules"
@@ -503,20 +461,9 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
             if pa_or_pan == "panorama":
                 # Needs Device Group
                 device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
-                XPATH_OR_RESTCALL = ITEM2_REST_PAN.replace(
+                XPATH_OR_RESTCALL = PAN_REST_POSTNATRULES.replace(
                     "DEVICE_GROUP", device_group
                 )
-
-        elif output == "3":  # gARP, program.
-            # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
-
-            output = garp_logic(pa_or_pan, obj)
-        
-            print(f"\ngARP {outputrequested} Test Commands:")
-            print("-------------------------------------------------------------")
-            for line in output:
-                print(line)
-            print("-------------------------------------------------------------")
 
         else:
             print("\nHuh?. You entered {}\n".format(profile))
@@ -527,8 +474,14 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
             root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested
         )
 
-        print("done. create a loop here?")
-        sys.exit(0)
+        # gARP Logic
+        output = garp_logic(api_output, xml_or_rest, outputrequested, pa_or_pan, device_group)
+        
+        print(f"\ngARP {outputrequested} Test Commands:")
+        print("-------------------------------------------------------------")
+        for line in output:
+            print(line)
+        print("-------------------------------------------------------------")
 
 
 # If run from the command line
