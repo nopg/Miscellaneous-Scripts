@@ -59,7 +59,7 @@ XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/networ
 XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules"
 REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
 
-PAN_XML_ADDRESS =       "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='lab-Branch1-dg']/address/entry[@name='ENTRY_NAME']"
+PAN_XML_ADDRESS =       "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/address/entry[@name='ENTRY_NAME']"
 #PAN_XML_ADDRESSGROUP =  "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='lab-Branch1-dg']/address-group/entry[@name='ENTRY_NAME']"
 PAN_XML_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
 PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
@@ -154,14 +154,19 @@ def garp_interfaces(entries, iftype):
                             temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                             temp = temp.replace('IFNAME', ifname)
                             garp_commands.append(temp)
-                            ip_to_eth_dict.update({ip:ifname})
+                            print(f"ip={ip},ifname={ifname}")
+                            h = ip.split('/',1)[0]
+                            print(f"h={h}")
+                            ip_to_eth_dict.update({ip.split('/',1)[0]:ifname})
                     else: 
                         ip = entry['layer3']['ip']['entry']['@name']
                         temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                         temp = temp.replace('IFNAME', ifname)
                         garp_commands.append(temp)
                         print(f"ip={ip},ifname={ifname}")
-                        ip_to_eth_dict.update({ip:ifname})
+                        h = ip.split('/',1)[0]
+                        print(f"h={h}")
+                        ip_to_eth_dict.update({h:ifname})
                 elif "units" in entry["layer3"]:
                     # Sub Interfaces
                     XIPS = True
@@ -177,13 +182,19 @@ def garp_interfaces(entries, iftype):
                                     temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                     temp = temp.replace('IFNAME', ifname)
                                     garp_commands.append(temp)
-                                    ip_to_eth_dict.update({ip:ifname})
+                                    print(f"ip={ip},ifname={ifname}")
+                                    h = ip.split('/',1)[0]
+                                    print(f"h={h}")
+                                    ip_to_eth_dict.update({ip.split('/',1)[0]:ifname})
                             else:
                                 ip = subif['ip']['entry']['@name']
                                 temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                 temp = temp.replace('IFNAME', ifname)
                                 garp_commands.append(temp)
-                                ip_to_eth_dict.update({ip:ifname})
+                                print(f"ip={ip},ifname={ifname}")
+                                h = ip.split('/',1)[0]
+                                print(f"h={h}")
+                                ip_to_eth_dict.update({ip.split('/',1)[0]:ifname})
                             
                             #Append Sub Interfaces
                             # if not SUBIF_XIP:
@@ -216,13 +227,15 @@ def iterdict(d, searchfor):
 
 def address_lookup(obj):
 
-    XPATH = PAN_XML_ADDRESS.replace("ENTRY_NAME", obj)
-    #output = grab_api_output(".", "xml", XPATH, "address")
-    temp = grab_files("debtest2")[0]
-    output = xmltodict.parse(temp)
+    XPATH = XML_ADDRESS.replace("ENTRY_NAME", obj)
+    print(XPATH)
+    output = grab_api_output(".", "xml", XPATH, "address")
+    #temp = grab_files("debtest2")[0]
+    #output = xmltodict.parse(temp)
 
     ips = output["response"]["result"]["entry"]["ip-netmask"]
     
+    print(f"ips = {ips}")
     if ips is list:
         for ip in ips:
             ips.append(ip)
@@ -276,9 +289,9 @@ def garp_natrules(entries, natrules):
                     else:
                         ips = address_lookup(obj)
                         for ip in ips:
-                            if "192.168.98.1/24" in ip_to_eth_dict:
-                                ifname = ip_to_eth_dict['192.168.98.1/24']
-                                print(f"HECKYA, {ifname}")
+                            if ip.split('/',1)[0] in ip_to_eth_dict:
+                                ifname = ip_to_eth_dict[ip.split('/',1)[0]]
+                                print(f"HECKYA, {ip} found. {ifname}")
                             ifname = "iface-lookup"
                             temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                             temp = temp.replace('IFNAME', ifname)    

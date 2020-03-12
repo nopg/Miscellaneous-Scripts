@@ -1,0 +1,2 @@
+
+<response status="success" code="19"><result total-count="1" count="1"><entry name="mytest"><ip-netmask>192.168.98.1/32</ip-netmask></entry></result></response>
