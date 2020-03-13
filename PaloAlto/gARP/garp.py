@@ -295,11 +295,11 @@ def garp_interfaces(entries, iftype):
     return garp_commands
 
 
-def garp_natrules(entries, natrules, pa_or_pan, fwconn, device_group=""):
+def garp_natrules(entries, pa_or_pan, fwconn, device_group=""):
     garp_commands = []
     global ip_to_eth_dict
     if entries:
-        # go
+        print(f"\n\nSearching through natrules interfaces")
         for entry in entries:
             garp_command = "test arp gratuitous ip IPADDRESS interface IFNAME"
             ip = None
@@ -372,7 +372,7 @@ def garp_natrules(entries, natrules, pa_or_pan, fwconn, device_group=""):
     return garp_commands
 
 
-def garp_logic(pa_or_pan, fwconn, root_folder):
+def garp_logic(root_folder, fwconn, pa_or_pan):
 
     global XPATH_ADDRESS_OBJ 
     global XPATH_ADDRESS_OBJ_PAN 
@@ -433,121 +433,21 @@ def garp_logic(pa_or_pan, fwconn, root_folder):
     )
     
     if device_group:
-        nat_garp = garp_natrules(nat_entries, "natrules", pa_or_pan, fwconn, device_group)
+        nat_garp = garp_natrules(nat_entries, pa_or_pan, fwconn, device_group)
     else:
-        nat_garp = garp_natrules(nat_entries, "natrules", pa_or_pan, fwconn)
+        nat_garp = garp_natrules(nat_entries, pa_or_pan, fwconn)
 
-    return garp_commands + nat_garp
+    output = garp_commands + nat_garp
 
-# Main Program
-def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
-
-    global ip_to_eth_dict
-    ip_to_eth_dict = {}
-
-    # Organize user input
-    # Expand '1' to '2,3,4,5,6,7,8,9,A'
-    if "1" in output_list:
-        pass
-    # Expand '2-5,8-9' to '2,3,4,5,8,9'
-    if "-" in output_list:
-        dashes = [index for index, value in enumerate(output_list) if value == "-"]
-        remaining = output_list
-        final = []
-
-        for dash in dashes:
-            predash = remaining.index("-") - 1
-            postdash = remaining.index("-") + 1
-
-            up_to_predash = [x for x in remaining[:predash]]
-            final = final + up_to_predash
-
-            expanded = range(int(remaining[predash]), int(remaining[postdash]) + 1)
-            final = final + [str(num) for num in expanded]
-
-            remaining = remaining[postdash + 1 :]
-
-        if remaining:
-            output_list = final + remaining
-        else:
-            output_list = final
-
-    ######
-    ### Begin the real work.
-    ######
-    # Loop through user provided input, import each profile
-    for output in output_list:
-        device_group = None
-
-        if output == "1":  # INTERFACES, --XML ONLY--
-            # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
-            XPATH_OR_RESTCALL = ITEM1_XML
-            xml_or_rest = "xml"
-            ext = "xml"
-            outputrequested = "interfaces"
-
-            if pa_or_pan == "panorama":
-                # Needs Template Name
-                template_name = input("\nEnter the Template Name (CORRECTLY!): ")
-                XPATH_OR_RESTCALL = ITEM1_XML_PAN.replace(
-                    "TEMPLATE_NAME", template_name
-                )
-
-        elif output == "2":  # NAT RULES, REST for now
-            # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
-            XPATH_OR_RESTCALL = ITEM2_REST
-            xml_or_rest = "rest"
-            ext = "json"
-            outputrequested = "natrules"
-
-            if pa_or_pan == "panorama":
-                # Needs Device Group
-                device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
-                XPATH_OR_RESTCALL = ITEM2_REST_PAN.replace(
-                    "DEVICE_GROUP", device_group
-                )
-
-        elif output == "3":  # gARP, program.
-            # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
-
-            output = garp_logic(pa_or_pan, obj)
-        
-            print(f"\ngARP {outputrequested} Test Commands:")
-            print("-------------------------------------------------------------")
-            for line in output:
-                print(line)
-            print("-------------------------------------------------------------")
-
-        else:
-            print("\nHuh?. You entered {}\n".format(profile))
-            continue
-
-        # Grab Output (XML or REST, convert to dict.)
-        api_output = grab_api_output(
-            root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested
-        )
-
-        print("done. create a loop here?")
-        sys.exit(0)
+    print(f"\ngARP Test Commands:")
+    print("-------------------------------------------------------------")
+    for line in output:
+        print(line)
+    print("-------------------------------------------------------------")
 
 
 # If run from the command line
 if __name__ == "__main__":
-
-    if sys.argv[1] == 'DEBUG':
-        root_folder = 'debtest'
-        fout = grab_files(root_folder)
-        for fin in fout:
-            parsedfile = json.loads(fin)
-            print(f"fin = {parsedfile}")
-            output = garp_logic(parsedfile, "rest", "natrules")
-        print("===========DEBUG MODE===========")
-        print("\ngARP DEBUG Test Commands:")
-        print("-------------------------------------------------------------")
-        for line in output:
-            print(line)
-        print("-------------------------------------------------------------")
-        sys.exit(0)
 
     # Guidance on how to use the script
     if len(sys.argv) != 4:
@@ -564,22 +464,7 @@ if __name__ == "__main__":
     # Create connection with the Palo Alto as 'obj'
     obj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
 
-    # MENU
-    # xml_or_rest = "1"
-
-    # while xml_or_rest != "1" and xml_or_rest != "2":
-    #     xml_or_rest = input(
-    #         """\nREST or XML??
-
-    #     1) XML  (8.1-)
-    #     2) REST (9.0+)
-
-    #     Enter 1 or 2: """
-    #     )
-
-    # UNUSED PLACEHOLDER FOR NOW
-    xml_or_rest = "xml"
-
+    # PA or Panorama?
     allowed = list("12")  # Allowed user input
     incorrect_input = True
     while incorrect_input:
@@ -604,38 +489,6 @@ if __name__ == "__main__":
     else:
         pa_or_pan = "panorama"
 
-    allowed = list("12,-")  # Allowed user input
-    incorrect_input = True
-    while incorrect_input:
-        selection = input(
-            """\nWhat output would you like to display/export?
-
-            1) List Interfaces
-            2) List NAT
-
-            For multiple enter: ('1' or 2-4' or '2,5,7')
-
-            Enter Selection: """
-        )
-
-        for value in selection:
-            if value not in allowed:
-                incorrect_input = True
-                break
-            else:
-                incorrect_input = False
-
-        temp = "".join(selection)
-        if temp.endswith("-") or temp.startswith("-"):
-            incorrect_input = True
-
-    entry = ""
-
-    # Turn input into list, remove commas
-    output_list = list(selection.replace(",", ""))
-
     # Run program
-    main(output_list, root_folder, xml_or_rest, entry, pa_or_pan)
-
-    # Done!
-    print("\n\nComplete!\n")
+    fwconn = xmlpa.xml_api_lib_pa(pa_ip, username, password)
+    garp_logic(root_folder, fwconn, pa_or_pan)

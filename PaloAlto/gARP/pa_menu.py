@@ -174,7 +174,7 @@ def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested
         return json_response
 
 # Main Program
-def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
+def main(output_list, root_folder, entry, pa_or_pan):
 
     # Organize user input
     # Expand '1' to '2,3,4,5,6,7,8,9,A'
@@ -213,8 +213,6 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
         if output == "1":  # INTERFACES, --XML ONLY--
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = ITEM1_XML
-            xml_or_rest = "xml"
-            ext = "xml"
             outputrequested = "interfaces"
 
             if pa_or_pan == "panorama":
@@ -226,14 +224,12 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
 
             # Grab Output (XML or REST, convert to dict.)
             api_output = grab_api_output(
-                root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested
+                root_folder, "xml", XPATH_OR_RESTCALL, outputrequested
             )
 
         elif output == "2":  # NAT RULES, REST for now
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = ITEM2_REST
-            xml_or_rest = "rest"
-            ext = "json"
             outputrequested = "natrules"
 
             if pa_or_pan == "panorama":
@@ -245,20 +241,14 @@ def main(output_list, root_folder, xml_or_rest, entry, pa_or_pan):
 
             # Grab Output (XML or REST, convert to dict.)
             api_output = grab_api_output(
-                root_folder, xml_or_rest, XPATH_OR_RESTCALL, outputrequested
+                root_folder, "rest", XPATH_OR_RESTCALL, outputrequested
             )
 
 
         elif output == "3":  # gARP, program.
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
 
-            output = garpl.garp_logic(pa_or_pan, obj, root_folder)
-        
-            print(f"\ngARP Test Commands:")
-            print("-------------------------------------------------------------")
-            for line in output:
-                print(line)
-            print("-------------------------------------------------------------")
+            output = garpl.garp_logic(root_folder, obj, pa_or_pan)
 
         else:
             print("\nHuh?. You entered {}\n".format(profile))
@@ -300,22 +290,6 @@ if __name__ == "__main__":
 
     # Create connection with the Palo Alto as 'obj'
     obj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
-
-    # MENU
-    # xml_or_rest = "1"
-
-    # while xml_or_rest != "1" and xml_or_rest != "2":
-    #     xml_or_rest = input(
-    #         """\nREST or XML??
-
-    #     1) XML  (8.1-)
-    #     2) REST (9.0+)
-
-    #     Enter 1 or 2: """
-    #     )
-
-    # UNUSED PLACEHOLDER FOR NOW
-    xml_or_rest = "xml"
 
     allowed = list("12")  # Allowed user input
     incorrect_input = True
@@ -373,7 +347,7 @@ if __name__ == "__main__":
     output_list = list(selection.replace(",", ""))
 
     # Run program
-    main(output_list, root_folder, xml_or_rest, entry, pa_or_pan)
+    main(output_list, root_folder, entry, pa_or_pan)
 
     # Done!
     print("\n\nComplete!\n")
