@@ -248,7 +248,7 @@ def main(output_list, root_folder, entry, pa_or_pan):
         elif output == "3":  # gARP, program.
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
 
-            output = garpl.garp_logic(root_folder, obj, pa_or_pan)
+            output = garpl.garp_logic(root_folder, pa_or_pan)
 
         else:
             print("\nHuh?. You entered {}\n".format(profile))

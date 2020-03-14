@@ -53,29 +53,34 @@ import xml_api_lib_pa as xmlpa
 # fmt: off
 # Global Variables, debug & xpath location for each profile type
 # ENTRY = + "/entry[@name='alert-only']"
-DEBUG = False
 
-XPATH_ADDRESS_OBJ =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='ENTRY_NAME']"
-XPATH_ADDRESS_OBJ_PAN = "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/address/entry[@name='ENTRY_NAME']"
+class mem: 
+    DEBUG = False
 
-XPATH_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/network/interface"
-XPATH_INTERFACES_PAN =    "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
+    XPATH_ADDRESS_OBJ =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='ENTRY_NAME']"
+    XPATH_ADDRESS_OBJ_PAN = "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/address/entry[@name='ENTRY_NAME']"
 
-REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
-REST_NATRULES_PAN = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
+    XPATH_INTERFACES =    "/config/devices/entry[@name='localhost.localdomain']/network/interface"
+    XPATH_INTERFACES_PAN =    "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
 
+    REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
+    REST_NATRULES_PAN = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
+    
+    ip_to_eth_dict = {}
+    fwconn = None
+    device_group = None
 
 #PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
 
 # fmt: on
 
 
-def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested, obj):
+def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested):
     # Grab PA/Panorama API Output
     success = False
     if xml_or_rest == "xml":
         filename = f"{root_folder}/{outputrequested}.xml"
-        response = obj.get_xml_request_pa(
+        response = mem.fwconn.get_xml_request_pa(
             call_type="config", action="get", xpath=xpath_or_restcall
         )
         xml_response = xmltodict.parse(response)
@@ -90,7 +95,7 @@ def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested
 
     elif xml_or_rest == "rest":
         filename = f"{root_folder}/{outputrequested}.json"
-        response = obj.get_rest_request_pa(restcall=xpath_or_restcall)
+        response = mem.fwconn.get_rest_request_pa(restcall=xpath_or_restcall)
         json_response = json.loads(response)
         if json_response["@status"] == "success":
             success = True
@@ -198,28 +203,28 @@ def iterdict(d, searchfor):
 
 
 def interface_lookup(ip):
-    for key, v in ip_to_eth_dict.items():
+    for key, v in mem.ip_to_eth_dict.items():
         iprange = ipcalc.Network(key)
         if ip in iprange:
             return v
 
 
-def address_lookup(obj, pa_or_pan, device_group, fwconn):
+def address_lookup(entry):
     
-    if pa_or_pan == "panorama":
-        XPATH = XPATH_ADDRESS_OBJ_PAN.replace("DEVICE_GROUP", device_group)
-        XPATH = XPATH.replace("ENTRY_NAME", obj)
+    if mem.pa_or_pan == "panorama":
+        XPATH = mem.XPATH_ADDRESS_OBJ_PAN.replace("DEVICE_GROUP", mem.device_group)
+        XPATH = XPATH.replace("ENTRY_NAME", entry)
     else:
-        XPATH = XPATH_ADDRESS_OBJ.replace("ENTRY_NAME", obj)
+        XPATH = mem.XPATH_ADDRESS_OBJ.replace("ENTRY_NAME", entry)
 
-    output = grab_api_output(".", "xml", XPATH, "address", fwconn)
+    output = grab_api_output(".", "xml", XPATH, "address")
 
     # Need to check for no response, must be an IP not address
     if "entry" in output["response"]["result"]:
         ips = output["response"]["result"]["entry"]["ip-netmask"]
     else:
         # Must be an IP/Mask already
-        ips = obj
+        ips = entry
     
     if ips is list:
         for ip in ips:
@@ -232,7 +237,6 @@ def address_lookup(obj, pa_or_pan, device_group, fwconn):
 
 def garp_interfaces(entries, iftype):
 
-    global ip_to_eth_dict
     garp_commands = []
 
     if entries:
@@ -254,13 +258,13 @@ def garp_interfaces(entries, iftype):
                             temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                             temp = temp.replace('IFNAME', ifname)
                             garp_commands.append(temp)
-                            ip_to_eth_dict.update({ip:ifname})
+                            mem.ip_to_eth_dict.update({ip:ifname})
                     else: 
                         ip = entry['layer3']['ip']['entry']['@name']
                         temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                         temp = temp.replace('IFNAME', ifname)
                         garp_commands.append(temp)
-                        ip_to_eth_dict.update({ip:ifname})
+                        mem.ip_to_eth_dict.update({ip:ifname})
                 elif "units" in entry["layer3"]:
                     # Sub Interfaces
                     XIPS = True
@@ -276,13 +280,13 @@ def garp_interfaces(entries, iftype):
                                     temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                     temp = temp.replace('IFNAME', ifname)
                                     garp_commands.append(temp)
-                                    ip_to_eth_dict.update({ip:ifname})
+                                    mem.ip_to_eth_dict.update({ip:ifname})
                             else:
                                 ip = subif['ip']['entry']['@name']
                                 temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                 temp = temp.replace('IFNAME', ifname)
                                 garp_commands.append(temp)
-                                ip_to_eth_dict.update({ip:ifname})
+                                mem.ip_to_eth_dict.update({ip:ifname})
                     else:
                         print("ONLY ONE SUBIF")
                 else:
@@ -295,9 +299,8 @@ def garp_interfaces(entries, iftype):
     return garp_commands
 
 
-def garp_natrules(entries, pa_or_pan, fwconn, device_group=""):
+def garp_natrules(entries):
     garp_commands = []
-    global ip_to_eth_dict
     if entries:
         print(f"\n\nSearching through natrules interfaces")
         for entry in entries:
@@ -327,7 +330,7 @@ def garp_natrules(entries, pa_or_pan, fwconn, device_group=""):
 
                         for ipobj in ipobjs:
 
-                            ips = address_lookup(ipobj, pa_or_pan, device_group, fwconn)
+                            ips = address_lookup(ipobj)
 
                             for ip in ips:
                                 ifname = interface_lookup(ip)
@@ -339,7 +342,7 @@ def garp_natrules(entries, pa_or_pan, fwconn, device_group=""):
 
                     else:
                         # Look up Address Object to get actual value
-                        ips = address_lookup(obj, pa_or_pan, device_group, fwconn)
+                        ips = address_lookup(obj)
 
                         for ip in ips:                         
                             ifname = interface_lookup(ip)
@@ -354,7 +357,7 @@ def garp_natrules(entries, pa_or_pan, fwconn, device_group=""):
                         ifname = snat["dynamic-ip-and-port"]["interface-address"]["interface"]
                         if "ip" in snat["dynamic-ip-and-port"]["interface-address"]:
                             ipobj = snat["dynamic-ip-and-port"]["interface-address"]["ip"]
-                            ips = address_lookup(ipobj, pa_or_pan, device_group, fwconn)
+                            ips = address_lookup(ipobj)
                             for ip in ips: 
                                 temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
                                 temp = temp.replace('IFNAME', ifname)    
@@ -372,43 +375,34 @@ def garp_natrules(entries, pa_or_pan, fwconn, device_group=""):
     return garp_commands
 
 
-def garp_logic(root_folder, fwconn, pa_or_pan):
+def garp_logic(root_folder, pa_or_pan):
 
-    global XPATH_ADDRESS_OBJ 
-    global XPATH_ADDRESS_OBJ_PAN 
+    mem.fwconn = xmlpa.xml_api_lib_pa(pa_ip, username, password)
+    mem.pa_or_pan = pa_or_pan
 
-    global XPATH_INTERFACES
-    global XPATH_INTERFACES_PAN
-
-    global REST_NATRULES   
-    global REST_NATRULES_PAN
-
-
-    global ip_to_eth_dict
-    ip_to_eth_dict = {}
-
-    device_group = None
-
-    if pa_or_pan == "panorama":
+    if mem.pa_or_pan == "panorama":
         # Needs Template Name & Device Group
         template_name = input("\nEnter the Template Name (CORRECTLY!): ")
-        device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
+        mem.device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
         
-        XPATH_INTERFACES = XPATH_INTERFACES_PAN
+        XPATH_INTERFACES = mem.XPATH_INTERFACES_PAN
         XPATH_INTERFACES = XPATH_INTERFACES.replace("TEMPLATE_NAME", template_name)
-        XPATH_INTERFACES = XPATH_INTERFACES.replace("DEVICE_GROUP", device_group)
-        REST_NATRULES = REST_NATRULES_PAN
+        XPATH_INTERFACES = XPATH_INTERFACES.replace("DEVICE_GROUP", mem.device_group)
+        REST_NATRULES = mem.REST_NATRULES_PAN
         REST_NATRULES = REST_NATRULES.replace("TEMPLATE_NAME", template_name)
-        REST_NATRULES = REST_NATRULES.replace("DEVICE_GROUP", device_group)
+        REST_NATRULES = REST_NATRULES.replace("DEVICE_GROUP", mem.device_group)
+    else:
+        XPATH_INTERFACES = mem.XPATH_INTERFACES
+        REST_NATRULES = mem.REST_NATRULES
 
     # Grab Interfaces (XML)
     int_output = grab_api_output(
-        root_folder, "xml", XPATH_INTERFACES, "interfaces", fwconn
+        root_folder, "xml", XPATH_INTERFACES, "interfaces"
     )
 
     # Grab NAT Rules (REST)
     nat_output = grab_api_output(
-        root_folder, "rest", REST_NATRULES, "natrules", fwconn
+        root_folder, "rest", REST_NATRULES, "natrules"
     )
 
     # INTERFACES
@@ -432,10 +426,7 @@ def garp_logic(root_folder, fwconn, pa_or_pan):
         nat_output.get("result").get("entry")
     )
     
-    if device_group:
-        nat_garp = garp_natrules(nat_entries, pa_or_pan, fwconn, device_group)
-    else:
-        nat_garp = garp_natrules(nat_entries, pa_or_pan, fwconn)
+    nat_garp = garp_natrules(nat_entries)
 
     output = garp_commands + nat_garp
 
@@ -462,7 +453,7 @@ if __name__ == "__main__":
     password = getpass.getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj'
-    obj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
+    paobj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
 
     # PA or Panorama?
     allowed = list("12")  # Allowed user input
@@ -490,5 +481,4 @@ if __name__ == "__main__":
         pa_or_pan = "panorama"
 
     # Run program
-    fwconn = xmlpa.xml_api_lib_pa(pa_ip, username, password)
-    garp_logic(root_folder, fwconn, pa_or_pan)
+    garp_logic(root_folder, pa_or_pan)
