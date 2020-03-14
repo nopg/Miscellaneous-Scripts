@@ -75,18 +75,6 @@ class mem:
 
 # fmt: on
 
-# Read all .xml files found in folder_name, return list containing all the output
-def grab_files(folder_name):
-    file_list = []
-    for root, dirs, files in os.walk(folder_name):
-        for file in files:
-            #if file.endswith(".xml"):
-            with open(root + "/" + file, "r") as fin:
-                data = fin.read()
-                file_list.append(data)
-    return file_list
-
-
 # Used to find the translated addresses
 def iterdict(d, searchfor):
     for k,v in d.items():
@@ -122,7 +110,7 @@ def address_lookup(entry):
     if "entry" in output["response"]["result"]:
         ips = output["response"]["result"]["entry"]["ip-netmask"]
     else:
-        # Must be an IP/Mask already
+        # It must be an IP/Mask already
         ips = entry
     
     if ips is list:

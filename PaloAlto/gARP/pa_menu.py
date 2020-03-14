@@ -72,105 +72,6 @@ def grab_files(folder_name):
                 file_list.append(data)
     return file_list
 
-# Create file for each profile type
-def create_xml_files(temp, filename):
-
-    # Pull folder name from string
-    end = filename.rfind("/")
-    folder = filename[0:end]
-
-    # Create the root folder and subfolder if it doesn't already exist
-    os.makedirs(folder, exist_ok=True)
-
-    # Because XML: remove <response/><result/> and <?xml> tags
-    # Using get().get() won't cause exception on KeyError
-    # Check for various response type and ensure xml is written consistently
-    data = temp.get("response")
-    if data:
-        # data = temp.get("response").get("result")
-        data = {"response": data}
-        if data:
-            data = xmltodict.unparse(data)
-        else:
-            data = xmltodict.unparse(temp)
-    else:
-        data = xmltodict.unparse(temp)
-    data = data.replace('<?xml version="1.0" encoding="utf-8"?>', "")
-
-    with open(filename, "w") as fout:
-        fout.write(data)
-
-
-def create_json_files(data, filename):
-    """
-    CREATE OUTPUT FILES 
-
-    :param data: list of data to be written
-    :param template_type: 'feature' or 'device'
-    :return: None, print output
-    """
-    # Pull folder name from string
-    end = filename.rfind("/")
-    folder = filename[0:end]
-
-    # Create the root folder and subfolder if it doesn't already exist
-    os.makedirs(folder, exist_ok=True)
-    
-    # Write Data
-    fout = open(filename, "w")
-    fout.write(data)
-    fout.close()
-
-    #print("\tCreated: {}\n".format(filename))
-
-
-def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested):
-    # Grab PA/Panorama API Output
-    success = False
-    if xml_or_rest == "xml":
-        filename = f"{root_folder}/{outputrequested}.xml"
-        response = obj.get_xml_request_pa(
-            call_type="config", action="get", xpath=xpath_or_restcall
-        )
-        xml_response = xmltodict.parse(response)
-        if xml_response["response"]["@status"] == "success":
-            success = True
-        create_xml_files(xml_response, filename)
-        if not xml_response["response"]["result"]:
-            print(
-                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for XML API reply"
-            )
-            sys.exit(0)
-
-    elif xml_or_rest == "rest":
-        filename = f"{root_folder}/{outputrequested}.json"
-        response = obj.get_rest_request_pa(restcall=xpath_or_restcall)
-        json_response = json.loads(response)
-        if json_response["@status"] == "success":
-            success = True
-        create_json_files(response, filename)
-        if not json_response["result"]:
-            print(
-                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for REST API reply"
-            )
-
-    if not success:
-        # Extra logging when debugging
-        if DEBUG:
-            print(f"\nGET request sent: xpath={xpath_or_restcall}.\n")
-            print(f"\nResponse: \n{response}")
-            create_xml_files(result, filename)
-            print(f"Output also written to {filename}")
-        else:
-            print(f"\nError exporting '{outputrequested}' object.")
-            print(
-                "(Normally this just means no object found, set DEBUG=True if needed)"
-            )
-            
-    if xml_or_rest == "xml":
-        return xml_response
-    else:
-        return json_response
 
 # Main Program
 def main(output_list, root_folder, entry, pa_or_pan):
@@ -212,7 +113,7 @@ def main(output_list, root_folder, entry, pa_or_pan):
         if output == "1":  # INTERFACES, --XML ONLY--
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = ITEM1_XML
-            outputrequested = "interfaces"
+            f"{root_folder}/interfaces.xml"
 
             if pa_or_pan == "panorama":
                 # Needs Template Name
@@ -222,14 +123,14 @@ def main(output_list, root_folder, entry, pa_or_pan):
                 )
 
             # Grab Output (XML or REST, convert to dict.)
-            api_output = grab_api_output(
-                root_folder, "xml", XPATH_OR_RESTCALL, outputrequested
+            api_output = obj.grab_api_output(
+                "xml", XPATH_OR_RESTCALL, filename
             )
 
         elif output == "2":  # NAT RULES, REST for now
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = ITEM2_REST
-            outputrequested = "natrules"
+            filename = f"{root_folder}/natrules.json"
 
             if pa_or_pan == "panorama":
                 # Needs Device Group
@@ -239,15 +140,13 @@ def main(output_list, root_folder, entry, pa_or_pan):
                 )
 
             # Grab Output (XML or REST, convert to dict.)
-            api_output = grab_api_output(
-                root_folder, "rest", XPATH_OR_RESTCALL, outputrequested
+            api_output = obj.grab_api_output(
+                "rest", XPATH_OR_RESTCALL, filename
             )
 
-
         elif output == "3":  # gARP, program.
-            # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
-
-            output = garpl.garp_logic(root_folder, pa_or_pan)
+            # Run gARP
+            garpl.garp_logic(root_folder, pa_or_pan)
 
         else:
             print("\nHuh?. You entered {}\n".format(profile))
