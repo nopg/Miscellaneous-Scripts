@@ -72,7 +72,6 @@ def grab_files(folder_name):
                 file_list.append(data)
     return file_list
 
-
 # Create file for each profile type
 def create_xml_files(temp, filename):
 

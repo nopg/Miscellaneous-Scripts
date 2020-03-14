@@ -69,60 +69,11 @@ class mem:
     ip_to_eth_dict = {}
     fwconn = None
     device_group = None
+    root_folder = '.'
 
 #PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
 
 # fmt: on
-
-
-def grab_api_output(root_folder, xml_or_rest, xpath_or_restcall, outputrequested):
-    # Grab PA/Panorama API Output
-    success = False
-    if xml_or_rest == "xml":
-        filename = f"{root_folder}/{outputrequested}.xml"
-        response = mem.fwconn.get_xml_request_pa(
-            call_type="config", action="get", xpath=xpath_or_restcall
-        )
-        xml_response = xmltodict.parse(response)
-        if xml_response["response"]["@status"] == "success":
-            success = True
-        create_xml_files(xml_response, filename)
-        if not xml_response["response"]["result"]:
-            print(
-                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for XML API reply"
-            )
-            sys.exit(0)
-
-    elif xml_or_rest == "rest":
-        filename = f"{root_folder}/{outputrequested}.json"
-        response = mem.fwconn.get_rest_request_pa(restcall=xpath_or_restcall)
-        json_response = json.loads(response)
-        if json_response["@status"] == "success":
-            success = True
-        create_json_files(response, filename)
-        if not json_response["result"]:
-            print(
-                "Nothing found on PA/Panorama, are you connecting to the right device? Check output for REST API reply"
-            )
-
-    if not success:
-        # Extra logging when debugging
-        if DEBUG:
-            print(f"\nGET request sent: xpath={xpath_or_restcall}.\n")
-            print(f"\nResponse: \n{response}")
-            create_xml_files(result, filename)
-            print(f"Output also written to {filename}")
-        else:
-            print(f"\nError exporting '{outputrequested}' object.")
-            print(
-                "(Normally this just means no object found, set DEBUG=True if needed)"
-            )
-            
-    if xml_or_rest == "xml":
-        return xml_response
-    else:
-        return json_response
-
 
 # Read all .xml files found in folder_name, return list containing all the output
 def grab_files(folder_name):
@@ -134,58 +85,6 @@ def grab_files(folder_name):
                 data = fin.read()
                 file_list.append(data)
     return file_list
-
-
-# Create file for each profile type
-def create_xml_files(temp, filename):
-
-    # Pull folder name from string
-    end = filename.rfind("/")
-    folder = filename[0:end]
-
-    # Create the root folder and subfolder if it doesn't already exist
-    os.makedirs(folder, exist_ok=True)
-
-    # Because XML: remove <response/><result/> and <?xml> tags
-    # Using get().get() won't cause exception on KeyError
-    # Check for various response type and ensure xml is written consistently
-    data = temp.get("response")
-    if data:
-        # data = temp.get("response").get("result")
-        data = {"response": data}
-        if data:
-            data = xmltodict.unparse(data)
-        else:
-            data = xmltodict.unparse(temp)
-    else:
-        data = xmltodict.unparse(temp)
-    data = data.replace('<?xml version="1.0" encoding="utf-8"?>', "")
-
-    with open(filename, "w") as fout:
-        fout.write(data)
-
-
-def create_json_files(data, filename):
-    """
-    CREATE OUTPUT FILES 
-
-    :param data: list of data to be written
-    :param template_type: 'feature' or 'device'
-    :return: None, print output
-    """
-    # Pull folder name from string
-    end = filename.rfind("/")
-    folder = filename[0:end]
-
-    # Create the root folder and subfolder if it doesn't already exist
-    os.makedirs(folder, exist_ok=True)
-    
-    # Write Data
-    fout = open(filename, "w")
-    fout.write(data)
-    fout.close()
-
-    #print("\tCreated: {}\n".format(filename))
 
 
 # Used to find the translated addresses
@@ -217,7 +116,7 @@ def address_lookup(entry):
     else:
         XPATH = mem.XPATH_ADDRESS_OBJ.replace("ENTRY_NAME", entry)
 
-    output = grab_api_output(".", "xml", XPATH, "address")
+    output = mem.fwconn.grab_api_output("xml", XPATH, f"{mem.root_folder}/address.xml")
 
     # Need to check for no response, must be an IP not address
     if "entry" in output["response"]["result"]:
@@ -379,6 +278,7 @@ def garp_logic(root_folder, pa_or_pan):
 
     mem.fwconn = xmlpa.xml_api_lib_pa(pa_ip, username, password)
     mem.pa_or_pan = pa_or_pan
+    mem.root_folder = root_folder
 
     if mem.pa_or_pan == "panorama":
         # Needs Template Name & Device Group
@@ -396,13 +296,13 @@ def garp_logic(root_folder, pa_or_pan):
         REST_NATRULES = mem.REST_NATRULES
 
     # Grab Interfaces (XML)
-    int_output = grab_api_output(
-        root_folder, "xml", XPATH_INTERFACES, "interfaces"
+    int_output = mem.fwconn.grab_api_output(
+        "xml", XPATH_INTERFACES, f"{mem.root_folder}/interfaces.xml"
     )
 
     # Grab NAT Rules (REST)
-    nat_output = grab_api_output(
-        root_folder, "rest", REST_NATRULES, "natrules"
+    nat_output = mem.fwconn.grab_api_output(
+        "rest", REST_NATRULES, f"{mem.root_folder}/natrules.json"
     )
 
     # INTERFACES
