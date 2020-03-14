@@ -113,7 +113,7 @@ def main(output_list, root_folder, entry, pa_or_pan):
         if output == "1":  # INTERFACES, --XML ONLY--
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
             XPATH_OR_RESTCALL = ITEM1_XML
-            f"{root_folder}/interfaces.xml"
+            filename = f"{root_folder}/interfaces.xml"
 
             if pa_or_pan == "panorama":
                 # Needs Template Name
@@ -146,7 +146,7 @@ def main(output_list, root_folder, entry, pa_or_pan):
 
         elif output == "3":  # gARP, program.
             # Run gARP
-            garpl.garp_logic(root_folder, pa_or_pan)
+            garpl.garp_logic(pa_ip, username, password, pa_or_pan, root_folder)
 
         else:
             print("\nHuh?. You entered {}\n".format(profile))
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         for fin in fout:
             parsedfile = json.loads(fin)
             print(f"fin = {parsedfile}")
-            output = garpl.garp_logic(parsedfile, "rest", "natrules", "")
+            #output = garpl.garp_logic(parsedfile, "rest", "natrules", "")
         print("===========DEBUG MODE===========")
         print("\ngARP DEBUG Test Commands:")
         print("-------------------------------------------------------------")

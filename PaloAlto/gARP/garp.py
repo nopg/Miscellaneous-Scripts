@@ -67,6 +67,9 @@ class mem:
     REST_NATRULES_PAN = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
     
     ip_to_eth_dict = {}
+    pa_ip = None
+    username = None
+    password = None
     fwconn = None
     device_group = None
     root_folder = '.'
@@ -262,9 +265,12 @@ def garp_natrules(entries):
     return garp_commands
 
 
-def garp_logic(root_folder, pa_or_pan):
+def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
 
-    mem.fwconn = xmlpa.xml_api_lib_pa(pa_ip, username, password)
+    mem.pa_ip = pa_ip
+    mem.username = username
+    mem.password = password
+    mem.fwconn = xmlpa.xml_api_lib_pa(mem.pa_ip, mem.username, mem.password)
     mem.pa_or_pan = pa_or_pan
     mem.root_folder = root_folder
 
@@ -336,12 +342,12 @@ if __name__ == "__main__":
 
     # Gather input
     root_folder = sys.argv[1]
-    pa_ip = sys.argv[2]
+    mem.pa_ip = sys.argv[2]
     username = sys.argv[3]
     password = getpass.getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj'
-    paobj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
+    paobj = xmlpa.xml_api_lib_pa(mem.pa_ip, username, password)
 
     # PA or Panorama?
     allowed = list("12")  # Allowed user input
@@ -369,4 +375,4 @@ if __name__ == "__main__":
         pa_or_pan = "panorama"
 
     # Run program
-    garp_logic(root_folder, pa_or_pan)
+    garp_logic(pa_ip, username, password, pa_or_pan, root_folder)
