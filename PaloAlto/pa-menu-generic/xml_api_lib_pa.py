@@ -39,11 +39,12 @@ Legal:
 
 import requests
 import sys
-
+import os
+import json
 import xmltodict
 
+# Who cares about SSL?
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 DEBUG = False
@@ -86,6 +87,57 @@ class xml_api_lib_pa:
         if not self.key:
             print(f"Login Failed: Response=\n{temp}")
             sys.exit(0)
+
+        # Create file for each profile type
+    def create_xml_files(self, temp, filename):
+
+        # Pull folder name from string
+        end = filename.rfind("/")
+        folder = filename[0:end]
+
+        # Create the root folder and subfolder if it doesn't already exist
+        os.makedirs(folder, exist_ok=True)
+
+        # Because XML: remove <response/><result/> and <?xml> tags
+        # Using get().get() won't cause exception on KeyError
+        # Check for various response type and ensure xml is written consistently
+        data = temp.get("response")
+        if data:
+            # data = temp.get("response").get("result")
+            data = {"response": data}
+            if data:
+                data = xmltodict.unparse(data)
+            else:
+                data = xmltodict.unparse(temp)
+        else:
+            data = xmltodict.unparse(temp)
+        data = data.replace('<?xml version="1.0" encoding="utf-8"?>', "")
+
+        with open(filename, "w") as fout:
+            fout.write(data)
+
+    def create_json_files(self, data, filename):
+        """
+        CREATE OUTPUT FILES 
+
+        :param data: list of data to be written
+        :param template_type: 'feature' or 'device'
+        :return: None, print output
+        """
+        # Pull folder name from string
+        end = filename.rfind("/")
+        folder = filename[0:end]
+
+        # Create the root folder and subfolder if it doesn't already exist
+        os.makedirs(folder, exist_ok=True)
+        
+        # Write Data
+        fout = open(filename, "w")
+        fout.write(data)
+        fout.close()
+
+        #print("\tCreated: {}\n".format(filename))
+
 
     # GET request for Palo Alto API
     def get_xml_request_pa(
@@ -134,3 +186,59 @@ class xml_api_lib_pa:
 
         # Return string (XML)
         return response.text
+
+    def grab_api_output(self, xml_or_rest, xpath_or_restcall, filename=None, root_folder='.'):
+        # Grab PA/Panorama API Output
+        success = False
+        if xml_or_rest == "xml":
+
+            response = self.get_xml_request_pa(
+                call_type="config", action="get", xpath=xpath_or_restcall
+            )
+            xml_response = xmltodict.parse(response)
+
+            if xml_response["response"]["@status"] == "success":
+                success = True
+
+            if filename:
+                filename = f"{root_folder}/{filename}"
+                self.create_xml_files(xml_response, filename)
+
+            if not xml_response["response"]["result"]:
+                print(
+                    "Nothing found on PA/Panorama, are you connecting to the right device? Check output for XML API reply"
+                )
+                sys.exit(0)
+
+        elif xml_or_rest == "rest":
+            
+            response = self.get_rest_request_pa(restcall=xpath_or_restcall)
+            json_response = json.loads(response)
+            if json_response["@status"] == "success":
+                success = True
+            if filename:
+                filename = f"{root_folder}/{filename}"
+                self.create_json_files(response, filename)
+            
+            if not json_response["result"]:
+                print(
+                    "Nothing found on PA/Panorama, are you connecting to the right device? Check output for REST API reply"
+                )
+
+        if not success:
+            # Extra logging when debugging
+            if DEBUG:
+                print(f"\nGET request sent: xpath={xpath_or_restcall}.\n")
+                print(f"\nResponse: \n{response}")
+                create_xml_files(result, filename)
+                print(f"Output also written to {filename}")
+            else:
+                print(f"\nError exporting '{filename}' object.")
+                print(
+                    "(Normally this just means no object found, set DEBUG=True if needed)"
+                )
+                
+        if xml_or_rest == "xml":
+            return xml_response
+        else:
+            return json_response
