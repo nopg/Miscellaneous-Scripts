@@ -342,12 +342,12 @@ if __name__ == "__main__":
 
     # Gather input
     root_folder = sys.argv[1]
-    mem.pa_ip = sys.argv[2]
+    pa_ip = sys.argv[2]
     username = sys.argv[3]
     password = getpass.getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj'
-    paobj = xmlpa.xml_api_lib_pa(mem.pa_ip, username, password)
+    paobj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
 
     # PA or Panorama?
     allowed = list("12")  # Allowed user input
