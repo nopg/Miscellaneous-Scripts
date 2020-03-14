@@ -242,5 +242,3 @@ class xml_api_lib_pa:
             return xml_response
         else:
             return json_response
-
-    
