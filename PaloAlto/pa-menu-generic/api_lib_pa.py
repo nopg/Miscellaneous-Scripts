@@ -51,7 +51,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 DEBUG = False
 
 # XML API Class for use with Palo Alto API
-class xml_api_lib_pa:
+class api_lib_pa:
     # Upon creation:
     def __init__(self, pa_ip, username, password):
         self.pa_ip = pa_ip
@@ -189,7 +189,7 @@ class xml_api_lib_pa:
         return response.text
 
     def grab_api_output(
-        self, xml_or_rest, xpath_or_restcall, filename=None, root_folder="."
+        self, xml_or_rest, xpath_or_restcall, filename=None,
     ):
         # Grab PA/Panorama API Output
         success = False
@@ -204,7 +204,7 @@ class xml_api_lib_pa:
                 success = True
 
             if filename:
-                filename = f"{root_folder}/{filename}"
+                filename = f"{filename}"
                 self.create_xml_files(xml_response, filename)
 
             if not xml_response["response"]["result"]:
@@ -220,7 +220,7 @@ class xml_api_lib_pa:
             if json_response["@status"] == "success":
                 success = True
             if filename:
-                filename = f"{root_folder}/{filename}"
+                filename = f"{filename}"
                 self.create_json_files(response, filename)
 
             if not json_response["result"]:
