@@ -66,7 +66,7 @@ def grab_files(folder_name):
     file_list = []
     for root, dirs, files in os.walk(folder_name):
         for file in files:
-            #if file.endswith(".xml"):
+            # if file.endswith(".xml"):
             with open(root + "/" + file, "r") as fin:
                 data = fin.read()
                 file_list.append(data)
@@ -123,9 +123,7 @@ def main(output_list, root_folder, entry, pa_or_pan):
                 )
 
             # Grab Output (XML or REST, convert to dict.)
-            api_output = obj.grab_api_output(
-                "xml", XPATH_OR_RESTCALL, filename
-            )
+            api_output = obj.grab_api_output("xml", XPATH_OR_RESTCALL, filename)
             print(api_output)
 
         elif output == "2":  # NAT RULES, REST for now
@@ -136,14 +134,10 @@ def main(output_list, root_folder, entry, pa_or_pan):
             if pa_or_pan == "panorama":
                 # Needs Device Group
                 device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
-                XPATH_OR_RESTCALL = ITEM2_REST_PAN.replace(
-                    "DEVICE_GROUP", device_group
-                )
+                XPATH_OR_RESTCALL = ITEM2_REST_PAN.replace("DEVICE_GROUP", device_group)
 
             # Grab Output (XML or REST, convert to dict.)
-            api_output = obj.grab_api_output(
-                "rest", XPATH_OR_RESTCALL, filename
-            )
+            api_output = obj.grab_api_output("rest", XPATH_OR_RESTCALL, filename)
             print(api_output)
 
         elif output == "3":  # gARP, program.
@@ -161,7 +155,7 @@ def main(output_list, root_folder, entry, pa_or_pan):
 # If run from the command line
 if __name__ == "__main__":
 
-    if sys.argv[1] == 'DEBUG':
+    if sys.argv[1] == "DEBUG":
         pass
 
     # Guidance on how to use the script

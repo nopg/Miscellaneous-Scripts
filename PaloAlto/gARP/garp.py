@@ -78,8 +78,11 @@ class mem:
 
 # fmt: on
 
-# Used to find the translated addresses
 def iterdict(d, searchfor):
+    """
+    Traverse through the dictionary (d) and find the key: (searchfor).
+    Return the value of that key.
+    """
     for k,v in d.items():
         if searchfor in k:
             return v
@@ -93,6 +96,11 @@ def iterdict(d, searchfor):
 
 
 def interface_lookup(ip):
+    """
+    Used to find which physical interface is associated with this IP (NAT entry).
+    Uses existing dictionary mapping ip/mask to physical interface.
+    Searches based on the subnet mask in use on the physical interface.
+    """
     for key, v in mem.ip_to_eth_dict.items():
         iprange = ipcalc.Network(key)
         if ip in iprange:
@@ -100,7 +108,11 @@ def interface_lookup(ip):
 
 
 def address_lookup(entry):
-    
+    """
+    Used to find the translated addresses objects on the PA/Panorama.
+    Runs another api call to grab the object and return it's value (the actual ip address)
+    If the NAT rule isn't using an object, we can assume this value is the IP address.
+    """
     if mem.pa_or_pan == "panorama":
         XPATH = mem.XPATH_ADDRESS_OBJ_PAN.replace("DEVICE_GROUP", mem.device_group)
         XPATH = XPATH.replace("ENTRY_NAME", entry)
@@ -126,7 +138,11 @@ def address_lookup(entry):
 
 
 def garp_interfaces(entries, iftype):
-
+    """
+    Search through ethernet and aggregate-ethernet interfaces.
+    Build a list of 'test arp' commands based on what is found.
+    Return this list.
+    """
     garp_commands = []
 
     if entries:
@@ -185,6 +201,12 @@ def garp_interfaces(entries, iftype):
 
 
 def garp_natrules(entries):
+    """
+    Search through PA/Panorama NAT Rules.
+    Build a list of 'test arp' commands based on what is found.
+    Currently only supports source-nat, and post-nat (panorama) rules.
+    Return this list.
+    """
     garp_commands = []
     if entries:
         print(f"\n\nSearching through natrules interfaces")
@@ -261,6 +283,12 @@ def garp_natrules(entries):
 
 
 def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
+    """
+    Main point of entry.
+    Connect to PA/Panorama.
+    Grab 'test arp' output from interfaces and NAT rules.
+    Print out the commands.
+    """
 
     mem.pa_ip = pa_ip
     mem.username = username

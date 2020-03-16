@@ -45,6 +45,7 @@ import xmltodict
 
 # Who cares about SSL?
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 DEBUG = False
@@ -89,6 +90,7 @@ class xml_api_lib_pa:
             sys.exit(0)
 
         # Create file for each profile type
+
     def create_xml_files(self, temp, filename):
 
         # Pull folder name from string
@@ -130,14 +132,13 @@ class xml_api_lib_pa:
 
         # Create the root folder and subfolder if it doesn't already exist
         os.makedirs(folder, exist_ok=True)
-        
+
         # Write Data
         fout = open(filename, "w")
         fout.write(data)
         fout.close()
 
-        #print("\tCreated: {}\n".format(filename))
-
+        # print("\tCreated: {}\n".format(filename))
 
     # GET request for Palo Alto API
     def get_xml_request_pa(
@@ -187,7 +188,9 @@ class xml_api_lib_pa:
         # Return string (XML)
         return response.text
 
-    def grab_api_output(self, xml_or_rest, xpath_or_restcall, filename=None, root_folder='.'):
+    def grab_api_output(
+        self, xml_or_rest, xpath_or_restcall, filename=None, root_folder="."
+    ):
         # Grab PA/Panorama API Output
         success = False
         if xml_or_rest == "xml":
@@ -211,7 +214,7 @@ class xml_api_lib_pa:
                 sys.exit(0)
 
         elif xml_or_rest == "rest":
-            
+
             response = self.get_rest_request_pa(restcall=xpath_or_restcall)
             json_response = json.loads(response)
             if json_response["@status"] == "success":
@@ -219,7 +222,7 @@ class xml_api_lib_pa:
             if filename:
                 filename = f"{root_folder}/{filename}"
                 self.create_json_files(response, filename)
-            
+
             if not json_response["result"]:
                 print(
                     "Nothing found on PA/Panorama, are you connecting to the right device? Check output for REST API reply"
@@ -237,7 +240,7 @@ class xml_api_lib_pa:
                 print(
                     "(Normally this just means no object found, set DEBUG=True if needed)"
                 )
-                
+
         if xml_or_rest == "xml":
             return xml_response
         else:
