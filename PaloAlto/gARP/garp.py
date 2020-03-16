@@ -73,6 +73,7 @@ class mem:
     fwconn = None
     device_group = None
     root_folder = '.'
+    garp_commands = []
 
 #PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
 
@@ -136,14 +137,24 @@ def address_lookup(entry):
     
     return ips
 
+def add_garp_command(ip, ifname):
+    """
+    Update global garp_commands list.
+    First remove the subnet mask from the 'ip' received.
+    example: 'test arp gratuitous ip 5.5.5.4 interface ethernet1/1'
+    """
 
-def garp_interfaces(entries, iftype):
+    ip = ip.split('/',1)[0] # removes anything in IP after /, ie /24
+    garp_command = f"test arp gratuitous ip {ip} interface {ifname}"    
+    mem.garp_commands.append(garp_command)
+
+
+def build_garp_interfaces(entries, iftype):
     """
     Search through ethernet and aggregate-ethernet interfaces.
     Build a list of 'test arp' commands based on what is found.
     Return this list.
     """
-    garp_commands = []
 
     if entries:
         # SEARCH ENTRIES
@@ -151,22 +162,17 @@ def garp_interfaces(entries, iftype):
         for entry in entries["entry"]:
 
             ifname = entry['@name']
-            garp_command = "test arp gratuitous ip IPADDRESS interface IFNAME"
 
             if "layer3" in entry:
                 if "ip" in entry["layer3"]:
                     if type(entry['layer3']['ip']['entry']) is list:
                         for xip in entry['layer3']['ip']['entry']:
                             ip = xip['@name']
-                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                            temp = temp.replace('IFNAME', ifname)
-                            garp_commands.append(temp)
+                            add_garp_command(ip,ifname)
                             mem.ip_to_eth_dict.update({ip:ifname})
                     else: 
                         ip = entry['layer3']['ip']['entry']['@name']
-                        temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                        temp = temp.replace('IFNAME', ifname)
-                        garp_commands.append(temp)
+                        add_garp_command(ip,ifname)
                         mem.ip_to_eth_dict.update({ip:ifname})
                 elif "units" in entry["layer3"]:
                     # Sub Interfaces
@@ -178,108 +184,91 @@ def garp_interfaces(entries, iftype):
                                 print(f"FOUND SUBIF WITH SECONDARY IP ADDRESS, {ifname}")
                                 for subif_xip in subif['ip']['entry']:
                                     ip = subif_xip['@name']
-                                    temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                                    temp = temp.replace('IFNAME', ifname)
-                                    garp_commands.append(temp)
+                                    add_garp_command(ip,ifname)
                                     mem.ip_to_eth_dict.update({ip:ifname})
                             else:
                                 ip = subif['ip']['entry']['@name']
-                                temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                                temp = temp.replace('IFNAME', ifname)
-                                garp_commands.append(temp)
+                                add_garp_command(ip,ifname)
                                 mem.ip_to_eth_dict.update({ip:ifname})
                     else:
                         print("ONLY ONE SUBIF")
                 else:
-                    garp_commands.append(f"No IP address found (e1)(DHCP?), {entry['@name']}")
+                    mem.garp_commands.append(f"No IP address found (e1)(DHCP?), {entry['@name']}")
             else:
-                garp_commands.append(f"No IP address found (e2), {entry['@name']}")
+                mem.garp_commands.append(f"No IP address found (e2), {entry['@name']}")
     else:
         print(f"\nNo interfaces found for '{iftype}' type interfaces\n")
 
-    return garp_commands
 
 
-def garp_natrules(entries):
+def build_garp_natrules(entries):
     """
     Search through PA/Panorama NAT Rules.
     Build a list of 'test arp' commands based on what is found.
     Currently only supports source-nat, and post-nat (panorama) rules.
     Return this list.
     """
-    garp_commands = []
+
     if entries:
         print(f"\n\nSearching through natrules interfaces")
         for entry in entries:
-            garp_command = "test arp gratuitous ip IPADDRESS interface IFNAME"
             ip = None
 
             if "disabled" in entry:
                 if entry["disabled"] == "yes":
-                    print(f"disabled = {entry['disabled']}")
+                    mem.garp_commands.append(f"Disabled Rule: Check {entry['@name']}")
+                    continue
             if "destination-translation" in entry:
-                #print(f"dnat = {entry['destination-translation']}")
-                #print("RYAN ADD CHECK FOR INTERFACE-ADDRESS----CATCH A USE CASE.")
-                garp_commands.append(f"DNAT, - Check NAT rule named: {entry['@name']} for details.")
-                #obj = iterdict(entry['destination-translation'])
+                mem.garp_commands.append(f"DNAT, - Check NAT rule named: {entry['@name']} for details.")
             if "source-translation" in entry:
                 snat = entry['source-translation']
                 
                 # Returns Address Object typically, could also be an IP
-                obj = iterdict(snat, "translated-address")
+                addr_obj = iterdict(snat, "translated-address")
                 
                 # Usually 'translated-address' but check for 'interface-address'
-                if obj:
+                if addr_obj:
 
-                    if isinstance(obj, dict):
+                    # If it's a dictionary, we hame multiple IP's
+                    if isinstance(addr_obj, dict):
                         ipobjs = []
-                        [ipobjs.append(o) for o in obj["member"]]
+                        [ipobjs.append(o) for o in addr_obj["member"]]
 
                         for ipobj in ipobjs:
-
                             ips = address_lookup(ipobj)
-
                             for ip in ips:
                                 ifname = interface_lookup(ip)
                                 if not ifname:
                                     ifname = "INTERFACE NOT FOUND"
-                                temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                                temp = temp.replace('IFNAME', ifname)    
-                                garp_commands.append(temp)
+
+                            add_garp_command(ip,ifname)
 
                     else:
-                        # Look up Address Object to get actual value
-                        ips = address_lookup(obj)
+                        # Look up Address Object to get actual value, always returns list
+                        ips = address_lookup(addr_obj)
 
-                        for ip in ips:                         
+                        for ip in ips:                     
                             ifname = interface_lookup(ip)
                             if not ifname:
                                 ifname = "INTERFACE NOT FOUND"
-                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                            temp = temp.replace('IFNAME', ifname)    
-                            garp_commands.append(temp)
+                            add_garp_command(ip,ifname)
                 else:
-                    obj = iterdict(snat, "interface-address")
-                    if obj:
+                    addr_obj = iterdict(snat, "interface-address")
+                    if addr_obj:
                         ifname = snat["dynamic-ip-and-port"]["interface-address"]["interface"]
                         if "ip" in snat["dynamic-ip-and-port"]["interface-address"]:
                             ipobj = snat["dynamic-ip-and-port"]["interface-address"]["ip"]
                             ips = address_lookup(ipobj)
                             for ip in ips: 
-                                temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                                temp = temp.replace('IFNAME', ifname)    
-                                garp_commands.append(temp)
+                                add_garp_command(ip,ifname)
                         else:
-                            ip = "IP NOT FOUND, ARP should be taken care of via: "
-                            temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
-                            temp = temp.replace('IFNAME', ifname)    
-                            garp_commands.append(temp)
+                            ip = "IP NOT FOUND, ARP taken care of via: "
+                            add_garp_command(ip,ifname)
                     else:
-                        garp_commands.append(f"Error, SNAT configured without a translated IP (e2), {snat}")  
+                        mem.garp_commands.append(f"Error, SNAT configured without a translated IP (e2), {snat}")  
     else:
         print(f"No nat rules found for 'natrules")
 
-    return garp_commands
 
 
 def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
@@ -322,51 +311,54 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
         "rest", REST_NATRULES, f"{mem.root_folder}/natrules.json"
     )
 
-    # INTERFACES
+    # Parse XML to get to what we need
     eth_entries = (
         int_output.get("response").get("result").get("interface").get("ethernet")
     )
     ae_entries = (
         int_output.get("response").get("result").get("interface").get("aggregate-ethernet")
     )
-
-    eth_garp = garp_interfaces(eth_entries, "ethernet")
-    ae_garp = garp_interfaces(ae_entries, "aggregate-ethernet")
-    
-    garp_commands =  eth_garp + ae_garp
-
-    # Going through NAT rules
-
-    print("\nPlease wait..\n")
-
     nat_entries = (
         nat_output.get("result").get("entry")
     )
+
+    # Going through Interfaces
+    mem.garp_commands.append("----------------------ARP FOR Interfaces---------------------")
+    build_garp_interfaces(eth_entries, "ethernet")
+    build_garp_interfaces(ae_entries, "aggregate-ethernet")
     
-    nat_garp = garp_natrules(nat_entries)
+    # Going through NAT rules
+    print("\nPlease wait..\n")
 
-    output = garp_commands + nat_garp
+    mem.garp_commands.append("---------------------------ARP FOR NAT---------------------------")
+    build_garp_natrules(nat_entries)
 
+    #Print out all the commands/output!
     print(f"\ngARP Test Commands:")
     print("-------------------------------------------------------------")
-    for line in output:
+    for line in mem.garp_commands:
         print(line)
     print("-------------------------------------------------------------")
 
 
 # If run from the command line
 if __name__ == "__main__":
-
+    
+    root_folder = None
     # Guidance on how to use the script
-    if len(sys.argv) != 4:
+    if len(sys.argv) == 4:
+        root_folder = sys.argv[3]
+    elif len(sys.argv) !=3:
         print("\nplease provide the following arguments:")
-        print("\tpython3 garp.py <output folder location> <PA mgmt IP> <username>\n\n")
+        print("\tpython3 garp.py <PA mgmt IP> <username> <optional output folder>\n\n")
         sys.exit(0)
 
+    if not root_folder:
+        root_folder = '~temp/'
+
     # Gather input
-    root_folder = sys.argv[1]
-    pa_ip = sys.argv[2]
-    username = sys.argv[3]
+    pa_ip = sys.argv[1]
+    username = sys.argv[2]
     password = getpass.getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj'
@@ -399,3 +391,4 @@ if __name__ == "__main__":
 
     # Run program
     garp_logic(pa_ip, username, password, pa_or_pan, root_folder)
+
