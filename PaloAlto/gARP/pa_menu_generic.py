@@ -155,20 +155,23 @@ def main(output_list, root_folder, entry, pa_or_pan):
 # If run from the command line
 if __name__ == "__main__":
 
-    if sys.argv[1] == "DEBUG":
-        pass
-
-    # Guidance on how to use the script
-    if len(sys.argv) != 4:
+    root_folder = None
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "DEBUG":
+            sys.exit(0)
+    elif len(sys.argv) == 4:
+        root_folder = sys.argv[3]
+    elif len(sys.argv) != 3:
         print("\nplease provide the following arguments:")
-        print("\tpython3 garp.py <output folder location> <PA mgmt IP> <username>\n\n")
+        print("\tpython3 garp.py <PA/Panorama IP> <username> <optional output folder>\n\n")
         sys.exit(0)
 
     # Gather input
-    root_folder = sys.argv[1]
-    pa_ip = sys.argv[2]
-    username = sys.argv[3]
+    pa_ip = sys.argv[1]
+    username = sys.argv[2]
     password = getpass.getpass("Enter Password: ")
+    if not root_folder:
+        root_folder = "~temp/"
 
     # Create connection with the Palo Alto as 'obj'
     obj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
