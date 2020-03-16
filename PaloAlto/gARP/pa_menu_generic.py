@@ -126,6 +126,7 @@ def main(output_list, root_folder, entry, pa_or_pan):
             api_output = obj.grab_api_output(
                 "xml", XPATH_OR_RESTCALL, filename
             )
+            print(api_output)
 
         elif output == "2":  # NAT RULES, REST for now
             # SET PROPER VARIABLES, GRAB EXTRA VALUES IF NEEDED
@@ -143,13 +144,14 @@ def main(output_list, root_folder, entry, pa_or_pan):
             api_output = obj.grab_api_output(
                 "rest", XPATH_OR_RESTCALL, filename
             )
+            print(api_output)
 
         elif output == "3":  # gARP, program.
             # Run gARP
             garpl.garp_logic(pa_ip, username, password, pa_or_pan, root_folder)
 
         else:
-            print("\nHuh?. You entered {}\n".format(profile))
+            print("\nHuh?. You entered {}\n".format(output))
             continue
 
         print("done. create a loop here?")
@@ -160,19 +162,7 @@ def main(output_list, root_folder, entry, pa_or_pan):
 if __name__ == "__main__":
 
     if sys.argv[1] == 'DEBUG':
-        root_folder = 'debtest'
-        fout = grab_files(root_folder)
-        for fin in fout:
-            parsedfile = json.loads(fin)
-            print(f"fin = {parsedfile}")
-            #output = garpl.garp_logic(parsedfile, "rest", "natrules", "")
-        print("===========DEBUG MODE===========")
-        print("\ngARP DEBUG Test Commands:")
-        print("-------------------------------------------------------------")
-        for line in output:
-            print(line)
-        print("-------------------------------------------------------------")
-        sys.exit(0)
+        pass
 
     # Guidance on how to use the script
     if len(sys.argv) != 4:

@@ -136,13 +136,10 @@ def garp_interfaces(entries, iftype):
 
             ifname = entry['@name']
             garp_command = "test arp gratuitous ip IPADDRESS interface IFNAME"
-            XIPS = False
-            SUBIF_XIP = False
 
             if "layer3" in entry:
                 if "ip" in entry["layer3"]:
                     if type(entry['layer3']['ip']['entry']) is list:
-                        XIPS = True
                         for xip in entry['layer3']['ip']['entry']:
                             ip = xip['@name']
                             temp = garp_command.replace('IPADDRESS', ip.split('/',1)[0]) # removes anything in IP after /, ie /24
@@ -157,13 +154,11 @@ def garp_interfaces(entries, iftype):
                         mem.ip_to_eth_dict.update({ip:ifname})
                 elif "units" in entry["layer3"]:
                     # Sub Interfaces
-                    XIPS = True
                     if entry['layer3']['units']['entry'].__len__() > 1:
                         for subif in entry['layer3']['units']['entry']:
                             ifname = subif['@name']
                             if type(subif['ip']['entry']) is list:
                                 # Really, secondary addresses on subinterfaces?!
-                                SUBIF_XIP = True
                                 print(f"FOUND SUBIF WITH SECONDARY IP ADDRESS, {ifname}")
                                 for subif_xip in subif['ip']['entry']:
                                     ip = subif_xip['@name']
@@ -342,12 +337,12 @@ if __name__ == "__main__":
 
     # Gather input
     root_folder = sys.argv[1]
-    mem.pa_ip = sys.argv[2]
+    pa_ip = sys.argv[2]
     username = sys.argv[3]
     password = getpass.getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj'
-    paobj = xmlpa.xml_api_lib_pa(mem.pa_ip, username, password)
+    paobj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
 
     # PA or Panorama?
     allowed = list("12")  # Allowed user input
