@@ -51,7 +51,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 DEBUG = False
 
 # XML API Class for use with Palo Alto API
-class xml_api_lib_pa:
+class api_lib_pa:
     # Upon creation:
     def __init__(self, pa_ip, username, password):
         self.pa_ip = pa_ip

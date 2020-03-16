@@ -48,7 +48,7 @@ import ipcalc
 
 from lxml import etree
 import xmltodict
-import xml_api_lib_pa as xmlpa
+import api_lib_pa as pa
 
 # fmt: off
 # Global Variables, debug & xpath location for each profile type
@@ -222,7 +222,7 @@ def build_garp_natrules(entries):
                     continue
             if "destination-translation" in entry:
                 mem.garp_commands.append(
-                    f"DNAT, - Check NAT rule named: {entry['@name']} for details."
+                    f"DNAT, - Check NAT rule named: '{entry['@name']}' for details."
                 )
             if "source-translation" in entry:
                 snat = entry["source-translation"]
@@ -289,7 +289,7 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
     mem.pa_ip = pa_ip
     mem.username = username
     mem.password = password
-    mem.fwconn = xmlpa.xml_api_lib_pa(mem.pa_ip, mem.username, mem.password)
+    mem.fwconn = pa.api_lib_pa(mem.pa_ip, mem.username, mem.password)
     mem.pa_or_pan = pa_or_pan
     mem.root_folder = root_folder
 
@@ -372,7 +372,7 @@ if __name__ == "__main__":
     password = getpass.getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj' to test login success
-    paobj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
+    paobj = pa.api_lib_pa(pa_ip, username, password)
 
     # PA or Panorama?
     allowed = list("12")  # Allowed user input

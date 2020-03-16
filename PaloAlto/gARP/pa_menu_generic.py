@@ -44,7 +44,7 @@ import os
 import xmltodict
 import json
 
-import xml_api_lib_pa as xmlpa  # rename
+import api_lib_pa as pa  # rename
 import garp as garpl
 
 # fmt: off
@@ -174,7 +174,7 @@ if __name__ == "__main__":
         root_folder = "~temp/"
 
     # Create connection with the Palo Alto as 'obj'
-    obj = xmlpa.xml_api_lib_pa(pa_ip, username, password)
+    obj = pa.api_lib_pa(pa_ip, username, password)
 
     allowed = list("12")  # Allowed user input
     incorrect_input = True
