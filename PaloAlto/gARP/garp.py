@@ -157,7 +157,7 @@ def build_garp_interfaces(entries, iftype):
     Build a list of 'test arp' commands based on what is found.
     Return this list.
     """
-    if entries:u
+    if entries:
         print(f"\nSearching through {iftype} interfaces")
         for entry in entries["entry"]:
 
@@ -174,7 +174,7 @@ def build_garp_interfaces(entries, iftype):
                             ip = xip["@name"]
                             add_garp_command(ip, ifname)
                             mem.ip_to_eth_dict.update({ip: ifname})
-                    else: # Normal 1 IP on 1 interface
+                    else:  # Normal 1 IP on 1 interface
                         ip = entry["layer3"]["ip"]["entry"]["@name"]
                         add_garp_command(ip, ifname)
                         mem.ip_to_eth_dict.update({ip: ifname})
@@ -191,19 +191,19 @@ def build_garp_interfaces(entries, iftype):
                                     ip = subif_xip["@name"]
                                     add_garp_command(ip, ifname)
                                     mem.ip_to_eth_dict.update({ip: ifname})
-                            else: # Normal 1 IP on Subinterface
+                            else:  # Normal 1 IP on Subinterface
                                 ip = subif["ip"]["entry"]["@name"]
                                 add_garp_command(ip, ifname)
                                 mem.ip_to_eth_dict.update({ip: ifname})
-                    else: # Can remove this if/else?
+                    else:  # Can remove this if/else?
                         print("ONLY ONE SUBIF")
-                else: # Probably DHCP, should be added
+                else:  # Probably DHCP, should be added
                     mem.garp_commands.append(
                         f"No IP address found (e1)(DHCP?), {entry['@name']}"
                     )
-            else: # No 'layer3', no IP Address here.
+            else:  # No 'layer3', no IP Address here.
                 mem.garp_commands.append(f"No IP address found (e2), {entry['@name']}")
-    else: # No interfaces
+    else:  # No interfaces
         print(f"\nNo interfaces found for '{iftype}' type interfaces\n")
 
 
@@ -271,14 +271,14 @@ def build_garp_natrules(entries):
                             ips = address_lookup(ipobj)
                             for ip in ips:
                                 add_garp_command(ip, ifname)
-                        else: # No IP found(DHCP?), since we have interface should already have a 'test' command for it
+                        else:  # No IP found(DHCP?), since we have interface should already have a 'test' command for it
                             ip = "IP NOT FOUND, ARP taken care of via: "
                             add_garp_command(ip, ifname)
-                    else: # SNAT Misconfigured
+                    else:  # SNAT Misconfigured
                         mem.garp_commands.append(
                             f"Error, SNAT configured without a translated IP (e2), {snat}"
                         )
-    else: # No Natrules
+    else:  # No Natrules
         print(f"No nat rules found for 'natrules")
 
 
@@ -364,7 +364,9 @@ if __name__ == "__main__":
         root_folder = sys.argv[3]
     elif len(sys.argv) != 3:
         print("\nplease provide the following arguments:")
-        print("\tpython3 garp.py <PA/Panorama IP> <username> <optional output folder>\n\n")
+        print(
+            "\tpython3 garp.py <PA/Panorama IP> <username> <optional output folder>\n\n"
+        )
         sys.exit(0)
 
     if not root_folder:
