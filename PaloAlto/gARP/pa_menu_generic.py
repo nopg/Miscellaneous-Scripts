@@ -37,7 +37,7 @@ Legal:
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 """
 
-import getpass
+from getpass import getpass
 import sys
 import os
 
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     # Gather input
     pa_ip = sys.argv[1]
     username = sys.argv[2]
-    password = getpass.getpass("Enter Password: ")
+    password = getpass("Enter Password: ")
     if not root_folder:
         root_folder = "~temp/"
 

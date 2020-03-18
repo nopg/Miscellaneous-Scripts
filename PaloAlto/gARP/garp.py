@@ -40,7 +40,7 @@ Legal:
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 """
 
-import getpass
+from getpass import getpass
 import sys
 import os
 import json
@@ -114,6 +114,7 @@ def address_lookup(entry):
     Used to find the translated addresses objects on the PA/Panorama.
     Runs another api call to grab the object and return it's value (the actual ip address)
     If the NAT rule isn't using an object, we can assume this value is the IP address.
+    Returns a LIST
     """
     if mem.pa_or_pan == "panorama":
         XPATH = mem.XPATH_ADDRESS_OBJ_PAN.replace("DEVICE_GROUP", mem.device_group)
@@ -156,51 +157,53 @@ def build_garp_interfaces(entries, iftype):
     Build a list of 'test arp' commands based on what is found.
     Return this list.
     """
-    if entries:
-        # SEARCH ENTRIES
+    if entries:u
         print(f"\nSearching through {iftype} interfaces")
         for entry in entries["entry"]:
 
+            # Set interface name
             ifname = entry["@name"]
 
+            # Should have an IP
             if "layer3" in entry:
+                # Normal IP Address on interface
                 if "ip" in entry["layer3"]:
+                    # Secondary IP Addresses
                     if type(entry["layer3"]["ip"]["entry"]) is list:
                         for xip in entry["layer3"]["ip"]["entry"]:
                             ip = xip["@name"]
                             add_garp_command(ip, ifname)
                             mem.ip_to_eth_dict.update({ip: ifname})
-                    else:
+                    else: # Normal 1 IP on 1 interface
                         ip = entry["layer3"]["ip"]["entry"]["@name"]
                         add_garp_command(ip, ifname)
                         mem.ip_to_eth_dict.update({ip: ifname})
+                # Sub Interfaces
                 elif "units" in entry["layer3"]:
                     # Sub Interfaces
                     if entry["layer3"]["units"]["entry"].__len__() > 1:
                         for subif in entry["layer3"]["units"]["entry"]:
+                            # Set new (sub)interface name
                             ifname = subif["@name"]
+                            # Secondary IP Addresses
                             if type(subif["ip"]["entry"]) is list:
-                                # Really, secondary addresses on subinterfaces?!
-                                print(
-                                    f"FOUND SUBIF WITH SECONDARY IP ADDRESS, {ifname}"
-                                )
                                 for subif_xip in subif["ip"]["entry"]:
                                     ip = subif_xip["@name"]
                                     add_garp_command(ip, ifname)
                                     mem.ip_to_eth_dict.update({ip: ifname})
-                            else:
+                            else: # Normal 1 IP on Subinterface
                                 ip = subif["ip"]["entry"]["@name"]
                                 add_garp_command(ip, ifname)
                                 mem.ip_to_eth_dict.update({ip: ifname})
-                    else:
+                    else: # Can remove this if/else?
                         print("ONLY ONE SUBIF")
-                else:
+                else: # Probably DHCP, should be added
                     mem.garp_commands.append(
                         f"No IP address found (e1)(DHCP?), {entry['@name']}"
                     )
-            else:
+            else: # No 'layer3', no IP Address here.
                 mem.garp_commands.append(f"No IP address found (e2), {entry['@name']}")
-    else:
+    else: # No interfaces
         print(f"\nNo interfaces found for '{iftype}' type interfaces\n")
 
 
@@ -228,15 +231,15 @@ def build_garp_natrules(entries):
                 snat = entry["source-translation"]
 
                 # Returns Address Object typically, could also be an IP
+                # Usually 'translated-address' but also check for 'interface-address'
                 addr_obj = iterdict(snat, "translated-address")
 
-                # Usually 'translated-address' but check for 'interface-address'
                 if addr_obj:
-                    # If it's a dictionary, we hame multiple IP's
+                    # If it's a dictionary, we have multiple IP's
                     if isinstance(addr_obj, dict):
                         ipobjs = []
                         [ipobjs.append(o) for o in addr_obj["member"]]
-
+                        # Find the real-ip from the address object
                         for ipobj in ipobjs:
                             ips = address_lookup(ipobj)
                             for ip in ips:
@@ -246,7 +249,7 @@ def build_garp_natrules(entries):
 
                             add_garp_command(ip, ifname)
                     else:
-                        # Look up Address Object to get actual value, always returns list
+                        # Find the real-ip from the address object
                         ips = address_lookup(addr_obj)
 
                         for ip in ips:
@@ -255,7 +258,7 @@ def build_garp_natrules(entries):
                                 ifname = "INTERFACE NOT FOUND"
                             add_garp_command(ip, ifname)
                 else:
-                    # Maybe an interface-address?
+                    # Checking for interface-address?
                     addr_obj = iterdict(snat, "interface-address")
                     if addr_obj:
                         ifname = snat["dynamic-ip-and-port"]["interface-address"][
@@ -268,14 +271,14 @@ def build_garp_natrules(entries):
                             ips = address_lookup(ipobj)
                             for ip in ips:
                                 add_garp_command(ip, ifname)
-                        else:
+                        else: # No IP found(DHCP?), since we have interface should already have a 'test' command for it
                             ip = "IP NOT FOUND, ARP taken care of via: "
                             add_garp_command(ip, ifname)
-                    else:
+                    else: # SNAT Misconfigured
                         mem.garp_commands.append(
                             f"Error, SNAT configured without a translated IP (e2), {snat}"
                         )
-    else:
+    else: # No Natrules
         print(f"No nat rules found for 'natrules")
 
 
@@ -293,6 +296,7 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
     mem.pa_or_pan = pa_or_pan
     mem.root_folder = root_folder
 
+    # Set the correct XPATH for what we need (interfaces and nat rules)
     if mem.pa_or_pan == "panorama":
         # Needs Template Name & Device Group
         template_name = input("\nEnter the Template Name (CORRECTLY!): ")
@@ -313,12 +317,12 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
         "xml", XPATH_INTERFACES, f"{mem.root_folder}/interfaces.xml"
     )
 
-    # Grab NAT Rules (REST)
+    # Grab NAT Rules (REST, 9.0+)
     nat_output = mem.fwconn.grab_api_output(
         "rest", REST_NATRULES, f"{mem.root_folder}/natrules.json"
     )
 
-    # Parse XML to get to what we need
+    # Parse XML to get to what we need closer to a dictionary
     eth_entries = (
         int_output.get("response").get("result").get("interface").get("ethernet")
     )
@@ -369,7 +373,7 @@ if __name__ == "__main__":
     # Gather input
     pa_ip = sys.argv[1]
     username = sys.argv[2]
-    password = getpass.getpass("Enter Password: ")
+    password = getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj' to test login success
     paobj = pa.api_lib_pa(pa_ip, username, password)

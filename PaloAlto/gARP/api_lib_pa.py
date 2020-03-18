@@ -233,7 +233,7 @@ class api_lib_pa:
             if DEBUG:
                 print(f"\nGET request sent: xpath={xpath_or_restcall}.\n")
                 print(f"\nResponse: \n{response}")
-                self.create_xml_files(result, filename)
+                self.create_xml_files(response, filename)
                 print(f"Output also written to {filename}")
             else:
                 print(f"\nError exporting '{filename}' object.")
