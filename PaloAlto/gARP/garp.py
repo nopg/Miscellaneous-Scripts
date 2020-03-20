@@ -26,7 +26,8 @@ Example usage:
         Password: 
 
 Cautions:
-    - Set DEBUG=True if errors occur and you would like detailed information.
+    - Source-NAT only (discovers and outputs others)
+    - Panorama Post-NAT rules only (for now)
     
 
 Legal:
