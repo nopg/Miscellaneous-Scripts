@@ -170,6 +170,15 @@ def grab_panorama_objects():
     return device_groups, template_stack_names
 
 
+def add_review_entry(entry, type):
+    if type == "disabled":
+        mem.review_nats.append(f"Disabled Rule: Check {entry['@name']}")
+    elif type == "dnat":
+        mem.review_nats.append(f"DNAT, - Check NAT rule named: '{entry['@name']}' for details.")
+
+    mem.fwconn.create_json_files(entry, f"{mem.root_folder}/{entry['@name']}.json")
+
+
 def add_garp_command(ip, ifname):
     """
     Update global garp_commands list.
@@ -251,12 +260,10 @@ def build_garp_natrules(entries):
             ip = None
             if "disabled" in entry:
                 if entry["disabled"] == "yes":
-                    mem.review_nats.append(f"Disabled Rule: Check {entry['@name']}")
+                    add_review_entry(entry, "disabled")
                     continue
             if "destination-translation" in entry:
-                mem.review_nats.append(
-                    f"DNAT, - Check NAT rule named: '{entry['@name']}' for details."
-                )
+                add_review_entry(entry, "dnat")
             if "source-translation" in entry:
                 snat = entry["source-translation"]
 
@@ -378,16 +385,19 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
 
     # Interfaces
     mem.garp_commands.append(
-        "----------------------ARP FOR Interfaces---------------------"
+        "--------------------ARP FOR Interfaces---------------------"
     )
     build_garp_interfaces(eth_entries, "ethernet")
     build_garp_interfaces(ae_entries, "aggregate-ethernet")
 
     # NAT Rules
     mem.garp_commands.append(
-        "---------------------------ARP FOR NAT-----------------------"
+        "-------------------------ARP FOR NAT-----------------------"
     )
     build_garp_natrules(nat_entries)
+
+    #create_review
+    #mem.fwconn.create_xml_files(mem.review_nats, f"{mem.root_folder}/review-natrules.json")
 
     # Print out all the commands/output!
     print(f"\ngARP Test Commands:")
@@ -396,9 +406,10 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
         print(line)
     print("-----------------------------------------------------------")
 
-    print("---------------------------REVIEW THESE NATS-----------------------")
+    print("--------------------REVIEW THESE NATS----------------------")
     for nat in mem.review_nats:
         print(nat)
+    print("-----------------------------------------------------------\n")
 
 
 
