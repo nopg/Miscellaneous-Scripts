@@ -102,7 +102,9 @@ class api_lib_pa:
         timestamp = "/" + \
         str(datetime.now().year) + '-' + \
         str(datetime.now().month) + '-' + \
-        str(datetime.now().day) + '/'
+        str(datetime.now().day) + '--' + \
+        str(datetime.now().hour) + '-' + \
+        str(datetime.now().minute) + '/'
 
         filename = folder + timestamp + filename[end:]
 
@@ -154,7 +156,9 @@ class api_lib_pa:
         timestamp = "/" + \
         str(datetime.now().year) + '-' + \
         str(datetime.now().month) + '-' + \
-        str(datetime.now().day) + '/'
+        str(datetime.now().day) + '--' + \
+        str(datetime.now().hour) + '-' + \
+        str(datetime.now().minute) + '/'
 
         filename = folder + timestamp + filename[end:]
 
