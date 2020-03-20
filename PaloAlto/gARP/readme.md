@@ -2,7 +2,7 @@
 This was built (in hopes) to replace the existing Excel spreadsheet that was being used for new PA installs.
 
 ## api_lib_pa.py
-This is my ever-expanding PA API python library. To be used for various XML/JSON/etc calls to PA or Panorama.
+This is my ever-expanding PA API python library. To be used for various XML/JSON calls to PA or Panorama.
 
 ## garp.py
 Main program
