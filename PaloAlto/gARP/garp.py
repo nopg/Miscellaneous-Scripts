@@ -372,7 +372,15 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
     # Grab NAT Rules (REST, 9.0+)
     nat_output = mem.fwconn.grab_api_output(
         "rest", REST_NATRULES, f"{mem.root_folder}/natrules.json"
-    )
+   )
+
+    if int_output["response"]["result"]["@count"] == "0":
+        print("\nNo interfaces found, check interfaces.xml for API Reply\n")
+        sys.exit(0)
+    
+    if nat_output["result"]["@count"] == "0":
+        print("\nNo NAT Rules found, check natrules.xml for API Reply\n")
+        sys.exit(0)
 
     # Parse XML to get to what we need closer to a dictionary
     eth_entries = (
@@ -439,7 +447,11 @@ if __name__ == "__main__":
     password = getpass("Enter Password: ")
 
     # Create connection with the Palo Alto as 'obj' to test login success
-    paobj = pa.api_lib_pa(pa_ip, username, password)
+    try:
+        paobj = pa.api_lib_pa(pa_ip, username, password)
+    except:
+        print(f"Error connecting to: {pa_ip}\nCheck username/password and network connectivity.")
+        sys.exit(0)
 
     # PA or Panorama?
     allowed = list("12")  # Allowed user input

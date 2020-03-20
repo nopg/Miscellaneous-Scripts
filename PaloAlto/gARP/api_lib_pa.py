@@ -240,9 +240,8 @@ class api_lib_pa:
                 self.create_xml_files(xml_response, filename)
 
             if not xml_response["response"]["result"]:
-                print(
-                    "Nothing found on PA/Panorama, are you connecting to the right device? Check output for XML API reply"
-                )
+                print("Nothing found on PA/Panorama, are you connecting to the right device?")
+                print(f"Check {filename} for XML API reply")
                 sys.exit(0)
 
         elif xml_or_rest == "rest":
@@ -255,9 +254,8 @@ class api_lib_pa:
                 self.create_json_files(json_response, filename)
 
             if not json_response["result"]:
-                print(
-                    "Nothing found on PA/Panorama, are you connecting to the right device? Check output for REST API reply"
-                )
+                print("Nothing found on PA/Panorama, are you connecting to the right device?")
+                print(f"Check {filename} for XML API reply")
 
         if not success:
             # Extra logging when debugging
