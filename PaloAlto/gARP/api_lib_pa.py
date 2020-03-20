@@ -5,7 +5,8 @@ Description:
 Requires:
     requests
     xmltodict
-        to install try: pip3 install xmltodict requests 
+    json
+        to install try: pip3 install xmltodict requests json
 
 Author:
     Ryan Gillespie rgillespie@compunet.biz

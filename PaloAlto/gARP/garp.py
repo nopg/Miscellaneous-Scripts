@@ -27,7 +27,6 @@ Example usage:
 
 Cautions:
     - Set DEBUG=True if errors occur and you would like detailed information.
-    - Not fully developed.
     
 
 Legal:
