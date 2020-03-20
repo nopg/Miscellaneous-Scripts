@@ -1,6 +1,11 @@
 # gARP - Gratuitous ARP Script
 This was built (in hopes) to replace the existing Excel spreadsheet that was being used for new PA installs.
 
+Requires these Python Modules:
+>ipcalc, requests, xmltodict, lxml, json
+
+>try: pip3 install ipcalc requests xmltodict lxml json
+
 ## api_lib_pa.py
 This is my ever-expanding PA API python library. To be used for various XML/JSON calls to PA or Panorama.
 
