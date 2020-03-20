@@ -64,7 +64,7 @@ class mem:
     XPATH_INTERFACES_PAN =    "/config/devices/entry[@name='localhost.localdomain']/template/entry[@name='TEMPLATE_NAME']/config/devices/entry[@name='localhost.localdomain']/network/interface"
 
     XPATH_DEVICE_GROUPS = "/config/devices/entry[@name='localhost.localdomain']/device-group"
-    XPATH_TEMPLATE_STACK_NAMES = "/config/devices/entry[@name='localhost.localdomain']/template-stack"
+    XPATH_TEMPLATE_NAMES = "/config/devices/entry[@name='localhost.localdomain']/template"
 
     REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
     REST_NATRULES_PAN = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
@@ -127,7 +127,7 @@ def address_lookup(entry):
     else:
         XPATH = mem.XPATH_ADDRESS_OBJ.replace("ENTRY_NAME", entry)
 
-    output = mem.fwconn.grab_api_output("xml", XPATH, f"{mem.root_folder}/address.xml")
+    output = mem.fwconn.grab_api_output("xml", XPATH, f"{mem.root_folder}/address-obj--{entry}.xml")
 
     # Need to check for no response, must be an IP not address
     if "entry" in output["response"]["result"]:
@@ -147,9 +147,9 @@ def address_lookup(entry):
 
 def grab_panorama_objects():
     temp_device_groups = mem.fwconn.grab_api_output("xml", mem.XPATH_DEVICE_GROUPS, f"{mem.root_folder}/device_groups.xml")
-    temp_template_stack_names = mem.fwconn.grab_api_output("xml", mem.XPATH_TEMPLATE_STACK_NAMES, f"{mem.root_folder}/template-stack_names.xml")
+    temp_template_names = mem.fwconn.grab_api_output("xml", mem.XPATH_TEMPLATE_NAMES, f"{mem.root_folder}/template_names.xml")
     device_groups = []
-    template_stack_names = []
+    template_names = []
 
     # Need to check for no response, must be an IP not address
     if "entry" in temp_device_groups["response"]["result"]["device-group"]:
@@ -160,14 +160,17 @@ def grab_panorama_objects():
         sys.exit(0)
 
    # Need to check for no response, must be an IP not address
-    if "entry" in temp_template_stack_names["response"]["result"]["template-stack"]:
-        for entry in temp_template_stack_names["response"]["result"]["template-stack"]["entry"]:
-            template_stack_names.append(entry["@name"])
+    if "entry" in temp_template_names["response"]["result"]["template"]:
+        if isinstance(temp_template_names["response"]["result"]["template"]["entry"],list):
+            for entry in temp_template_names["response"]["result"]["template"]["entry"]:
+                template_names.append(entry["@name"])
+        else:
+            template_names.append(temp_template_names["response"]["result"]["template"]["entry"]["@name"])
     else:
         print(f"Error, Panorama chosen but no Template Names found.")
         sys.exit(0)
     
-    return device_groups, template_stack_names
+    return device_groups, template_names
 
 
 def add_review_entry(entry, type):
@@ -176,7 +179,7 @@ def add_review_entry(entry, type):
     elif type == "dnat":
         mem.review_nats.append(f"DNAT, - Check NAT rule named: '{entry['@name']}' for details.")
 
-    mem.fwconn.create_json_files(entry, f"{mem.root_folder}/{entry['@name']}.json")
+    mem.fwconn.create_json_files(entry, f"{mem.root_folder}/review-{entry['@name']}.json")
 
 
 def add_garp_command(ip, ifname):
@@ -337,16 +340,16 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
     if mem.pa_or_pan == "panorama":
 
         # Needs Template Name & Device Group
-        device_groups, template_stack_names = grab_panorama_objects()
+        device_groups, template_names = grab_panorama_objects()
+        print("\nTemplate Names:")
+        print("---------------------")
+        for template in template_names:
+            print(template)
+        print("--------------\n")
         print("Device Groups:")
         print("--------------")
         for dg in device_groups:
             print(dg)
-        print("--------------\n")
-        print("Template Stack Names:")
-        print("---------------------")
-        for stack in template_stack_names:
-            print(stack)
             
         template_name = input("\nEnter the Template Name (CORRECTLY!): ")
         mem.device_group = input("\nEnter the Device Group Name (CORRECTLY!): ")
