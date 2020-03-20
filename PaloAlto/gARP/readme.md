@@ -1,5 +1,5 @@
 # gARP - Gratuitous ARP Script
-This was built so that engineers would stop calling an Excel spreadsheet their 'gratuitous arp script'.
+This was built (in hopes) to replace the existing Excel spreadsheet that was being used for new PA installs.
 
 ## api_lib_pa.py
 This is my ever-expanding PA API python library. To be used for various XML/JSON/etc calls to PA or Panorama.
