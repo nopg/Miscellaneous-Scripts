@@ -55,7 +55,6 @@ import api_lib_pa as pa
 # ENTRY = + "/entry[@name='alert-only']"
 
 class mem: 
-    DEBUG = False
 
     XPATH_ADDRESS_OBJ =  "/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='ENTRY_NAME']"
     XPATH_ADDRESS_OBJ_PAN = "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/address/entry[@name='ENTRY_NAME']"
@@ -68,7 +67,6 @@ class mem:
 
     REST_NATRULES =     "/restapi/9.0/Policies/NATRules?location=vsys&vsys=vsys1"
     REST_NATRULES_PAN = "/restapi/9.0/Policies/NATPostRules?location=device-group&device-group=DEVICE_GROUP"
-
     
     ip_to_eth_dict = {}
     pa_ip = None
@@ -131,7 +129,10 @@ def address_lookup(entry):
 
     # Need to check for no response, must be an IP not address
     if "entry" in output["response"]["result"]:
-        ips = output["response"]["result"]["entry"]["ip-netmask"]
+        if "ip-netmask" in output["response"]["result"]["entry"]:
+            ips = output["response"]["result"]["entry"]["ip-netmask"]
+        else:
+            add_review_entry(output["response"]["result"]["entry"], "not-ip-netmask")
     else:
         # It must be an IP/Mask already
         ips = entry
@@ -178,8 +179,15 @@ def add_review_entry(entry, type):
         mem.review_nats.append(f"Disabled Rule: Check {entry['@name']}")
     elif type == "dnat":
         mem.review_nats.append(f"DNAT, - Check NAT rule named: '{entry['@name']}' for details.")
+    elif type == "not-ip-netmask":
+        mem.review_nats.append(f"non IP-NETMASK used for translated address: '{entry['@name']}' for details.")
 
-    mem.fwconn.create_json_files(entry, f"{mem.root_folder}/review-{entry['@name']}.json")
+        print("Not implemented yet. Ask Ryan. Send him natrules.json")
+        print("Most likely an address-object using 'IP Range', 'IP Wildcard Mask', or 'FQDN'.")
+        print("For NAT? I know a couple use cases, but maybe manually add this gARP after reviewing.")
+        print("May be redundant or otherwise unnecessary.")
+
+    mem.fwconn.create_json_files(entry, f"{mem.root_folder}/review-{entry['@name']}.xml")
 
 
 def add_garp_command(ip, ifname):
