@@ -74,6 +74,7 @@ class mem:
     device_group = None
     root_folder = '.'
     garp_commands = []
+    review_nats = []
 
 # PAN_XML_NATRULES =      "/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='DEVICE_GROUP']/post-rulebase/nat/rules"
 
@@ -221,10 +222,10 @@ def build_garp_natrules(entries):
             ip = None
             if "disabled" in entry:
                 if entry["disabled"] == "yes":
-                    mem.garp_commands.append(f"Disabled Rule: Check {entry['@name']}")
+                    mem.review_nats.append(f"Disabled Rule: Check {entry['@name']}")
                     continue
             if "destination-translation" in entry:
-                mem.garp_commands.append(
+                mem.review_nats.append(
                     f"DNAT, - Check NAT rule named: '{entry['@name']}' for details."
                 )
             if "source-translation" in entry:
@@ -353,6 +354,11 @@ def garp_logic(pa_ip, username, password, pa_or_pan, root_folder=None):
     for line in mem.garp_commands:
         print(line)
     print("-----------------------------------------------------------")
+
+    print("---------------------------REVIEW THESE NATS-----------------------")
+    for nat in mem.review_nats:
+        print(nat)
+
 
 
 # If run from the command line
