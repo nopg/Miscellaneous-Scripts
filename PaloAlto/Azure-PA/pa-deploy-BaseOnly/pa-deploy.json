@@ -4,7 +4,6 @@
     "parameters": {
         "vNetName": {
             "type": "string",
-            "value": "vnet-rg-patest",
             "metadata": {
                 "description": "Name of vNet"
             }
@@ -15,6 +14,12 @@
                 "description": "Availability Set name for Firewalls"
             },
             "defaultValue": "PaloAlto-AS"
+        },
+        "vNetCIDR": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR to use."
+            }
         },
         "privateAddressPrefix": {
             "type": "string",
@@ -37,6 +42,20 @@
                 "description": "Public address prefix "
             }
         },
+        "webAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.5.1.0/24",
+            "metadata": {
+                "description": "Public address prefix "
+            }
+        },
+        "dbAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.5.2.0/24",
+            "metadata": {
+                "description": "Public address prefix "
+            }
+        },
         "diagStorageAccountName": {
             "type": "string",
             "metadata": {
@@ -51,14 +70,12 @@
         },
         "paloVM1Name": {
             "type": "string",
-            "defaultValue": "PaloAltoVM1",
             "metadata": {
                 "description": "Name of first firewall"
             }
         },
         "paloVM2Name": {
             "type": "string",
-            "defaultValue": "PaloAltoVM2",
             "metadata": {
                 "description": "Name of second firewall"
             }
@@ -71,7 +88,6 @@
         },
         "adminPassword": {
             "type": "securestring",
-            "defaultValue": "Th@nksTroy!",
             "metadata": {
                 "description": "Password for the administrator account of VMs"
             }
@@ -201,7 +217,7 @@
                 "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
             }
         },
-        "webLBPublicIPName": {
+        "testLBPublicIPName": {
             "type": "string",
             "metadata": {
                 "description": "Public IP for external Load Balancer"
@@ -287,7 +303,7 @@
             }
         },
         {
-            "name": "[parameters('webLBPublicIPName')]",
+            "name": "[parameters('testLBPublicIPName')]",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2017-10-01",
             "location": "[resourceGroup().location]",
@@ -532,48 +548,6 @@
             }
         },
         {
-            "name": "BusinessRT",
-            "type": "Microsoft.Network/routeTables",
-            "apiVersion": "2017-10-01",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "routes": [
-                    {
-                        "name": "Blackhole-Management",
-                        "properties": {
-                            "addressPrefix": "[parameters('managementAddressPrefix')]",
-                            "nextHopType": "None"
-                        }
-                    },
-                    {
-                        "name": "Default",
-                        "properties": {
-                            "addressPrefix": "0.0.0.0/0",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('internalLoadBalancerIPAddress')]"
-                        }
-                    },
-                    {
-                        "name": "Web",
-                        "properties": {
-                            "addressPrefix": "10.5.1.0/24",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('internalLoadBalancerIPAddress')]"
-                        }
-                    },
-                    {
-                        "name": "DB",
-                        "properties": {
-                            "addressPrefix": "10.5.3.0/24",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('internalLoadBalancerIPAddress')]"
-                        }
-                    }
-                ],
-                "disableBgpRoutePropagation": false
-            }
-        },
-        {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/virtualNetworks",
             "name": "[parameters('vNetName')]",
@@ -583,18 +557,13 @@
                 "[concat('Microsoft.Network/routeTables/', 'ManagementRT')]",
                 "[concat('Microsoft.Network/routeTables/', 'PublicRT')]",
                 "[concat('Microsoft.Network/routeTables/', 'WebRT')]",
-                "[concat('Microsoft.Network/routeTables/', 'BusinessRT')]",
                 "[concat('Microsoft.Network/routeTables/', 'DBRT')]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', 'AllowAll-Subnet')]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', 'AllowManagement-Subnet')]"
             ],
             "properties": {
                 "addressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('managementAddressPrefix')]",
-                        "[parameters('publicAddressPrefix')]",
-                        "[parameters('privateAddressPrefix')]"
-                    ]
+                    "addressPrefixes": "[parameters('vNetCIDR')]",
                 },
                 "subnets": [
                     {
@@ -612,7 +581,7 @@
                     {
                         "name": "Public",
                         "properties": {
-                            "addressPrefix": "172.16.1.0/24",
+                            "addressPrefix": "[parameters('publicAddressPrefix')]",
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables/', 'PublicRT')]"
                             },
@@ -624,7 +593,7 @@
                     {
                         "name": "Private",
                         "properties": {
-                            "addressPrefix": "10.5.0.0/24",
+                            "addressPrefix": "[parameters('privateAddressPrefix')]",
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables/', 'PrivateRT')]"
                             },
@@ -636,7 +605,7 @@
                     {
                         "name": "Web",
                         "properties": {
-                            "addressPrefix": "10.5.1.0/24",
+                            "addressPrefix": "[parameters('webAddressPrefix')]",
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables/', 'WebRT')]"
                             },
@@ -646,21 +615,9 @@
                         }
                     },
                     {
-                        "name": "Business",
-                        "properties": {
-                            "addressPrefix": "10.5.2.0/24",
-                            "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables/', 'BusinessRT')]"
-                            },
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', 'AllowAll-Subnet')]"
-                            }
-                        }
-                    },
-                    {
                         "name": "DB",
                         "properties": {
-                            "addressPrefix": "10.5.3.0/24",
+                            "addressPrefix": "[parameters('dbAddressPrefix')]",
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables/', 'DBRT')]"
                             },
@@ -1047,7 +1004,7 @@
         },
         {
             "apiVersion": "2018-12-01",
-            "name": "Web-LB",
+            "name": "External-LB",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -1064,7 +1021,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('webLBPublicIPName'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('testLBPublicIPName'))]"
                             }
                         }
                     }
@@ -1120,7 +1077,7 @@
         },
         "Web IP": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('webLBPublicIPName'))).IpAddress]"
+            "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('testLBPublicIPName'))).IpAddress]"
         }
     }
 }

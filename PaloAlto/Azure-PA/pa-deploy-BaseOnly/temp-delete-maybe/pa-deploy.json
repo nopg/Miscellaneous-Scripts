@@ -201,7 +201,7 @@
                 "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
             }
         },
-        "webLBPublicIPName": {
+        "testLBPublicIPName": {
             "type": "string",
             "metadata": {
                 "description": "Public IP for external Load Balancer"
@@ -287,7 +287,7 @@
             }
         },
         {
-            "name": "[parameters('webLBPublicIPName')]",
+            "name": "[parameters('testLBPublicIPName')]",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2017-10-01",
             "location": "[resourceGroup().location]",
@@ -1064,7 +1064,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('webLBPublicIPName'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('testLBPublicIPName'))]"
                             }
                         }
                     }
@@ -1120,7 +1120,7 @@
         },
         "Web IP": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('webLBPublicIPName'))).IpAddress]"
+            "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('testLBPublicIPName'))).IpAddress]"
         }
     }
 }
