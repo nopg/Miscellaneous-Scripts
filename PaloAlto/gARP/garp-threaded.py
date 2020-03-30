@@ -295,20 +295,23 @@ def process_nat_entries(entry):
                 # Find the real-ip from the address object
                 for ipobj in ipobjs:
                     ips = address_lookup(ipobj)
+                    commands = []
                     for ip in ips:
                         ifname = interface_lookup(ip)
                         if not ifname:
                             ifname = "INTERFACE NOT FOUND"
-                        return add_garp_command(ip, ifname)
+                        commands.append(add_garp_command(ip, ifname))
+                    return commands
             else:
                 # Find the real-ip from the address object
                 ips = address_lookup(addr_obj)
-
+                commands = []
                 for ip in ips:
                     ifname = interface_lookup(ip)
                     if not ifname:
                         ifname = "INTERFACE NOT FOUND"
-                    return add_garp_command(ip, ifname)
+                    commands.append(add_garp_command(ip, ifname))
+                return commands
         else:
             # Checking for interface-address?
             addr_obj = iterdict(snat, "interface-address")

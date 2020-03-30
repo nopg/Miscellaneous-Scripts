@@ -1,0 +1,321 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing VNet"
+      }
+    },
+    "paloVMName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of VM-Series FW in the Azure portal"
+      }
+    },
+    "managementSubnetName": {
+      "type": "string",
+      "defaultValue": "Management",
+      "metadata": {
+        "description": "Management Subnet address range"
+      }
+    },
+    "firewallManagementPrivateIPAddress": {
+      "type": "string",
+      "defaultValue": "10.0.0.14",
+      "metadata": {
+        "description": "Management subnet static address for firewall"
+      }
+    },
+    "untrustSubnetName": {
+      "type": "string",
+      "defaultValue": "Untrust",
+      "metadata": {
+        "description": "Untrust Subnet address range"
+      }
+    },
+    "firewallUntrustPrivateIPAddress": {
+      "type": "string",
+      "defaultValue": "10.0.1.14",
+      "metadata": {
+        "description": "Untrust subnet static address for firewall"
+      }
+    },
+    "TrustSubnetName": {
+      "type": "string",
+      "defaultValue": "Trust",
+      "metadata": {
+        "description": "Infrastructure Subnet address range"
+      }
+    },
+    "firewallTrustPrivateIPAddress": {
+      "type": "string",
+      "defaultValue": "10.0.5.14",
+      "metadata": {
+        "description": "Infrastructure subnet static address for firewall"
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_A4",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2"
+      ],
+      "metadata": {
+        "description": "Azure VM size for VM-Series"
+      },
+      "defaultValue": "Standard_D3_v2"
+    },
+    "imageVersion": {
+      "type": "string",
+      "allowedValues": [
+        "7.1.1",
+        "8.0.0",
+        "8.1.0",
+        "9.0.0",
+        "latest"
+      ],
+      "metadata": {
+        "description": "PAN OS Version"
+      },
+      "defaultValue": "latest"
+    },
+    "imageSku": {
+      "type": "string",
+      "allowedValues": [
+        "byol",
+        "bundle1",
+        "bundle2"
+      ],
+      "metadata": {
+        "description": "Firewall License Model"
+      },
+      "defaultValue": "bundle1"
+    },
+    "BootstrapStorageAccount": {
+      "defaultValue": "cnetpalotraining",
+      "type": "string",
+      "metadata": {
+        "description": "Storage account hosting bootstrap files"
+      }
+    },
+    "StorageAccountAccessKey": {
+      "defaultValue": "",
+      "type": "string",
+      "metadata": {
+        "description": "Authentication key to access the storage account"
+      }
+    },
+    "StorageAccountFileShare": {
+      "defaultValue": "bootstrap",
+      "type": "string",
+      "metadata": {
+        "description": "The file share in the storage account where the bootstrap files are located"
+      }
+    },
+    "StorageAccountFileShareDirectory": {
+      "defaultValue": "",
+      "type": "string",
+      "metadata": {
+        "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Username of the administrator account of VMs"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Password for the administrator account of VMs"
+      }
+    }
+  },
+  "variables": {
+    "fwManagementPublicIPName": "[concat('fw',toLower(parameters('paloVMName')),'-mgmt-ip')]",
+    "imagePublisher": "paloaltonetworks",
+    "imageOffer": "vmseries1",
+    "customDataField": "[concat('storage-account=', parameters('BootstrapStorageAccount'), ',access-key=', parameters('StorageAccountAccessKey'), ',file-share=', parameters('StorageAccountFileShare'),',share-directory=', parameters('StorageAccountFileShareDirectory'))]",
+    "nicName": "[concat(parameters('paloVMName'), '-eth')]"
+  },
+  "resources": [
+    {
+      "name": "[variables('fwManagementPublicIPName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2017-10-01",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "name": "[concat(variables('nicName'), '0')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('fwManagementPublicIPName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig-mgmt",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('firewallManagementPrivateIPAddress')]",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fwManagementPublicIPName'))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets/',parameters('vNetName'), parameters('managementSubnetName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('nicName'), '1')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig-untrust",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('firewallUntrustPrivateIPAddress')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets/',parameters('vNetName'),parameters('untrustSubnetName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('nicName'), '2')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig-trust",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('firewallTrustPrivateIPAddress')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets/',parameters('vNetName'), parameters('TrustSubnetName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2018-10-01",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('paloVMName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '0')]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '1')]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '2')]"
+      ],
+      "plan": {
+        "name": "[parameters('imageSku')]",
+        "product": "[variables('imageOffer')]",
+        "publisher": "[variables('imagePublisher')]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('paloVMName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "customData": "[base64(variables('customDataField'))]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[parameters('imageSku')]",
+            "version": "[parameters('imageVersion')]"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'0'))]",
+              "properties": {
+                "primary": true
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'1'))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'2'))]",
+              "properties": {
+                "primary": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "string",
+      "type": "Microsoft.DevTestLab/schedules",
+      "apiVersion": "2018-09-15",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('paloVMName')))]"
+      ],
+      "properties": {
+        "status": "Enabled",
+        "taskType": "ComputeVmShutdownTask",
+        "dailyRecurrence": {
+          "time": "2000"
+        },
+        "timeZoneId": "US Mountain Standard Time",
+        "notificationSettings": {
+          "status": "Disabled",
+          "timeInMinutes": 15
+        },
+        "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('paloVMName')))]"
+      }
+    }
+  ],
+  "outputs": {
+    "FW MGMT IP": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('fwManagementPublicIPName'))).IpAddress]"
+    }
+  }
+}
