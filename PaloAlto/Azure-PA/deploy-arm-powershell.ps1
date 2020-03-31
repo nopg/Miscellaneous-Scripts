@@ -9,3 +9,13 @@ az deployment group create --resource-group <my-resource-group> --template-uri h
 
 #list Regions:
 az account list-locations
+
+#Retrieve weird error details
+az monitor activity-log list --correlation-id xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+
+
+
+
+#AZURE SCHEMA JSON
+https://github.com/Azure/azure-resource-manager-schemas

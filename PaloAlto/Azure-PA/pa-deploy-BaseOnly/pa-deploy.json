@@ -486,17 +486,9 @@
                         }
                     },
                     {
-                        "name": "Business",
-                        "properties": {
-                            "addressPrefix": "10.5.2.0/24",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('internalLoadBalancerIPAddress')]"
-                        }
-                    },
-                    {
                         "name": "DB",
                         "properties": {
-                            "addressPrefix": "10.5.3.0/24",
+                            "addressPrefix": "[parameters('dbAddressPrefix')]",
                             "nextHopType": "VirtualAppliance",
                             "nextHopIpAddress": "[parameters('internalLoadBalancerIPAddress')]"
                         }
@@ -528,17 +520,9 @@
                         }
                     },
                     {
-                        "name": "Business",
-                        "properties": {
-                            "addressPrefix": "10.5.2.0/24",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('internalLoadBalancerIPAddress')]"
-                        }
-                    },
-                    {
                         "name": "Web",
                         "properties": {
-                            "addressPrefix": "10.5.1.0/24",
+                            "addressPrefix": "[parameters('webAddressPrefix')]",
                             "nextHopType": "VirtualAppliance",
                             "nextHopIpAddress": "[parameters('internalLoadBalancerIPAddress')]"
                         }
@@ -563,7 +547,9 @@
             ],
             "properties": {
                 "addressSpace": {
-                    "addressPrefixes": "[parameters('vNetCIDR')]",
+                    "addressPrefixes": [
+                        "[parameters('vNetCIDR')]"
+                    ]
                 },
                 "subnets": [
                     {
@@ -663,7 +649,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIPAddresses/', variables('fw1UntrustPublicIPName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/', parameters('vNetName'))]",
-                "[resourceId('Microsoft.Network/loadBalancers/', 'Web-LB')]"
+                "[resourceId('Microsoft.Network/loadBalancers/', 'External-LB')]"
             ],
             "apiVersion": "2015-06-15",
             "properties": {
@@ -682,7 +668,7 @@
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
-                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Web-LB'),'/backendAddressPools/firewalls')]"
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'External-LB'),'/backendAddressPools/firewalls')]"
                                 }
                             ]
                         }
@@ -754,7 +740,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIPAddresses/', variables('fw2UntrustPublicIPName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/', parameters('vNetName'))]",
-                "[resourceId('Microsoft.Network/loadBalancers/', 'Web-LB')]"
+                "[resourceId('Microsoft.Network/loadBalancers/', 'External-LB')]"
             ],
             "apiVersion": "2015-06-15",
             "properties": {
@@ -773,7 +759,7 @@
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
-                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Web-LB'),'/backendAddressPools/firewalls')]"
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'External-LB'),'/backendAddressPools/firewalls')]"
                                 }
                             ]
                         }
@@ -1035,13 +1021,13 @@
                     {
                         "properties": {
                             "frontendIPConfiguration": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Web-LB'), '/frontendIpConfigurations/web')]"
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'External-LB'), '/frontendIpConfigurations/web')]"
                             },
                             "backendAddressPool": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Web-LB'), '/backendAddressPools/firewalls')]"
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'External-LB'), '/backendAddressPools/firewalls')]"
                             },
                             "probe": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Web-LB'), '/probes/https-probe')]"
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'External-LB'), '/probes/https-probe')]"
                             },
                             "protocol": "Tcp",
                             "frontendPort": 80,
