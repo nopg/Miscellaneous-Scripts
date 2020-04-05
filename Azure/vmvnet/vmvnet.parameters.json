@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetCount": {
+            "type": "int",
+            "value": 3,
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },
+        "vNetPrefix": {
+            "type": "string",
+            "value": "vnet",
+            "metadata": {
+                "description": "Virtual Network Name"
+            }
+        },
+        "vnetCIDR1": {
+            "type": "string",
+            "value": "10.1.0.0/16",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },
+        "subnetPrefix1": {
+            "type": "string",
+            "value": "10.1.1.0/24",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+        "vnetCIDR2": {
+            "type": "string",
+            "value": "10.2.0.0/16",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },
+        "subnetPrefix2": {
+            "type": "string",
+            "value": "10.2.1.0/24",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+        "vnetCIDR3": {
+            "type": "string",
+            "value": "10.3.0.0/16",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },
+        "subnetPrefix3": {
+            "type": "string",
+            "value": "10.3.1.0/24",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+    }
+}

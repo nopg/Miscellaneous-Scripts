@@ -1,0 +1,90 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vNetName": {
+            "value": "vnet-rgpatest"
+        },
+        "vNetCIDR": {
+            "value": "10.77.0.0/16"
+        },
+        "privateAddressPrefix": {
+            "value": "10.77.0.0/24"
+        },
+        "managementAddressPrefix": {
+            "value": "10.77.1.0/24"
+        },
+        "publicAddressPrefix": {
+            "value": "10.77.2.0/23"
+        },
+        "webAddressPrefix": {
+            "value": "10.77.10.0/24"
+        },
+        "dbAddressPrefix": {
+            "value": "10.77.20.0/24"
+        },
+        "fw1ManagementPrivateIPAddress": {
+            "value": "10.77.1.6"
+        },
+        "fw2ManagementPrivateIPAddress": {
+            "value": "10.77.1.7"
+        },
+        "fw1PublicPrivateIPAddress": {
+            "value": "10.77.2.6"
+        },
+        "fw2PublicPrivateIPAddress": {
+            "value": "10.77.2.7"
+        },
+        "fw1PrivateIPAddress": {
+            "value": "10.77.0.6"
+        },
+        "fw2PrivateIPAddress": {
+            "value": "10.77.0.7"
+        },
+        "internalLoadBalancerIPAddress": {
+            "value": "10.77.0.21"
+        },
+        "diagStorageAccountName": {
+            "value": "rgpadiagstorage1234"
+        },
+        "managementSourceAddressRange": {
+            "value": "67.177.1.163/32"
+        },
+        "paloVM1Name": {
+            "value": "vm-PaloAltoVM1"
+        },
+        "paloVM2Name": {
+            "value": "vm-PaloAltoVM2"
+        },
+        "adminUsername": {
+            "value": "sysadmin"
+        },
+        "adminPassword": {
+            "value": "Th@nksTroy!"
+        },
+        "vmSize": {
+            "value": "Standard_D3_v2"
+        },
+        "imageVersion": {
+            "value": "latest"
+        },
+        "imageSku": {
+            "value": "byol"
+        },
+        "BootstrapStorageAccount": {
+            "value": "cnetpalotraining"
+        },
+        "StorageAccountFileShare": {
+            "value": "bootstrap2"
+        },
+        "StorageAccountFileShareDirectory1": {
+            "value": "rg/fw1"
+        },
+        "StorageAccountFileShareDirectory2": {
+            "value": "rg/fw2"
+        },
+        "testLBPublicIPName": {
+            "value": "test-LB-Public-IP"
+        }
+    }
+}

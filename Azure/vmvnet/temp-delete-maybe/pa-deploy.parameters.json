@@ -1,0 +1,125 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vNetName": {
+            "type": "string",
+            "value": "vnet-rgpatest",
+            "metadata": {
+                "description": "Name of vNet"
+            }
+        },
+        "managementAddressPrefix": {
+            "type": "string",
+            "value": "192.168.1.0/24",
+            "metadata": {
+                "description": "Management address prefix "
+            }
+        },
+        "diagStorageAccountName": {
+            "type": "string",
+            "value": "diag-pa-storage",
+            "metadata": {
+                "description": "Diagnostic Storage Account Name"
+            }
+        },
+        "managementSourceAddressRange": {
+            "type": "string",
+            "value": "67.177.1.163/32"
+            "metadata": {
+                "description": "Management Security Group Source IP address range"
+            }
+        },
+        "paloVM1Name": {
+            "type": "string",
+            "value": "vm-PaloAltoVM1",
+            "metadata": {
+                "description": "Name of first firewall"
+            }
+        },
+        "paloVM2Name": {
+            "type": "string",
+            "value": "vm-PaloAltoVM2",
+            "metadata": {
+                "description": "Name of second firewall"
+            }
+        },
+        "adminUsername": {
+            "type": "string",
+            "value": "sysadmin",
+            "metadata": {
+                "description": "Username of the administrator account of VMs"
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "defaultValue": "Th@nksTroy!",
+            "metadata": {
+                "description": "Password for the administrator account of VMs"
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "value": "Standard_D3_v2",
+            "metadata": {
+                "description": "Azure VM size for VM-Series"
+            }
+        },
+        "imageVersion": {
+            "type": "string",
+            "defaultValue": "latest",
+            "metadata": {
+                "description": "PAN OS Version"
+            }
+        },
+        "imageSku": {
+            "type": "string",
+            "value": "byol",
+            "metadata": {
+                "description": "Firewall License Model"
+            }
+        },
+        "BootstrapStorageAccount": {
+            "defaultValue": "cnetpalotraining",
+            "type": "string",
+            "metadata": {
+                "description": "Storage account hosting bootstrap files"
+            }
+        },
+        "StorageAccountAccessKey": {
+            "defaultValue": "6vXKevk8N5+pA/2CTqkKTNy9YmnLbmih3xoHd8HQQD6IsaMeAOHsOdULk/yMwI9vyjdqIQz03hVJojhCGGlWJg==",
+            "type": "string",
+            "metadata": {
+                "description": "Authentication key to access the storage account"
+            }
+        },
+        "StorageAccountFileShare": {
+            "defaultValue": "bootstrap2",
+            "type": "string",
+            "metadata": {
+                "description": "The file share in the storage account where the bootstrap files are located"
+            }
+        },
+        "StorageAccountFileShareDirectory1": {
+            "defaultValue": "rg/fw1",
+            "type": "string",
+            "metadata": {
+                "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
+            }
+        },
+        "StorageAccountFileShareDirectory2": {
+            "defaultValue": "rg/fw2",
+            "type": "string",
+            "metadata": {
+                "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
+            }
+        },
+        "testLBPublicIPName": {
+            "type": "string",
+            "value": "test-Public-IP"
+            "metadata": {
+                "description": "Public IP for external Load Balancer"
+            }
+        }
+    }
+}
