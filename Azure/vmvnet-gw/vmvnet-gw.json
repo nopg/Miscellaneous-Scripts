@@ -1,0 +1,367 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetCount": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },
+        "vNetPrefix": {
+            "type": "string",
+            "defaultValue": "vnet",
+            "metadata": {
+                "description": "Virtual Network Name"
+            }
+        },
+        "vnetBGP-AS1": {
+            "type": "string",
+            "defaultValue": "65001",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },   
+        "vnetBGP-AS2": {
+            "type": "string",
+            "defaultValue": "65002",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },   
+        "vnetBGP-AS3": {
+            "type": "string",
+            "defaultValue": "65003",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },   
+        "vnetCIDR1": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },
+        "subnetPrefix1": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+        "gatewaysubnetPrefix1": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+        "vnetCIDR2": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },
+        "subnetPrefix2": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+        "gatewaysubnetPrefix2": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+        "vnetCIDR3": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },
+        "subnetPrefix3": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+        "gatewaysubnetPrefix3": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            }
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "sysadmin",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            }
+        },
+        "adminPasswordOrKey": {
+            "type": "securestring",
+            "defaultValue": "!Gr00t!",
+            "metadata": {
+                "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
+            }
+        },
+        "authenticationType": {
+            "type": "string",
+            "defaultValue": "password",
+            "allowedValues": [
+                "sshPublicKey",
+                "password"
+            ],
+            "metadata": {
+                "description": "Type of authentication to use on the Virtual Machine. SSH key is recommended."
+            }
+        }
+    },
+    "variables": {
+        "routeTableName": "[concat(parameters('vnetPrefix'),'-RT-')]",
+        "NSGName": "[concat(parameters('vnetPrefix'),'-NSG-')]",
+        "vmName": "[concat(parameters('vnetPrefix'),'-mgt-vm')]",
+        "subnetName": "[concat(parameters('vnetPrefix'),'-subnet1-')]",
+        "vmPublicIP": "[concat(variables('vmName'), '-PublicIP-' )]",
+        "vmNIC": "[concat(variables('vmName'),'-NIC-')]",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetPrefix'), variables('subnetName'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(variables('routeTableName'), copyIndex(1))]",
+            "type": "Microsoft.Network/routeTables",
+            "apiVersion": "2017-10-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "disableBgpRoutePropagation": false
+            },
+            "copy": {
+                "name": "copy-rt",
+                "count": "[parameters('vnetCount')]"
+            }
+        },
+        {
+            "apiVersion": "2017-06-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[concat(variables('nsgName'), copyIndex(1))]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "AllowAll-Inbound",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "priority": 100
+                        }
+                    }
+                ]
+            },
+            "copy": {
+                "name": "copy-nsg",
+                "count": "[parameters('vnetCount')]"
+            }
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[concat(parameters('vNetPrefix'), copyIndex(1))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/routeTables/', concat(variables('routeTableName'), copyIndex(1)))]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', concat(variables('NSGName'), copyIndex(1)))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters(concat('vnetCIDR', copyIndex(1)))]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[concat(variables('subnetName'), copyIndex(1))]",
+                        "properties": {
+                            "addressPrefix": "[parameters(concat('subnetPrefix', copyIndex(1)))]",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables/', concat(variables('routeTableName'), copyIndex(1)))]"
+                            },
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', concat(variables('NSGName'), copyIndex(1)))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "GatewaySubnet",
+                        "properties": {
+                        "addressPrefix": "[parameters( concat('gatewaySubnetPrefix', copyIndex(1)) )]"
+                    }
+                }
+                ]
+            },
+            "copy": {
+                "name": "copy-vnet",
+                "count": "[parameters('vnetCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIpAddresses",
+            "apiVersion": "2019-02-01",
+            "name": "[concat(variables('vmPublicIP'), copyIndex(1) )]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIpAllocationMethod": "Dynamic",
+                "publicIPAddressVersion": "IPv4",
+                "dnsSettings": {
+                    "domainNameLabel": "[toLower(concat(variables('vmName'), copyIndex(1), uniqueString(resourceGroup().id)))]"
+                },
+                "idleTimeoutInMinutes": 4
+            },
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "copy": {
+                "name": "copy-publicip",
+                "count": "[parameters('vnetCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-10-01",
+            "name": "[concat(variables('vmNIC'), copyIndex(1))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/', concat(parameters('vnetPrefix'), copyIndex(1)))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/', concat(variables('NSGName'), copyIndex(1)))]",
+                "[resourceId('Microsoft.Network/publicIpAddresses/', concat(variables('vmPublicIP'), copyIndex(1)))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "[concat(variables('vmName'), '-ipconfig1-', copyIndex(1))]",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(parameters('vnetPrefix'), copyIndex(1)) , concat(variables('subnetName'), copyIndex(1)) )]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('vmPublicIP'), copyIndex(1)))]"
+                            }
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',concat(variables('NSGName'), copyIndex(1)))]"
+                }
+            },
+            "copy": {
+                "name": "copy-nic",
+                "count": "[parameters('vnetCount')]"
+            }
+        },
+        {
+            "apiVersion": "2018-07-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[concat('vgw-public-ip-', copyIndex(1))]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            },
+            "copy": {
+                "name": "copy-vgw-public",
+                "count": "[parameters('vnetCount')]"
+            }
+        },
+        {
+            "apiVersion": "2018-07-01",
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "name": "[concat('vgw-', copyIndex(1))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat('vgw-public-ip-', copyIndex(1)) )]",
+                "[resourceId('Microsoft.Network/virtualNetworks', concat( parameters('vNetPrefix'), copyIndex(1)) )]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                {
+                    "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "subnet": {
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(parameters('vNetPrefix'), copyIndex(1)), 'GatewaySubnet')]"
+                    },
+                    "publicIPAddress": {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat('vgw-public-ip-', copyIndex(1)))]"
+                    }
+                    },
+                    "name": "[concat('vnetGatewayIPConfig-', copyIndex(1))]"
+                }
+                ],
+                "sku": {
+                "name": "VpnGw1",
+                "tier": "VpnGw1"
+                },
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": true,
+                "activeActive": false,
+                "bgpSettings": {
+                    "asn": "[parameters( concat('vnetBGP-AS', copyIndex(1)))]"
+                }
+            },
+            "copy": {
+                "name": "copy-vgw",
+                "count": "[parameters('vnetCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-03-01",
+            "name": "[concat(variables('vmName'), copyIndex(1))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNIC'), copyIndex(1)))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2s"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
+                    },
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18.04-LTS",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNIC'), copyIndex(1)))]"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[concat(variables('vmName'), copyIndex(1))]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPasswordOrKey')]",
+                    "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
+                }
+            },
+            "copy": {
+                "name": "copy-vm",
+                "count": "[parameters('vnetCount')]"
+            }
+        }
+    ]
+}

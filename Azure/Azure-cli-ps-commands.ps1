@@ -20,6 +20,8 @@ foreach ($module in (Get-Module -ListAvailable AzureRM*).Name | Get-Unique) {
     Uninstall-module $module
  }
 
+# To find the versions of Azure PowerShell installed on your computer:
+Get-Module -ListAvailable Az
 
 # Log In
 Connect-AzAccount --use-device-code # If multiple subscriptions

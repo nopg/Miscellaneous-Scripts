@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "connections_vgw_10_20_name": {
+            "defaultValue": "vgw-10-20",
+            "type": "String"
+        },
+        "virtualNetworkGateways_vgw_10_externalid": {
+            "defaultValue": "/subscriptions/3380a0c2-47b6-4803-b708-55c36f024bd9/resourceGroups/RG-vmvnet/providers/Microsoft.Network/virtualNetworkGateways/vgw-10",
+            "type": "String"
+        },
+        "virtualNetworkGateways_vgw_20_externalid": {
+            "defaultValue": "/subscriptions/3380a0c2-47b6-4803-b708-55c36f024bd9/resourceGroups/RG-vmvnet/providers/Microsoft.Network/virtualNetworkGateways/vgw-20",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('connections_vgw_10_20_name')]",
+            "location": "eastus",
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[parameters('virtualNetworkGateways_vgw_10_externalid')]"
+                },
+                "virtualNetworkGateway2": {
+                    "id": "[parameters('virtualNetworkGateways_vgw_20_externalid')]"
+                },
+                "connectionType": "Vnet2Vnet",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "sharedKey": "test1",
+                "enableBgp": true,
+                "usePolicyBasedTrafficSelectors": false,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [],
+                "expressRouteGatewayBypass": false
+            }
+        }
+    ]
+}
