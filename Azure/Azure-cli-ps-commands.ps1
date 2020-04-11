@@ -49,6 +49,9 @@ az network nic show-effective --resource-group <RG-NAME> -route-table --name <VM
 
 
 # Enable/Configure Forced Tunneling
+$RGNAME = <RESOURCE-GROUP-NAME>
+$LocalGateway = Get-AzureRmLocalNetworkGateway -Name $LNGNAME -ResourceGroupName $RGNAME 
+$VirtualGateway = Get-AzureRmVirtualNetworkGateway -Name $VGNAME -ResourceGroupName $RGNAME
 Set-AzureRmVirtualNetworkGatewayDefaultSite -GatewayDefaultSite $LocalGateway -VirtualNetworkGateway $VirtualGateway
 az network vnet-gateway update -g <RG-NAME> -n <VGW-Name> --gateway-default-site <LNG-Name>
 
@@ -86,10 +89,12 @@ cmd | get-member
 
 
 
-# REST API
+# REST API / Terraform
 # Create Service Principal (For Authentication via REST)
-$sp = New-AzADServicePrincipal -DisplayName ServicePrincipalName
+#$sp = New-AzADServicePrincipal -DisplayName ServicePrincipalName
 az ad sp create-for-rbac -n "postmanaccess"
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/${SUBSCRIPTION_ID}" -n NAME
+az ad sp credential list --id xxx
 
 
 #AZURE SCHEMA JSON
