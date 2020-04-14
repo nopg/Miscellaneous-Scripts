@@ -70,7 +70,10 @@ az group create --name <resource-group-name> --location <resource-group-location
 # Deploy ARM Template
 New-AzResourceGroupDeployment -ResourceGroupName <resource-group-name> -TemplateUri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-simple-linux/azuredeploy.json
 az deployment group create --resource-group <my-resource-group> --template-uri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-simple-linux/azuredeploy.json
-
+# ExpressRoute - Set Connection Weight to Prefer Specific Path (Higher is better)
+$connection = Get-AzVirtualNetworkGatewayConnection -Name "MyVirtualNetworkConnection" -ResourceGroupName "MyRG"
+$connection.RoutingWeight = 100
+Set-AzVirtualNetworkGatewayConnection -VirtualNetworkGatewayConnection $connection
 
 
 
