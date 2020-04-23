@@ -32,25 +32,127 @@
             "type": "string",
             "metadata": {
                 "description": "Virtual Network CIDR Range"
-            }
+            },
+            "defaultValue": "n/a"
         },
         "subnetPrefix2": {
             "type": "string",
             "metadata": {
                 "description": "Subnet Prefix"
-            }
+            },
+            "defaultValue": "n/a"
         },
         "vnetCIDR3": {
             "type": "string",
             "metadata": {
                 "description": "Virtual Network CIDR Range"
-            }
+            },
+            "defaultValue": "n/a"
         },
         "subnetPrefix3": {
             "type": "string",
             "metadata": {
                 "description": "Subnet Prefix"
-            }
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetCIDR4": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix4": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetCIDR5": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix5": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetCIDR6": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix6": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetCIDR7": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix7": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetCIDR8": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix8": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetCIDR9": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix9": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetCIDR10": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix10": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
         },
         "adminUsername": {
             "type": "string",
@@ -61,7 +163,7 @@
         },
         "adminPasswordOrKey": {
             "type": "securestring",
-            "defaultValue": "!Gr00t!",
+            "defaultValue": "cnetPAd3mo!!",
             "metadata": {
                 "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
             }

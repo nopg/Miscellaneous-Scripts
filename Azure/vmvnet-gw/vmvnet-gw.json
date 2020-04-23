@@ -16,27 +16,6 @@
                 "description": "Virtual Network Name"
             }
         },
-        "vnetBGP-AS1": {
-            "type": "string",
-            "defaultValue": "65001",
-            "metadata": {
-                "description": "Virtual Network CIDR Range"
-            }
-        },   
-        "vnetBGP-AS2": {
-            "type": "string",
-            "defaultValue": "65002",
-            "metadata": {
-                "description": "Virtual Network CIDR Range"
-            }
-        },   
-        "vnetBGP-AS3": {
-            "type": "string",
-            "defaultValue": "65003",
-            "metadata": {
-                "description": "Virtual Network CIDR Range"
-            }
-        },   
         "vnetCIDR1": {
             "type": "string",
             "metadata": {
@@ -55,42 +34,265 @@
                 "description": "Subnet Prefix"
             }
         },
+        "vnetBGP-AS1": {
+            "type": "string",
+            "defaultValue": "65001",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },   
         "vnetCIDR2": {
             "type": "string",
             "metadata": {
                 "description": "Virtual Network CIDR Range"
-            }
+            },
+            "defaultValue": "n/a"
         },
         "subnetPrefix2": {
             "type": "string",
             "metadata": {
                 "description": "Subnet Prefix"
-            }
+            },
+            "defaultValue": "n/a"
         },
         "gatewaysubnetPrefix2": {
             "type": "string",
             "metadata": {
                 "description": "Subnet Prefix"
-            }
+            },
+            "defaultValue": "n/a"
         },
+        "vnetBGP-AS2": {
+            "type": "string",
+            "defaultValue": "65002",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },   
         "vnetCIDR3": {
             "type": "string",
             "metadata": {
                 "description": "Virtual Network CIDR Range"
-            }
+            },
+            "defaultValue": "n/a"
         },
         "subnetPrefix3": {
             "type": "string",
             "metadata": {
                 "description": "Subnet Prefix"
-            }
+            },
+            "defaultValue": "n/a"
         },
         "gatewaysubnetPrefix3": {
             "type": "string",
             "metadata": {
                 "description": "Subnet Prefix"
-            }
+            },
+            "defaultValue": "n/a"
         },
+        "vnetBGP-AS3": {
+            "type": "string",
+            "defaultValue": "65003",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },   
+        "vnetCIDR4": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix4": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "gatewaysubnetPrefix4": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetBGP-AS4": {
+            "type": "string",
+            "defaultValue": "65004",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },  
+        "vnetCIDR5": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix5": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "gatewaysubnetPrefix5": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetBGP-AS5": {
+            "type": "string",
+            "defaultValue": "65005",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },  
+        "vnetCIDR6": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix6": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "gatewaysubnetPrefix6": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetBGP-AS6": {
+            "type": "string",
+            "defaultValue": "65006",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },  
+        "vnetCIDR7": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix7": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "gatewaysubnetPrefix7": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetBGP-AS7": {
+            "type": "string",
+            "defaultValue": "65007",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },  
+        "vnetCIDR8": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix8": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "gatewaysubnetPrefix8": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetBGP-AS8": {
+            "type": "string",
+            "defaultValue": "65008",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },  
+        "vnetCIDR9": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix9": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "gatewaysubnetPrefix9": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetBGP-AS9": {
+            "type": "string",
+            "defaultValue": "65009",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },  
+        "vnetCIDR10": {
+            "type": "string",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            },
+            "defaultValue": "n/a"
+        },
+        "subnetPrefix10": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "gatewaysubnetPrefix10": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet Prefix"
+            },
+            "defaultValue": "n/a"
+        },
+        "vnetBGP-AS10": {
+            "type": "string",
+            "defaultValue": "65010",
+            "metadata": {
+                "description": "Virtual Network CIDR Range"
+            }
+        },  
         "adminUsername": {
             "type": "string",
             "defaultValue": "sysadmin",
@@ -100,7 +302,7 @@
         },
         "adminPasswordOrKey": {
             "type": "securestring",
-            "defaultValue": "!Gr00t!",
+            "defaultValue": "cnetPAd3mo!!",
             "metadata": {
                 "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
             }
