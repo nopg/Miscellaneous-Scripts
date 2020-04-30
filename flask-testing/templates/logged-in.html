@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        You are logged in...
+        {{ form.pa.label(class="form-control-label") }}
+        {{ form.pa(class="form-control form-control-lg") }}
+    </div>
+    <p></p>
+    <a href="{{ url_for('index') }}">:Home:</a>
+{% endblock content %}
