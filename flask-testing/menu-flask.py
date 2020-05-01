@@ -6,16 +6,26 @@ app.config['SECRET_KEY'] = 'abcd'
 
 hi = [1,2,3,4,5,6]
 
+########################################################################
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-    form = forms.LoginForm()
+    form = forms.HomePage()
     if form.validate_on_submit():
         flash(f"Connecting to {form.pa_ip.data} succeeded..", "success")
         return redirect(url_for('loggedIn'))
     return render_template("index.html", title="gMenu", form=form)
 
-@app.route("/test")
-def test():
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = forms.LoginForm()
+    if form.validate_on_submit():
+        flash(f"Connecting to {form.pa_ip.data} succeeded..", "success")
+        return redirect(url_for('loggedIn'))
+    return render_template("login.html", title="gMenu", form=form)
+
+@app.route("/about")
+def about():
     return render_template("about.html", title="gAbout",testing=hi)
 
 @app.route("/loggedin")

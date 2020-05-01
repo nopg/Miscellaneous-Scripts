@@ -5,18 +5,26 @@
       <form method="POST" action="">
         {{ form.hidden_tag()}}
         <fieldset class="form-group">
-          <legend class="border-bottom mb-4">Log in Here?</legend>
+          <legend class="border-bottom mb-4">gTools - Pick your tool.</legend>
           <div class="form-group">
-            {{ form.pa_ip.label(class="form-control-label") }}
-            {{ form.pa_ip(class="form-control form-control-lg") }}
+            {{ form.g_ios.label(class="form-control-label") }}
+            {{ form.g_ios(class="form-control form-control-lg") }}
           </div>
           <div class="form-group">
-            {{ form.username.label(class="form-control-label") }}
-            {{ form.username(class="form-control form-control-lg") }}
+            {{ form.ap_ports.label(class="form-control-label") }}
+            {{ form.ap_ports(class="form-control form-control-lg") }}
           </div>
           <div class="form-group">
-            {{ form.password.label(class="form-control-label") }}
-            {{ form.password(class="form-control form-control-lg") }}
+            {{ form.used_port_inventory.label(class="form-control-label") }}
+            {{ form.used_port_inventory(class="form-control form-control-lg") }}
+          </div>
+          <div class="form-group">
+            {{ form.garp.label(class="form-control-label") }}
+            {{ form.garp(class="form-control form-control-lg") }}
+          </div>
+          <div class="form-group">
+            {{ form.becu.label(class="form-control-label") }}
+            {{ form.becu(class="form-control form-control-lg") }}
           </div>
         </fieldset>
         <div class="form-group">
@@ -28,7 +36,7 @@
     <h1>{{title}}</h1>
     Hello world!
     <p></p>
-    <a href="/test">Go to Test</a>
+    <a href="/about">About/Test</a>
     <p></p>
 
 {% endblock content %}

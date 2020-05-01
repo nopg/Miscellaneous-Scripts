@@ -49,7 +49,8 @@ Get-AzVirtualNetworkGatewayLearnedRoute -ResourceGroupName <RG Name> -VirtualNet
 # Get Effective Routes
 Get-AzEffectiveRouteTable -ResourceGroupName <RG-NAME> -NetworkInterfaceName <VM NIC Name> | Format-Table
 az network nic show-effective --resource-group <RG-NAME> -route-table --name <VM NIC Name>
-
+# List Public IP's used for Azure Services (Web/S3/Etc)
+az network list-service-tags --location eastus
 
 # Enable/Configure Forced Tunneling
 $RGNAME = <RESOURCE-GROUP-NAME>
