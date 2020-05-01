@@ -3,12 +3,14 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Radio
 from wtforms.validators import DataRequired, Length, EqualTo
 
 class HomePage(FlaskForm):
-    g_ios = RadioField('gIOS', validators=[])
-    ap_ports = RadioField('AP-Ports', validators=[])
-    used_port_inventory = RadioField('Used Port Inventory', validators=[])
-    garp = RadioField('PA Gratuitous ARP', validators=[])
-    becu = RadioField('PA Intra-zone Security Rule Conversion', validators=[])
-
+    choices = [
+        ("g_ios", "gIOS"),
+        ("ap_ports", "AP-Ports"),
+        ("used_port_inventory", "Used Port Inventory"),
+        ("garp", "PA Gratuitous ARP"),
+        ("becu", "PA Intra-Zone Security Rule Conversion")
+    ]
+    main_menu = RadioField("Choose your Tool.", choices=choices)
     submit = SubmitField('Login')
     remember = BooleanField('Remember Me')
 
