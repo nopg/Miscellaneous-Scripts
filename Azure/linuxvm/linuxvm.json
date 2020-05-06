@@ -4,7 +4,6 @@
     "parameters": {
         "vmName": {
             "type": "string",
-            "defaultValue": "Mgmt-VM-patest",
             "metadata": {
                 "description": "The name of you Virtual Machine."
             }
