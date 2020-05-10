@@ -30,10 +30,10 @@
                 "description": "Username for the Virtual Machine."
             }
         },
-        "adminPasswordOrKey": {
+        "adminPassword": {
             "type": "securestring",
             "metadata": {
-                "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
+                "description": "Password for the Virtual Machine."
             }
         },
         "ubuntuOSVersion": {
@@ -74,18 +74,7 @@
         "networkInterfaceName": "[concat(parameters('vmName'),'-NetInt')]",
         "dnsLabelPrefix": "[toLower(concat(parameters('vmName'), uniqueString(resourceGroup().id)))]",
         "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
-        "osDiskType": "Standard_LRS",
-        "linuxConfiguration": {
-            "disablePasswordAuthentication": true,
-            "ssh": {
-                "publicKeys": [
-                    {
-                        "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-                        "keyData": "[parameters('adminPasswordOrKey')]"
-                    }
-                ]
-            }
-        }
+        "osDiskType": "Standard_LRS"
     },
     "resources": [
         {
@@ -167,7 +156,7 @@
                 "osProfile": {
                     "computerName": "[parameters('vmName')]",
                     "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPasswordOrKey')]"
+                    "adminPassword": "[parameters('adminPassword')]"
                 }
             }
         }
