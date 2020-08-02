@@ -1,6 +1,6 @@
 from azure.storage.fileshare import ShareClient
 
-AZURE_STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=cnetpalopublic;AccountKey=hJAJfFZ7JLoACYja3dFmTYelw9cQnr3AkJzzf7Ig3QAG40IBWiWp8xDIW1XKh9/3lm81NBh1uBAO0YvZ3sSdqw==;EndpointSuffix=core.windows.net"
+AZURE_STORAGE_CONNECTION_STRING = ""
 AZURE_STORAGE_ACCOUNT_NAME = "cnetpalopublic"
 UPLOAD_FILE = './bst.xml'
 DOWNLOAD_FILE = './downloaded.xml'
