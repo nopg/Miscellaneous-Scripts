@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding=\"UTF-8\"?>
+<hello><capabilities>
+     <capability>u?rn:ietf:params:netconf:base:1.0</capability>
+      <capability>urn:ietf:params:netconf:capability:writeable-running:1.0</capability>
+       <capability>urn:ietf:params:netconf:ca?pability:roll?back-on-error:1.0</capability>
+        <capability>urn:ietf:params:netconf:capability:startup:1.0</capability>
+         <capability>urn:ietf:params:netconf:ca?pability:url:?1.0</capability>
+        <capability>urn:cisco:params:netconf:capability:pi-data-model:1.0</capability>
+       <capability>urn:cisco:params:netconf:capabili?ty:notificati?on:1.0</capability>
+   </capabilities>
+</hello>]]>]]>
