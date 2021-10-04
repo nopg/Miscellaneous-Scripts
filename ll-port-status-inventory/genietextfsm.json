@@ -1,0 +1,367 @@
+{
+    "interfaces": {
+        "GigabitEthernet1/0/1": {
+            "name": "gESX NIC 1",
+            "status": "connected",
+            "vlan": "trunk",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/2": {
+            "name": "gESX NIC 2",
+            "status": "connected",
+            "vlan": "trunk",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/3": {
+            "name": "MS-120",
+            "status": "connected",
+            "vlan": "trunk",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/4": {
+            "name": "Airport Extreme LA",
+            "status": "connected",
+            "vlan": "3",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/5": {
+            "status": "notconnect",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/6": {
+            "status": "notconnect",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/7": {
+            "status": "notconnect",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/8": {
+            "status": "notconnect",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/9": {
+            "status": "notconnect",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/10": {
+            "status": "notconnect",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/11": {
+            "status": "notconnect",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/12": {
+            "name": "xfinity-modem",
+            "status": "connected",
+            "vlan": "999",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/13": {
+            "name": "Dell iDRAC",
+            "status": "connected",
+            "vlan": "2",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/14": {
+            "name": "Mac Mini",
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/15": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/16": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/17": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/18": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/19": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/20": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/21": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/22": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/23": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/24": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/25": {
+            "status": "connected",
+            "vlan": "2",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/26": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/27": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/28": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/29": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/30": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/31": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/32": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/33": {
+            "status": "connected",
+            "vlan": "2",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/34": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/35": {
+            "status": "notconnect",
+            "vlan": "2",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/36": {
+            "name": "PA-3220 OOB",
+            "status": "notconnect",
+            "vlan": "254",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/37": {
+            "name": "Moses-INET",
+            "status": "notconnect",
+            "vlan": "299",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/38": {
+            "name": "Moses-INET",
+            "status": "notconnect",
+            "vlan": "299",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/39": {
+            "name": "Butte-INET",
+            "status": "notconnect",
+            "vlan": "299",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/40": {
+            "name": "Butte-INET",
+            "status": "notconnect",
+            "vlan": "299",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/41": {
+            "name": "Moses-lan1",
+            "status": "notconnect",
+            "vlan": "201",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/42": {
+            "name": "Moses-lan2",
+            "status": "notconnect",
+            "vlan": "201",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/43": {
+            "name": "Butte-lan1",
+            "status": "notconnect",
+            "vlan": "202",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/44": {
+            "name": "Butte-lan2",
+            "status": "notconnect",
+            "vlan": "202",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/45": {
+            "name": "LAB USE",
+            "status": "disabled",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/46": {
+            "name": "LAB USE",
+            "status": "disabled",
+            "vlan": "1",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/47": {
+            "name": "pi-Lab-MPLS",
+            "status": "disabled",
+            "vlan": "598",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100/1000BaseTX"
+        },
+        "GigabitEthernet1/0/48": {
+            "name": "Lab-MPLS",
+            "status": "connected",
+            "vlan": "298",
+            "duplex_code": "a-full",
+            "port_speed": "a-1000",
+            "type": "10/100/1000BaseTX"
+        },
+        "FastEthernet0": {
+            "status": "disabled",
+            "vlan": "routed",
+            "duplex_code": "auto",
+            "port_speed": "auto",
+            "type": "10/100BaseTX"
+        }
+    }
+}

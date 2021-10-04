@@ -1,8 +1,15 @@
 import sys
+from getpass import getpass
+import json
+import logging
 
 import rest_api_lib_meraki as meraki
 from scrapli import Scrapli
+from scrapli.helper import textfsm_parse
 #from scrapli.driver.core import IOSXEDriver
+
+
+#logging.basicConfig(filename="scrapli.log", level=logging.DEBUG)
 
 # Main Program
 def main(mydashboard):
@@ -36,7 +43,7 @@ def main(mydashboard):
     # SCRAPLI BASICS JUST STARTING
     ################################
 
-    auth_password = input("Password: ")
+    auth_password = getpass("Password: ")
 
     MY_DEVICE = {
         "host": "10.254.254.1",
@@ -47,12 +54,42 @@ def main(mydashboard):
         "transport_options": {"open_cmd": ["-c", "aes128-cbc"]},
     }
 
-    conn = Scrapli(**MY_DEVICE)
+    with Scrapli(**MY_DEVICE) as conn:
     #with IOSXEDriver(**MY_DEVICE) as conn:
     #    response = conn.send_command("show version")
+        print(conn.get_prompt())
+        test = conn.send_command("show ip interface brief")
+        print(test.textfsm_parse_output())
+        print(f"\n\n{test.channel_input}")
 
-    conn.open()
-    print(conn.get_prompt())
+        commands = ["show version", "show ip bgp summary"]
+        test2 = conn.send_commands(commands)
+        print(dir(test2))
+        print(test2.result)
+        print("\n\nhi\n\n")
+        print(test2)
+        for i in test2:
+            print(i)
+        print(test2[0].result)
+
+        test3 = conn.send_command("show interfaces status")
+        
+        structured_result = textfsm_parse("cisco_ios_show_interfaces_status_physical_only.textfsm", test3.result)
+        print(structured_result)
+        print("\n\nhere we go\n\n")
+        print(test3.textfsm_parse_output())
+
+        # Create to compare
+        with open("customtextfsm.json", 'w') as fout:
+            fout.write(json.dumps(structured_result, indent=4))
+
+        with open("ntctextfsm.json", 'w') as fout:
+            fout.write(json.dumps(test3.textfsm_parse_output(), indent=4))
+
+        structured_result = test3.genie_parse_output()
+        with open("genietextfsm.json", 'w') as fout:
+            fout.write(json.dumps(structured_result, indent=4))
+
     #print(response.result)
 
 
