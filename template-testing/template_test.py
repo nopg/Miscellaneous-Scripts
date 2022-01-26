@@ -7,9 +7,9 @@ with open("template.j2", "r") as fin:
 # Variables
 vars = {
     "hostname": "core1",
-    "loopback_ip_mask": "99.99.99.99/32",
-    "vlan2_ip_mask": "2.2.2.1/24",
-    "vlan3_ip_mask": "3.3.3.1/24",
+    "loopback_ip_mask": "99.99.99.99 255.255.255.255",
+    "vlan2_ip_mask": "2.2.2.1 255.255.255.0",
+    "vlan3_ip_mask": "3.3.3.1 255.255.255.0",
     "router_id": "99.99.99.99",
 }
 
