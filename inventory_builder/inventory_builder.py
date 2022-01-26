@@ -43,7 +43,8 @@ def build_device_list(filename):
             "platform": "cisco_iosxe",
             "transport_options": {
                 "asyncssh": {
-                    "encryption_algs": ["aes128-cbc", "aes192-cbc", "aes256-ctr", "aes192-ctr"]
+                    "encryption_algs": ["aes128-cbc", "aes192-cbc", "aes256-ctr", "aes192-ctr"],
+                    "kex_algs": ["diffie-hellman-group-exchange-sha1"]#, "aes192-cbc", "aes256-ctr", "aes192-ctr"]
                 }
             }
         } )

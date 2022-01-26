@@ -1,0 +1,123 @@
+no service pad
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+service password-encryption
+!
+hostname {{ hostname }}
+!
+boot-start-marker
+boot-end-marker
+!
+ip vrf DATA
+ rd 2:2
+ route-target export 2:2
+ route-target import 2:2
+ route-target import 299:299
+ route-target import 298:298
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 1-4094 priority 24576
+!
+!
+!
+!
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
+!
+vlan 2
+ name Data
+!
+vlan 3
+ name WIFI
+!
+vlan 98
+ name DMZ
+!
+!
+interface Loopback221
+ ip vrf forwarding DATA
+ ip address {{ loopback_ip_mask }}
+ ip ospf network point-to-point
+!
+interface GigabitEthernet1/0/1
+ description ESX NIC 1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 2
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet1/0/2
+ description ESX NIC 2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 2
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan2
+ description gData
+ ip vrf forwarding DATA
+ ip address {{ vlan2_ip_mask }}
+ no ip redirects
+ ip pim sparse-mode
+ ip igmp join-group 239.5.5.5
+!
+interface Vlan3
+ description gWifi
+ ip vrf forwarding DATA
+ ip address {{ vlan3_ip_mask }}
+ ip helper-address 192.168.77.12
+ ip pim sparse-mode
+!
+router ospf 77 vrf DATA
+ router-id {{ router_id }}
+ passive-interface default
+ no passive-interface Vlan2
+ no passive-interface Vlan99
+ network 5.5.5.5 0.0.0.0 area 0
+ network 10.1.1.2 0.0.0.0 area 0
+ network 10.254.254.1 0.0.0.0 area 0
+ network 192.168.77.1 0.0.0.0 area 0
+ network 192.168.78.1 0.0.0.0 area 0
+!
+router bgp 65001
+ bgp router-id {{ router_id }}
+ bgp log-neighbor-changes
+ bgp bestpath as-path multipath-relax
+ maximum-paths 4
+ !
+ address-family ipv4 vrf DATA
+  network 10.1.1.0 mask 255.255.255.252
+  network 10.254.254.0 mask 255.255.255.0
+  network 192.168.77.0
+  network 192.168.78.0
+  neighbor 10.1.1.1 remote-as 65254
+  neighbor 10.1.1.1 activate
+  neighbor 10.1.1.1 soft-reconfiguration inbound
+ exit-address-family
+ !
+!
+!
+no vstack
+!
+line con 0
+ privilege level 15
+line vty 0 4
+ exec-timeout 0 0
+ privilege level 15
+ transport input ssh
+line vty 5 15
+ exec-timeout 0 0
+ privilege level 15
+ transport input ssh
+!
+end
