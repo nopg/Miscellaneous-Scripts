@@ -1,3 +1,11 @@
+####
+#
+# Author: Ryan Gillespie
+# Description: Digicert -> Neustar Domain Validator
+# Date: 4/2022
+# 
+#
+####
 import sys
 import httpx
 from rich.pretty import pprint
@@ -32,13 +40,13 @@ class DomainGetter():
         exp_date = datetime.now() + timedelta(180) #expires 180 days from now
         
         for domain in domains:            
-            dcv_expiration = domain.get("dcv_expiration")
+            dcv_expiration = domain.get("dcv_expiration") # Some domains don't have this
 
             if dcv_expiration:
                 ev_exp_str = domain["dcv_expiration"]["ev"]
                 ov_exp_str = domain["dcv_expiration"]["ov"]
             else:
-                print(f"Domain {domain['name']} id: {domain['id']} has no dcv_expiration field...huh?")
+                print(f"Domain {domain['name']} id: {domain['id']} \t\t{'has no dcv_expiration field...':<50}")
                 continue
         
             ev_exp = datetime.strptime(ev_exp_str,"%Y-%m-%d")
