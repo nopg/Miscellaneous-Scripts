@@ -94,7 +94,7 @@ cmd | get-member
 # Find count of items in output of command
 (get-azvm).count
 # URL Encode a uri:
-$url = "https://raw.githubusercontent.com/glspi/cnet-pa1/master/pa-deploy.json"
+$url = "https://raw.githubusercontent.com/nopg/cnet-pa1/master/pa-deploy.json"
 [uri]::EscapeDataString($url)
 
 
