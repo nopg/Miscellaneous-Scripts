@@ -7,7 +7,7 @@ import gather_configs as GC
 class MainWindow(Frame):
     
     def __init__(self,parent):
-        parent.title("glspi's Gather Configs")
+        parent.title("nopg's Gather Configs")
         parent.geometry("450x300")
         ttk.Frame.__init__(self,parent)
         self.devicelist = StringVar()
